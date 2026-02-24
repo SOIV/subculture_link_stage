@@ -227,21 +227,21 @@
 
 **0순위: 사전 등록 정보** ⭐⭐ (자동 수집 정확도 향상)
 - EventTemplate: 행사 이름, 일반 개최 시기, 공식 URL 등
-- Venue: 장소 이름, 주소, 타임존 등
+- Venue: 장소 이름, 주소, 타임존 등<br>
 → 자동 수집 시 매칭 및 자동 완성에 활용
 
 **1순위: 공식 웹사이트** ⭐ (무료, 안정적)
 - Tokyo Game Show 일정 페이지
 - G-Star 공식 공지사항
 - 코미케 공식 일정
-- 각 게임사/출판사 공식 사이트
-→ cheerio로 HTML 파싱
+- 각 게임사/출판사 공식 사이트<br>
+→ cheerio로 HTML 파싱<br>
 → EventTemplate의 sources 정보 활용
 
 **2순위: RSS 피드** (무료, Twitter API 대체)
 - nitter를 통한 공식 X 계정 모니터링
-- 일부 사이트의 공식 RSS
-→ rss-parser 라이브러리 사용
+- 일부 사이트의 공식 RSS<br>
+→ rss-parser 라이브러리 사용<br>
 → EventTemplate의 sources에서 RSS URL 가져오기
 
 **3순위: 수동 수집** (초기 데이터)
@@ -530,16 +530,16 @@ router.get('/calendar/all.ics', async (req, res) => {
 | Bot | discord.js | $0 | - |
 
 ### 9.2 MongoDB 선택 이유
-✅ NoSQL - 스키마 유연함 (이벤트 구조에 최적)
-✅ 배열/객체 쿼리 편함 (tags, dates)
-✅ mongoose로 쉬운 개발
-✅ 512MB = 수만 개 이벤트 저장 가능
+✅ NoSQL - 스키마 유연함 (이벤트 구조에 최적)<br>
+✅ 배열/객체 쿼리 편함 (tags, dates)<br>
+✅ mongoose로 쉬운 개발<br>
+✅ 512MB = 수만 개 이벤트 저장 가능<br>
 ✅ 무제한 API 호출
 
 ### 9.3 예상 용량
 - 이벤트 1개 ≈ 1KB
 - 10,000개 = 10MB
-- 후보 포함해도 50MB 이하
+- 후보 포함해도 50MB 이하<br>
 → **512MB로 충분**
 
 ---
