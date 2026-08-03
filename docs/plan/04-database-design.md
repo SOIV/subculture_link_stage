@@ -90,6 +90,17 @@ glossary_translations
 glossary_suggestions
 ```
 
+#### 인증 및 권한
+
+Backstage 3단계 인증 구조([07-admin-dashboard.md §7.6](07-admin-dashboard.md#76-인증-및-권한-구조), [10-infra-ops-security.md §10.3.1](10-infra-ops-security.md#1031-역할))에 대응한다. 내부 운영자(전역 역할)와 행사 측 담당자(event_id 스코프 권한)는 신뢰 수준이 달라 계정 테이블을 분리한다.
+
+```text
+staff_accounts
+event_organizer_accounts
+event_organizer_permissions
+event_organizer_invites
+```
+
 #### 사용자 및 알림
 
 ```text
@@ -99,6 +110,8 @@ notification_templates
 notification_jobs
 notification_deliveries
 ```
+
+`users`는 Onstage 소셜 로그인 사용자 전용이며, 위 `staff_accounts`/`event_organizer_accounts`와는 별개 계정 체계다.
 
 #### 파일 및 스토리지
 
@@ -188,6 +201,54 @@ CREATE TABLE collected_documents (
   storage_object_id UUID,
   status TEXT NOT NULL,
   UNIQUE(source_id, content_hash)
+);
+```
+
+#### event_organizer_accounts
+
+```sql
+CREATE TABLE event_organizer_accounts (
+  id UUID PRIMARY KEY,
+  login_method TEXT NOT NULL,
+  login_identifier TEXT NOT NULL,
+  display_name TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(login_method, login_identifier)
+);
+```
+
+`login_method`는 자유(구글 등 소셜, 이메일/비밀번호 등)다. 보안 경계는 로그인 방식이 아니라 아래 `event_organizer_permissions`의 부여 절차에 있다.
+
+#### event_organizer_permissions
+
+```sql
+CREATE TABLE event_organizer_permissions (
+  id UUID PRIMARY KEY,
+  account_id UUID NOT NULL REFERENCES event_organizer_accounts(id) ON DELETE CASCADE,
+  event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+  role TEXT NOT NULL, -- EVENT_ORGANIZER_REP | EVENT_ORGANIZER
+  granted_by UUID NOT NULL REFERENCES staff_accounts(id),
+  granted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  revoked_at TIMESTAMPTZ,
+  UNIQUE(account_id, event_id)
+);
+```
+
+`granted_by`는 항상 `staff_accounts`(루트 관리자)를 가리킨다 — 대표(`EVENT_ORGANIZER_REP`)는 하위 계정을 조회·해지(`revoked_at` 갱신)할 수는 있지만 신규 행을 등록할 수는 없으므로, 등록 시점의 `granted_by`는 대표가 아니라 항상 루트 관리자다.
+
+#### event_organizer_invites
+
+```sql
+CREATE TABLE event_organizer_invites (
+  id UUID PRIMARY KEY,
+  event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+  code TEXT UNIQUE NOT NULL,
+  intended_role TEXT NOT NULL, -- EVENT_ORGANIZER_REP | EVENT_ORGANIZER
+  created_by UUID NOT NULL REFERENCES staff_accounts(id),
+  used_by_account_id UUID REFERENCES event_organizer_accounts(id),
+  used_at TIMESTAMPTZ,
+  expires_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 ```
 

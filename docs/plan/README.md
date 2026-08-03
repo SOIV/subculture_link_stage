@@ -12,7 +12,7 @@
 4. [데이터베이스 설계](04-database-design.md) — DB 선택, 테이블 그룹, 핵심 테이블 스키마, 태그 구조
 5. [오브젝트 스토리지 및 수집 파이프라인](05-storage-and-collection.md) — 스토리지 설계, 수집 소스·규칙, 분석 파이프라인
 6. [다국어, 번역, 용어집](06-i18n-translation-glossary.md) — 번역 설계, 용어집 구조, 사용자 번역 수정/용어 제안
-7. [관리자 대시보드](07-admin-dashboard.md) — Subculture Backstage 기능, 관리자 인증 방식(미결)
+7. [관리자 대시보드](07-admin-dashboard.md) — Subculture Backstage 기능, 3단계 인증·권한 구조(루트 관리자 / 행사 관리자 대표 / 하위 계정)
 8. [SCLS API 및 ICS 설계](08-api-and-ics.md) — 공개 API, OpenAPI 공개 전략, ICS/캘린더 설계
 9. [검색 및 알림](09-search-and-notifications.md) — 전문 검색, 유사도 검색, 알림 설계
 10. [인프라, 데이터 보관, 보안, 운영](10-infra-ops-security.md) — 기술 스택, 보관 정책, 보안·권한, 운영 모니터링
@@ -31,7 +31,7 @@
 - **운영 형태 및 공개 정책** ([01-overview-and-principles.md §1.6](01-overview-and-principles.md#16-운영-형태-및-공개-정책)) — 시장 차별점(해외 포함 통합 정보 + ICS 피드는 사실상 공백 상태), 무료+부분유료화(F2P·유료화 상품은 후반 설계, 그 전까지는 후원 기반), API·Worker 비공개 / Onstage 프론트엔드만 오픈소스 공개, 문의 채널(`biz@soiv-studio.xyz`)을 통한 개발·운영 참여 방식을 명시.
 - **OpenAPI 공개 전략** ([08-api-and-ics.md](08-api-and-ics.md)) — 원래 후기 확장(Phase 6)이었던 공개 API 문서화를 Phase 2(개발 착수)/Phase 3(전체 공개)로 앞당김. 이미 개인 개발자들이 흩어져서 앱을 만들어 쓰고 있는 상황이라, 공개 API가 초기 사용자 확보 포인트가 될 수 있다는 판단에 따른 것. OpenAPI 스펙 공개는 소스코드 오픈소스화와는 다르다는 점도 함께 명시.
 - **SNS 수집 ToS 리스크** ([05-storage-and-collection.md](05-storage-and-collection.md)) — X/Instagram 자동 수집의 API 접근성·약관 제약을 리스크로 명시.
-- **관리자 인증 방식 미결 표시** ([07-admin-dashboard.md](07-admin-dashboard.md)) — 세션/JWT/외부 Auth 중 미정임을 명시.
+- **관리자 인증 방식 미결 표시** ([07-admin-dashboard.md](07-admin-dashboard.md)) — 세션/JWT/외부 Auth 중 미정임을 명시. (→ 이후 별도 논의에서 3단계 인증·권한 구조로 확정, [07-admin-dashboard.md §7.6](07-admin-dashboard.md#76-인증-및-권한-구조) 참고)
 - **비용 상한 미결 표시** ([10-infra-ops-security.md](10-infra-ops-security.md)) — 구체적 예산 트리거는 운영 데이터가 쌓인 뒤 정하기로 함.
 - **ERD 미결 표시** ([04-database-design.md](04-database-design.md)) — 테이블 그룹/예시는 정리되었으나 다이어그램화는 구현 착수 직전 별도 작업으로 남김.
 

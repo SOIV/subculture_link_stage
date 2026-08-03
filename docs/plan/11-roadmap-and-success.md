@@ -20,7 +20,7 @@
 - [ ] Event Series, Event, Event Schedule 구현
 - [ ] Venue, Organizer, Tag 구현
 - [ ] Localizations 구현
-- [ ] 관리자 로그인 (인증 방식 확정 필요 — [07-admin-dashboard.md](07-admin-dashboard.md) 참고)
+- [ ] 루트 관리자 로그인 구현 (3단계 인증 구조 확정됨 — [07-admin-dashboard.md §7.6](07-admin-dashboard.md#76-인증-및-권한-구조) 참고, 세션/JWT 등 구체 구현 방식은 착수 시 결정)
 - [ ] 행사 수동 등록·수정 UI
 - [ ] 공개 GET API
 - [ ] ICS 전체 피드
@@ -115,7 +115,9 @@
 - [x] 개발·운영 참여 방식 확정 (메인 개발자 문의 기반)
 - [ ] ERD 확정
 - [ ] 초기 데이터 분류 코드 확정
-- [ ] 관리자 인증 방식 확정
+- [x] 관리자 인증 방식 확정 (루트 관리자 / 행사 관리자 대표 / 행사 관리자 하위 계정 3단계 구조 — [07-admin-dashboard.md §7.6](07-admin-dashboard.md#76-인증-및-권한-구조))
+- [ ] 행사 관리자 권한 부여 세부 절차 확정 (신원 확인 기준, 대표 지정 기준, 루트 관리자 계정 복구 수단 — 07-admin-dashboard.md §7.6.3 미결 항목)
+- [ ] 행사 관리자 계정 도입 Phase 배치 (현재 로드맵 미배치 — [02-users-and-scope.md §2.1.3](02-users-and-scope.md#213-행사-측-담당자-행사-관리자) 참고)
 - [ ] 비용 상한 및 트리거 확정
 
 ### 구현
