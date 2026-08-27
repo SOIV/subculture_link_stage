@@ -9,10 +9,11 @@
 - [x] 프로젝트명 확정: Subculture Link Stage (SCLS)
 - [x] Repository 구조 및 분리 방식 확정 ([03-architecture-and-domain.md §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))
 - [x] PostgreSQL ERD 작성 ([database/erd.md](database/erd.md), [database/schema.sql](database/schema.sql))
-- [ ] 태그·행사·일정 분류 코드 정의
-- [ ] 번역 상태 및 검수 상태 정의
-- [ ] 초기 대상 행사 10개 선정
-- [ ] 초기 수집 출처 및 이용 조건 확인 (X/Instagram 등 SNS API 접근 가능 여부 포함)
+- [x] 일정 분류 코드 정의 (`schedule_type` 15종 — [database/schema.sql](database/schema.sql) §1)
+- [x] 번역 상태 및 검수 상태 정의 (`translation_source`/`translation_status` — [06-i18n-translation-glossary.md §6.1.3](06-i18n-translation-glossary.md#613-번역-출처-및-상태))
+- [ ] 태그 분류 코드 확정 (예시 트리는 [04-database-design.md §4.4](04-database-design.md#44-태그-구조)에 있음, 실제 seed 데이터로 확정은 미완료 — Phase 1 구현과 병행 가능)
+- [ ] 초기 대상 행사 10개 선정 (콘텐츠 작업, Phase 1 구현과 병행 가능)
+- [ ] 초기 수집 출처 및 이용 조건 확인 (X/Instagram 등 SNS API 접근 가능 여부 포함 — Phase 2에서 필요, Phase 1 착수를 막지 않음)
 
 ### Phase 1 — Core MVP
 
