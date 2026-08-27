@@ -10,7 +10,7 @@
 |---|---|---|
 | Backend | Node.js + TypeScript | Express, Fastify 또는 NestJS 검토 |
 | Web | Next.js + React | 공개 웹과 관리자 UI 분리 가능 |
-| DB | PostgreSQL | Supabase, Neon, 자체 호스팅 등 |
+| DB | PostgreSQL (Supabase) | 초기 확정, 비용 부담 커지면 자체 호스팅 이전 검토 — 아래 결정 사항 참고 |
 | ORM | Prisma 또는 Drizzle | Migration 관리 필수 |
 | Queue | Redis + BullMQ | 수집·번역·알림 Worker |
 | Storage | Cloudflare R2 / S3 | 원본 및 이미지 |
@@ -19,6 +19,8 @@
 | ICS | ical-generator | Node.js 기준 |
 | Monitoring | Sentry + Metrics | 초기 무료/저비용 플랜 |
 | CDN/DNS | Cloudflare | 기존 환경 활용 |
+
+> **결정 사항 — DB 제공자: Supabase (Neon 제외)**: Neon은 컴퓨트 사용량 기반 과금 구조라, Worker/Scheduler처럼 상시 DB 커넥션을 유지하는 프로세스가 있으면 스케일-투-제로가 되지 않아 과금이 크게 튈 수 있다(운영자가 다른 프로젝트의 Discord Bot에서 이미 겪은 문제). SCLS도 수집·번역 Worker와 Scheduler가 상시 커넥션을 유지할 가능성이 높아 동일 리스크를 안고 있어, 초기에는 Neon을 사용하지 않는다. Supabase는 무료/Pro 티어가 정액 요금이라 이런 과금 급증 리스크가 없다. 다만 Supabase Pro 요금(무료 티어 초과 시 $25/월~)이 부담되는 시점이 오면 자체 호스팅 PostgreSQL(VPS)로 이전하는 것을 장기적으로 고려한다 — 이 경우 마이그레이션 비용을 낮추기 위해 Supabase 전용 기능(Auth, Realtime 등)에 의존하지 않고 표준 PostgreSQL 기능 위주로 스키마·쿼리를 설계한다.
 
 ### 10.1.2 배포 구조 예시
 
@@ -36,7 +38,7 @@ API / Worker
 - Render, Railway, Fly.io, VPS 등
 
 Database
-- Supabase / Neon / Managed PostgreSQL
+- Supabase (초기 확정, Neon 제외 — §10.1.1 결정 사항 참고)
 
 Queue
 - Managed Redis 또는 소형 자체 Redis

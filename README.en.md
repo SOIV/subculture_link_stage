@@ -43,7 +43,7 @@ See [docs/plan/03-architecture-and-domain.md](docs/plan/03-architecture-and-doma
 |---|---|
 | Backend | Node.js + TypeScript (evaluating Express / Fastify / NestJS) |
 | Web | Next.js + React |
-| DB | PostgreSQL |
+| DB | PostgreSQL (Supabase) |
 | ORM | Prisma or Drizzle |
 | Queue | Redis + BullMQ |
 | Storage | Cloudflare R2 / S3 |

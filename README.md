@@ -43,7 +43,7 @@
 |---|---|
 | Backend | Node.js + TypeScript (Express / Fastify / NestJS 검토 중) |
 | Web | Next.js + React |
-| DB | PostgreSQL |
+| DB | PostgreSQL (Supabase) |
 | ORM | Prisma 또는 Drizzle |
 | Queue | Redis + BullMQ |
 | Storage | Cloudflare R2 / S3 |
