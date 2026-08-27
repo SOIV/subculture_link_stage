@@ -113,7 +113,6 @@
 - [x] 운영 형태 확정 (무료 + 부분 유료화, 유료화 전에는 후원 기반)
 - [x] 소스 공개 범위 확정 (Onstage만 오픈소스, API/Worker/Backstage는 비공개)
 - [x] 개발·운영 참여 방식 확정 (메인 개발자 문의 기반)
-- [ ] ERD 확정
 - [ ] 초기 데이터 분류 코드 확정
 - [x] 관리자 인증 방식 확정 (루트 관리자 / 행사 관리자 대표 / 행사 관리자 하위 계정 3단계 구조 — [07-admin-dashboard.md §7.6](07-admin-dashboard.md#76-인증-및-권한-구조))
 - [x] Repository 구조 확정 (2-Repo: `scls-onstage` 별도 공개 저장소 + `scls-platform` 비공개 Monorepo — [03-architecture-and-domain.md §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))
