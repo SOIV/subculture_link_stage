@@ -63,7 +63,34 @@ scls-scheduler
 - 보관 정책 실행
 ```
 
-배포 단위는 API, Web, Worker를 분리한다. 저장소 구성은 소스 공개 범위에 따라 결정된다: `scls-onstage`(공개 웹)만 오픈소스로 공개하고 `scls-api`·`scls-backstage`·`scls-worker`·`scls-scheduler`는 비공개로 유지하므로, 하나의 Monorepo로 묶기보다 `scls-onstage`를 별도 공개 저장소로 분리하는 쪽이 공개 범위를 관리하기 쉽다. 자세한 배경은 [01-overview-and-principles.md §1.6.3](01-overview-and-principles.md#163-소스-공개-및-참여-정책) 참고.
+배포 단위는 API, Web, Worker를 분리한다.
+
+### 3.2.1 Repository 구조 (확정)
+
+**2-Repository 구조**를 사용한다.
+
+```text
+scls-onstage          (공개, 별도 저장소)
+- Subculture Onstage 프론트엔드만 포함
+- SCLS API를 공개 REST 계약으로만 소비 — 내부 DB 스키마·타입을 공유하지 않음
+
+scls-platform          (비공개, 단일 Monorepo — pnpm workspaces 등)
+├─ apps/api            (scls-api)
+├─ apps/backstage       (scls-backstage)
+├─ apps/worker          (scls-worker)
+├─ apps/scheduler       (scls-scheduler)
+└─ packages/
+   ├─ db                (Prisma/Drizzle 스키마 — database/schema.sql 기준)
+   ├─ domain            (Event/Schedule/Tag 등 공유 타입·enum)
+   └─ config            (공통 설정)
+```
+
+**결정 이유**
+
+- `scls-onstage`(공개 웹)만 오픈소스로 공개하고 나머지는 비공개로 유지한다는 원칙([01-overview-and-principles.md §1.6.3](01-overview-and-principles.md#163-소스-공개-및-참여-정책))에 따라, Onstage는 반드시 별도 저장소여야 한다. Onstage는 공개 REST API만 소비하는 순수 프론트엔드이므로 내부 스키마 공유가 필요 없어 분리 비용이 낮다.
+- `api`/`backstage`/`worker`/`scheduler` 네 서비스는 `events`/`event_schedules`/`change_proposals`/`entity_localizations` 등 핵심 도메인 모델을 그대로 공유한다([§3.5](#35-데이터-계층), [04-database-design.md](04-database-design.md)). 이를 4개의 개별 저장소로 나누면 공유 타입을 사설 패키지로 배포·버전관리해야 하는데, 1인 + AI 페어 프로그래밍(Claude Code, Codex 등) 체제에서는 이 비용이 실이익보다 크다.
+- AI 코딩 에이전트는 하나의 워킹 디렉터리 컨텍스트 안에서 여러 서비스에 걸친 변경(예: DB 스키마 변경 → api/worker/backstage 동시 반영)을 한 번에 처리할 때 가장 효율적이다. 4개로 쪼개진 저장소를 오가며 각각에서 세션을 새로 여는 구조는 이런 작업에서 불필요한 마찰을 만든다.
+- 따라서 공개 범위 경계(Onstage vs 나머지)에서만 저장소를 나누고, 비공개 영역은 하나의 Monorepo로 묶어 공유 패키지(`packages/db`, `packages/domain`)를 통해 타입을 직접 공유한다.
 
 ## 3.3 Event Series와 Event 구분
 

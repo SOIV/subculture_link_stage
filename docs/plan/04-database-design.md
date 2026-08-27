@@ -290,11 +290,13 @@ description
 is_active
 ```
 
-태그 표시명은 `entity_localizations` 또는 전용 `tag_localizations`로 다국어 제공한다.
+태그 표시명은 `entity_localizations`(entity_type='TAG')로 다국어 제공한다 — 전용 `tag_localizations` 신설 여부는 ERD 작업([§4.5](#45-erd))에서 확정했다.
 
-## 4.5 ERD 확정 (미결)
+## 4.5 ERD
 
-전체 테이블 간 관계를 다이어그램으로 정리한 ERD는 아직 작성 전이다. [11-roadmap-and-success.md](11-roadmap-and-success.md)의 Phase 0 체크리스트 항목("ERD 확정")으로 남아 있으며, 본 파일의 테이블 그룹·핵심 테이블 예시를 기준으로 구현 착수 직전에 별도로 작성한다.
+전체 테이블 간 관계를 다이어그램으로 정리한 ERD는 [database/erd.md](database/erd.md)에 있다. 도메인별로 6개 다이어그램(행사/일정, 조직·장소·작품·인물·태그, 수집·분석, 검수·변경, 다국어·번역, 인증·사용자·알림·스토리지)으로 나누어 정리했으며, 본 파일 §4.2~4.4에서 "또는"으로 열려 있던 세부 사항(태그 현지화 방식, change_proposals 제출 주체 표현, 다형 참조 허용 범위 등)을 확정한 내용도 포함한다.
+
+컬럼 단위 정의와 제약조건의 원본은 [database/schema.sql](database/schema.sql)이다. 실제 Migration 도구(Prisma/Drizzle) 선정 후에는 이 SQL을 그대로 옮기지 않고 해당 도구의 스키마 정의로 재작성하되, 테이블·컬럼·관계는 이 파일을 기준으로 삼는다.
 
 ---
 

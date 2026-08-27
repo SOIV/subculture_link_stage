@@ -7,8 +7,8 @@
 ### Phase 0 — 기획 및 기반 설계
 
 - [x] 프로젝트명 확정: Subculture Link Stage (SCLS)
-- [ ] Repository 구조 및 분리 방식 확정
-- [ ] PostgreSQL ERD 작성
+- [x] Repository 구조 및 분리 방식 확정 ([03-architecture-and-domain.md §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))
+- [x] PostgreSQL ERD 작성 ([database/erd.md](database/erd.md), [database/schema.sql](database/schema.sql))
 - [ ] 태그·행사·일정 분류 코드 정의
 - [ ] 번역 상태 및 검수 상태 정의
 - [ ] 초기 대상 행사 10개 선정
@@ -116,6 +116,8 @@
 - [ ] ERD 확정
 - [ ] 초기 데이터 분류 코드 확정
 - [x] 관리자 인증 방식 확정 (루트 관리자 / 행사 관리자 대표 / 행사 관리자 하위 계정 3단계 구조 — [07-admin-dashboard.md §7.6](07-admin-dashboard.md#76-인증-및-권한-구조))
+- [x] Repository 구조 확정 (2-Repo: `scls-onstage` 별도 공개 저장소 + `scls-platform` 비공개 Monorepo — [03-architecture-and-domain.md §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))
+- [x] ERD 확정 (도메인별 6개 다이어그램 + 전체 DDL — [database/erd.md](database/erd.md), [database/schema.sql](database/schema.sql))
 - [ ] 행사 관리자 권한 부여 세부 절차 확정 (신원 확인 기준, 대표 지정 기준, 루트 관리자 계정 복구 수단 — 07-admin-dashboard.md §7.6.3 미결 항목)
 - [ ] 행사 관리자 계정 도입 Phase 배치 (현재 로드맵 미배치 — [02-users-and-scope.md §2.1.3](02-users-and-scope.md#213-행사-측-담당자-행사-관리자) 참고)
 - [ ] 비용 상한 및 트리거 확정
