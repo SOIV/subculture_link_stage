@@ -72,7 +72,7 @@ The full development plan is organized by topic in [docs/plan/](docs/plan/README
 1. [Overview and core principles](docs/plan/01-overview-and-principles.md)
 2. [Target users and scope](docs/plan/02-users-and-scope.md)
 3. [System architecture and domain model](docs/plan/03-architecture-and-domain.md)
-4. [Database design](docs/plan/04-database-design.md)
+4. [Database design](docs/plan/04-database-design.md) ([ERD & full DDL](docs/plan/database/erd.md))
 5. [Object storage and collection pipeline](docs/plan/05-storage-and-collection.md)
 6. [Localization, translation, glossary](docs/plan/06-i18n-translation-glossary.md)
 7. [Admin dashboard](docs/plan/07-admin-dashboard.md)
@@ -89,8 +89,8 @@ Earlier single-document versions (v1–v3) are archived in [docs/legacy/](docs/l
 - [x] Planning docs split by topic
 - [x] Admin authentication model (3-tier permission structure) finalized
 - [x] Operating model and open-source scope finalized
-- [ ] PostgreSQL ERD finalized
-- [ ] Repository structure finalized
+- [x] PostgreSQL ERD finalized
+- [x] Repository structure finalized (2-repo: `scls-onstage` public + `scls-platform` private monorepo)
 - [ ] Phase 1 (Core MVP) implementation started
 
 See [docs/plan/11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md) (Korean) for the full roadmap and checklist.

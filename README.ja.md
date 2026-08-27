@@ -72,7 +72,7 @@
 1. [概要及び核心原則](docs/plan/01-overview-and-principles.md)
 2. [目標ユーザー及び機能範囲](docs/plan/02-users-and-scope.md)
 3. [システム構造及びドメインモデル](docs/plan/03-architecture-and-domain.md)
-4. [データベース設計](docs/plan/04-database-design.md)
+4. [データベース設計](docs/plan/04-database-design.md)（[ERD・全体DDL](docs/plan/database/erd.md)）
 5. [オブジェクトストレージ及び収集パイプライン](docs/plan/05-storage-and-collection.md)
 6. [多言語、翻訳、用語集](docs/plan/06-i18n-translation-glossary.md)
 7. [管理者ダッシュボード](docs/plan/07-admin-dashboard.md)
@@ -89,8 +89,8 @@
 - [x] 計画ドキュメントのテーマ別分離
 - [x] 管理者認証方式（3段階権限構造）確定
 - [x] 運営形態及びソース公開範囲確定
-- [ ] PostgreSQL ERD確定
-- [ ] リポジトリ構造確定
+- [x] PostgreSQL ERD確定
+- [x] リポジトリ構造確定（2-Repo構成: `scls-onstage` 公開 + `scls-platform` 非公開Monorepo）
 - [ ] Phase 1（Core MVP）実装着手
 
 全体のロードマップとチェックリストは [docs/plan/11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md)（韓国語）を参照してください。

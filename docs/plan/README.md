@@ -9,7 +9,7 @@
 1. [개요 및 핵심 원칙](01-overview-and-principles.md) — 명칭, v2 대비 변경 사항, 목적, 서비스 성격, 핵심 원칙, 최종 목표
 2. [목표 사용자 및 기능 범위](02-users-and-scope.md) — 사용자·사용 사례, Phase별 기능 범위, 초기 대상 범위
 3. [시스템 구조 및 도메인 모델](03-architecture-and-domain.md) — 전체 아키텍처, 서비스 컴포넌트, Event/Series/Schedule 모델, 데이터 계층
-4. [데이터베이스 설계](04-database-design.md) — DB 선택, 테이블 그룹, 핵심 테이블 스키마, 태그 구조
+4. [데이터베이스 설계](04-database-design.md) — DB 선택, 테이블 그룹, 핵심 테이블 스키마, 태그 구조, [ERD·전체 DDL](database/erd.md)
 5. [오브젝트 스토리지 및 수집 파이프라인](05-storage-and-collection.md) — 스토리지 설계, 수집 소스·규칙, 분석 파이프라인
 6. [다국어, 번역, 용어집](06-i18n-translation-glossary.md) — 번역 설계, 용어집 구조, 사용자 번역 수정/용어 제안
 7. [관리자 대시보드](07-admin-dashboard.md) — Subculture Backstage 기능, 3단계 인증·권한 구조(루트 관리자 / 행사 관리자 대표 / 하위 계정)
@@ -33,8 +33,13 @@
 - **SNS 수집 ToS 리스크** ([05-storage-and-collection.md](05-storage-and-collection.md)) — X/Instagram 자동 수집의 API 접근성·약관 제약을 리스크로 명시.
 - **관리자 인증 방식 미결 표시** ([07-admin-dashboard.md](07-admin-dashboard.md)) — 세션/JWT/외부 Auth 중 미정임을 명시. (→ 이후 별도 논의에서 3단계 인증·권한 구조로 확정, [07-admin-dashboard.md §7.6](07-admin-dashboard.md#76-인증-및-권한-구조) 참고)
 - **비용 상한 미결 표시** ([10-infra-ops-security.md](10-infra-ops-security.md)) — 구체적 예산 트리거는 운영 데이터가 쌓인 뒤 정하기로 함.
-- **ERD 미결 표시** ([04-database-design.md](04-database-design.md)) — 테이블 그룹/예시는 정리되었으나 다이어그램화는 구현 착수 직전 별도 작업으로 남김.
+- **ERD 미결 표시** ([04-database-design.md](04-database-design.md)) — 테이블 그룹/예시는 정리되었으나 다이어그램화는 구현 착수 직전 별도 작업으로 남김. (→ 이후 확정, [database/erd.md](database/erd.md)·[database/schema.sql](database/schema.sql) 참고)
+
+## v4 분리 이후 추가로 확정된 사항
+
+- **Repository 구조 확정** ([03-architecture-and-domain.md §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정)) — 2-Repo 구조로 결정: `scls-onstage`(공개 웹)만 별도 공개 저장소로 분리하고, `scls-api`·`scls-backstage`·`scls-worker`·`scls-scheduler`는 `scls-platform` 비공개 Monorepo로 묶어 DB 스키마·도메인 타입을 공유 패키지로 직접 공유한다. AI 페어 프로그래밍(Claude Code/Codex) 환경에서 서비스 간 공유 타입을 사설 패키지로 나누어 관리하는 비용이 실이익보다 크다는 판단이 근거.
+- **ERD 확정** ([database/erd.md](database/erd.md), [database/schema.sql](database/schema.sql)) — 약 50개 테이블의 관계를 도메인별 6개 다이어그램으로 정리하고, 전체 컬럼·제약조건을 담은 참고용 DDL을 작성. 기존 문서에 "또는"으로 열려 있던 태그 현지화 방식, `change_proposals` 제출 주체 표현, 다형 참조 허용 범위 등도 함께 확정.
 
 ## 진행 방식 메모
 
-초반에는 1인 개발로 진행하며, 이후 데이터 라벨링 등 일부 실습성 작업에 관심 있는 사람을 참여시킬 계획이다. 이 문서들의 세부 사항(ERD, 인증 방식, 비용 상한 등)은 메인 구현 작업 착수 전에 순차적으로 채워 넣는다.
+초반에는 1인 개발로 진행하며, 이후 데이터 라벨링 등 일부 실습성 작업에 관심 있는 사람을 참여시킬 계획이다. ERD·Repository 구조·관리자 인증 방식은 확정되었고, 남은 세부 사항(행사 관리자 권한 부여 절차, 비용 상한 등)은 메인 구현 작업 착수 전 또는 실제 운영 데이터가 쌓인 뒤 순차적으로 채워 넣는다.

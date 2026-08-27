@@ -72,7 +72,7 @@
 1. [개요 및 핵심 원칙](docs/plan/01-overview-and-principles.md)
 2. [목표 사용자 및 기능 범위](docs/plan/02-users-and-scope.md)
 3. [시스템 구조 및 도메인 모델](docs/plan/03-architecture-and-domain.md)
-4. [데이터베이스 설계](docs/plan/04-database-design.md)
+4. [데이터베이스 설계](docs/plan/04-database-design.md) ([ERD·전체 DDL](docs/plan/database/erd.md))
 5. [오브젝트 스토리지 및 수집 파이프라인](docs/plan/05-storage-and-collection.md)
 6. [다국어, 번역, 용어집](docs/plan/06-i18n-translation-glossary.md)
 7. [관리자 대시보드](docs/plan/07-admin-dashboard.md)
@@ -89,8 +89,8 @@
 - [x] 계획 문서 주제별 분리
 - [x] 관리자 인증 방식(3단계 권한 구조) 확정
 - [x] 운영 형태 및 소스 공개 범위 확정
-- [ ] PostgreSQL ERD 확정
-- [ ] Repository 구조 확정
+- [x] PostgreSQL ERD 확정
+- [x] Repository 구조 확정 (2-Repo: `scls-onstage` 공개 + `scls-platform` 비공개 Monorepo)
 - [ ] Phase 1 (Core MVP) 구현 착수
 
 전체 로드맵과 체크리스트는 [docs/plan/11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md) 참고.
