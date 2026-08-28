@@ -132,20 +132,21 @@ Core MVP가 실제로 사용된 이후 순차적으로 확장하는 자동화 �
 
 팝업스토어, 콜라보 카페, 굿즈 판매, 극장 상영은 데이터 구조가 안정된 이후 확대한다.
 
-### 2.3.3 초기 행사 시리즈 후보
+### 2.3.3 초기 대상 행사 시리즈 (확정)
 
-- Tokyo Game Show
-- G-Star
-- Comic Market
+- AGF Korea (Anime Game Festival Korea)
+- 코믹월드 (서울 코믹월드, 부산 코믹월드 등 지역별 개최분 포함)
+- 지스타 (G-STAR)
+- 플레이엑스포 (PlayX4)
+- 일러스타 페스 (ILLUSTAR FES)
+- TGS (Tokyo Game Show)
+- COMIC MARKET (코미케)
 - AnimeJapan
-- AGF Korea
-- 일러스타 페스
-- 서울 코믹월드
-- BanG Dream!
-- Project SEKAI 관련
-- 주요 게임사 공식 쇼케이스
+- WONDERLIVET (J-POP & Iconic Artist 뮤직 페스티벌)
 
-선정 기준은 수집 가능성, 공식 출처 안정성, 실제 사용 빈도다.
+선정 기준은 수집 가능성, 공식 출처 안정성, 실제 사용 빈도다. 코믹월드처럼 지역별로 개별 개최되는 시리즈는 Event Series 단위를 지역별로 나눌지, 하나의 Series 아래 지역별 Event로 묶을지 구현 착수 시 결정한다.
+
+BanG Dream!, Project SEKAI, 주요 게임사 공식 쇼케이스 등은 이번 선정에서 제외했다. 이 중 반복 투어형 시리즈(하나의 Series 아래 다수의 Event/Schedule이 반복 생성되는 구조)는 데이터 모델 검증 목적으로 Phase 1 후반~Phase 1.5 즈음 1~2개만 별도로 추가 검토한다. 그 외 행사는 추후 별도 조사로 확대하며, 이 목록은 최종 커버리지가 아니라 초기 10개 선정의 기준선이다.
 
 ---
 
