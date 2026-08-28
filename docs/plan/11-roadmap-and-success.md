@@ -17,10 +17,10 @@
 
 ### Phase 1 — Core MVP
 
-- [ ] PostgreSQL 및 Migration 구성
-- [ ] Event Series, Event, Event Schedule 구현
-- [ ] Venue, Organizer, Tag 구현
-- [ ] Localizations 구현
+- [x] PostgreSQL 및 Migration 구성 (Supabase 프로젝트 연결, `scls-platform` 비공개 저장소의 `packages/db`에 Phase 1 범위 Prisma 스키마 및 초기 migration 적용 완료)
+- [ ] Event Series, Event, Event Schedule 구현 (Prisma 스키마·테이블은 위 migration에 포함됨 — 여기서는 CRUD API/관리자 UI까지의 완성을 의미)
+- [ ] Venue, Organizer, Tag 구현 (스키마는 포함됨, CRUD API/UI 남음)
+- [ ] Localizations 구현 (스키마는 포함됨, CRUD API/UI 남음)
 - [ ] 루트 관리자 로그인 구현 (3단계 인증 구조 확정됨 — [07-admin-dashboard.md §7.6](07-admin-dashboard.md#76-인증-및-권한-구조) 참고, 세션/JWT 등 구체 구현 방식은 착수 시 결정)
 - [ ] 행사 수동 등록·수정 UI
 - [ ] 공개 GET API
