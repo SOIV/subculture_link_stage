@@ -343,6 +343,7 @@ erDiagram
     EVENTS ||--o{ EVENT_ORGANIZER_INVITES : "scopes"
 
     USERS ||--o{ USER_SUBSCRIPTIONS : has
+    USERS ||--o{ WEB_PUSH_SUBSCRIPTIONS : has
     USER_SUBSCRIPTIONS ||--o{ NOTIFICATION_DELIVERIES : receives
     NOTIFICATION_JOBS ||--o{ NOTIFICATION_DELIVERIES : has
     EVENTS ||--o{ NOTIFICATION_JOBS : triggers
@@ -386,6 +387,11 @@ erDiagram
         uuid user_id FK
         text subscription_type
         uuid target_id "polymorphic"
+    }
+    WEB_PUSH_SUBSCRIPTIONS {
+        uuid id PK
+        uuid user_id FK
+        text endpoint
     }
     NOTIFICATION_JOBS {
         uuid id PK

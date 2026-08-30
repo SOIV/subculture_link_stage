@@ -26,7 +26,7 @@
         ┌────────────┬────────────┬────────────┐
       [REST API]    [ICS Feed]   [Web App]   [Notification]
         ↓                                         ↓
-[Discord Bot / 개인 앱]                 [Discord / Email 등]
+[Discord Bot / 개인 앱]                 [Discord / Webhook / Web Push 등]
 ```
 
 ## 3.2 서비스 컴포넌트

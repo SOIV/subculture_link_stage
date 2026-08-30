@@ -613,7 +613,6 @@ CREATE TABLE users (
   login_provider     TEXT NOT NULL,
   login_identifier   TEXT NOT NULL,
   display_name       TEXT,
-  email              TEXT,
   locale_preference  TEXT,
   trust_level        TEXT NOT NULL DEFAULT 'GENERAL' CHECK (trust_level IN ('GENERAL','TRUSTED_CONTRIBUTOR')),
   created_at         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -626,13 +625,24 @@ CREATE TABLE user_subscriptions (
   user_id            UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   subscription_type  TEXT NOT NULL CHECK (subscription_type IN ('FRANCHISE','EVENT_SERIES','PARTICIPANT','EVENT','TAG')),
   target_id          UUID NOT NULL,
-  channel            TEXT NOT NULL DEFAULT 'EMAIL' CHECK (channel IN ('EMAIL','DISCORD','WEBHOOK')),
+  channel            TEXT NOT NULL CHECK (channel IN ('DISCORD','WEBHOOK','WEB_PUSH')),
   is_active          BOOLEAN NOT NULL DEFAULT TRUE,
   created_at         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   UNIQUE (user_id, subscription_type, target_id, channel)
 );
 -- target_id는 subscription_type에 따라 franchises/event_series/participants/
 -- events/tags 중 하나를 가리키는 다형 참조다 (entity_localizations와 동일한 예외).
+
+CREATE TABLE web_push_subscriptions (
+  id                 UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id            UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  endpoint           TEXT NOT NULL UNIQUE,
+  p256dh_key         TEXT NOT NULL,
+  auth_key           TEXT NOT NULL,
+  created_at         TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+-- Push API 구독 정보. user_subscriptions.channel = 'WEB_PUSH' 발송 시 이 테이블에서
+-- 브라우저별 엔드포인트를 조회한다. 브라우저/기기별로 별도 행이 생길 수 있다.
 
 CREATE TABLE notification_templates (
   id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -662,7 +672,7 @@ CREATE TABLE notification_deliveries (
   id                     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   notification_job_id    UUID NOT NULL REFERENCES notification_jobs(id) ON DELETE CASCADE,
   user_subscription_id   UUID REFERENCES user_subscriptions(id) ON DELETE SET NULL,
-  channel                TEXT NOT NULL CHECK (channel IN ('EMAIL','DISCORD','WEBHOOK')),
+  channel                TEXT NOT NULL CHECK (channel IN ('DISCORD','WEBHOOK','WEB_PUSH')),
   recipient              TEXT,
   status                 TEXT NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING','SENT','FAILED')),
   error_message          TEXT,

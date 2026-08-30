@@ -12,6 +12,34 @@
 - 변경 가능한 문자열보다 안정적인 ID 제공
 - 페이지네이션 및 Rate Limit 적용
 
+### 8.1.1 노출 채널 계층 구조
+
+서비스가 지원하는 실제 전송 계층은 Pull 1개(API)와 Push 4개(WebSocket · Webhook · Discord · Web Push)이며, 그 외 노출 채널은 모두 이들을 소비하는 클라이언트이거나 포맷 변형이다.
+
+```text
+[전송 계층]
+  Pull   API
+  Push   WebSocket (지속 연결·실시간) · Webhook (구독자 콜백 URL) · Discord (봇/자체 웹훅) · Web Push (브라우저 구독)
+                       │
+                       ▼
+[포맷/클라이언트]  ICS · Web(+인앱 알림함) · iFrame(embed/overlay/ambient)
+```
+
+- **ICS**: API 응답을 캘린더 앱이 구독 가능한 포맷으로 직렬화한 것. 별도 전송 방식이 아니라 API의 특수 응답 포맷에 가깝다. 상세: 8.6
+- **Discord**: 알림 발송 채널 중 하나로 09.5 발송 구조에 병렬 채널로 정의됨. 봇이 API를 조회하는 방식과, 알림을 직접 수신하는 방식 모두 08.4/09.5 참고
+- **Webhook**: 외부 구독자가 등록한 콜백 URL로 알림을 발송. Phase 6(8.5.1)의 "Webhook 구독 등록"과 연결
+- **Web Push**: 브라우저 Push API 구독. 구조적으로는 Webhook과 동일(구독자가 내준 엔드포인트로 POST)하되, 엔드포인트를 브라우저가 발급한다는 점만 다르다. `web_push_subscriptions` 테이블([database/schema.sql](database/schema.sql)) 참고
+- **iFrame 위젯**: API/WebSocket을 렌더링만 해주는 얇은 표면. 임베드 대상에 따라 용도가 갈린다.
+  - `embed`: 팬사이트·블로그 등에 삽입하는 캘린더/일정 리스트
+  - `overlay`: OBS 브라우저 소스 등, 이벤트 트리거 시에만 표시되는 알림
+  - `ambient`: Corsair Xeneon Edge류 세컨드 디스플레이처럼 상시 노출되는 요약/카운트다운
+  - 라우트·스펙은 아직 미정이며, API/ICS 공개 이후 단계(8.5.1의 Phase 5~6)에서 구체화한다.
+- **Web**: 서비스 자체 프론트엔드도 API를 소비하는 클라이언트 중 하나다. 로그인 사용자 대상 인앱 알림함도 여기 포함 — 별도 Push 채널이 아니라 자신의 `notification_delivery` 이력을 API로 Pull 조회하는 방식([09.5](09-search-and-notifications.md#95-발송-구조) 참고)
+
+새 노출 채널을 추가할 때는 위 전송 계층 중 하나를 재사용하는 것을 기본으로 하고, 별도 전송 방식을 새로 만드는 것은 지양한다.
+
+EMAIL 채널 제외로 생겼던 "일반 웹 사용자의 개인화 알림 공백"(§9.5)은 Web Push(실시간성 필요한 알림) + 인앱 알림함(Pull, 놓친 알림 확인용) 조합으로 메운다.
+
 ## 8.2 공개 API 예시
 
 ```http

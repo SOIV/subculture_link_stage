@@ -64,12 +64,14 @@ notification_job 생성
     ↓
 구독자 및 외부 클라이언트 대상 계산
     ↓
-Discord / Email / Webhook 발송
+Discord / Webhook / Web Push 발송
     ↓
 notification_delivery 결과 저장
 ```
 
 Discord Bot으로 직접 전송할지, Bot이 API를 폴링 또는 변경 Feed를 구독할지는 구현 단계에서 결정한다. 기본 방향은 Bot이 API를 소비하도록 한다.
+
+인앱 알림함(로그인한 사용자가 Web App에서 자신의 알림 목록을 확인하는 UI)은 이 발송 파이프라인의 Push 대상이 아니라, Web App이 REST API로 자신의 `notification_delivery` 이력을 조회하는 Pull 방식으로 동작한다. 즉 별도 발송 채널이 아니라 §8.1.1의 Web App(API 소비 클라이언트)에 속한다.
 
 ---
 
