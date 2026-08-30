@@ -32,8 +32,10 @@
 - **iFrame 위젯**: API/WebSocket을 렌더링만 해주는 얇은 표면. 임베드 대상에 따라 용도가 갈린다.
   - `embed`: 팬사이트·블로그 등에 삽입하는 캘린더/일정 리스트
   - `overlay`: OBS 브라우저 소스 등, 이벤트 트리거 시에만 표시되는 알림
-  - `ambient`: Corsair Xeneon Edge류 세컨드 디스플레이처럼 상시 노출되는 요약/카운트다운
+  - `ambient`: Corsair Xeneon Edge류 세컨드 디스플레이처럼 상시 노출되는 요약/카운트다운. 마우스 hover가 없는 터치 입력 환경이므로 hover 의존 UI 금지, 탭 타겟은 충분히 크게, `touchstart`/`pointerdown` 기반 처리
   - 라우트·스펙은 아직 미정이며, API/ICS 공개 이후 단계(8.5.1의 Phase 5~6)에서 구체화한다.
+  - 임베드하는 쪽 편의를 위해 iframe을 직접 다루는 대신 얇은 JS SDK(`<script>` 로더 + `SCLS.mount(el, options)`)로 감쌀 수 있다. SDK는 렌더링을 직접 하지 않고 iframe 생성·리사이즈(postMessage)·이벤트 콜백만 관리 — 렌더링을 호스트 페이지 DOM에 직접 주입하는 방식은 스타일 충돌 및 XSS 격리 실패 위험 때문에 지양한다.
+  - 위젯 라우트를 메인 플랫폼과 분리하는 격리 정책, CSP `frame-ancestors`/CORS 설정, 계정 필수 여부는 [10-infra-ops-security.md §10.3.3](10-infra-ops-security.md#1033-위젯-임베드-격리-정책) 참고
 - **Web**: 서비스 자체 프론트엔드도 API를 소비하는 클라이언트 중 하나다. 로그인 사용자 대상 인앱 알림함도 여기 포함 — 별도 Push 채널이 아니라 자신의 `notification_delivery` 이력을 API로 Pull 조회하는 방식([09.5](09-search-and-notifications.md#95-발송-구조) 참고)
 
 새 노출 채널을 추가할 때는 위 전송 계층 중 하나를 재사용하는 것을 기본으로 하고, 별도 전송 방식을 새로 만드는 것은 지양한다.
