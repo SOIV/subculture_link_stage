@@ -335,6 +335,7 @@ erDiagram
 
 ```mermaid
 erDiagram
+    STAFF_ACCOUNTS ||--o{ STAFF_SESSIONS : has
     STAFF_ACCOUNTS ||--o{ EVENT_ORGANIZER_PERMISSIONS : grants
     STAFF_ACCOUNTS ||--o{ EVENT_ORGANIZER_INVITES : creates
     EVENT_ORGANIZER_ACCOUNTS ||--o{ EVENT_ORGANIZER_PERMISSIONS : has
@@ -357,6 +358,12 @@ erDiagram
         uuid id PK
         text login_id
         text role
+    }
+    STAFF_SESSIONS {
+        uuid id PK
+        uuid staff_account_id FK
+        text token_hash
+        timestamptz expires_at
     }
     EVENT_ORGANIZER_ACCOUNTS {
         uuid id PK
@@ -427,6 +434,7 @@ erDiagram
 - **change_proposals 제출 주체**: `staff_accounts`와 `event_organizer_accounts`를 가리키는 두 개의 nullable FK(`submitted_by_staff_id`, `submitted_by_organizer_account_id`)로 표현한다. 신뢰 수준이 다른 두 계정 체계를 하나의 다형 FK로 묶지 않기 위함이며, 둘 다 NULL이면 시스템(자동 파이프라인) 제출로 간주한다.
 - **다형 참조 허용 범위**: `entity_id`/`target_id`/`scope_id` 형태의 다형 컬럼은 `entity_localizations`, `user_subscriptions`, `glossary_terms`/`glossary_suggestions` 세 곳에만 남기고, 나머지 핵심 관계(행사·태그·조직·스토리지 등)는 전부 대상별 전용 FK로 분리했다 — §4.2 원칙("target_type+target_id 범용 연결 테이블은 사용하지 않는다")과의 정합성을 유지하기 위함이다.
 - **event/event_schedule status 값**: 문서에 명시되지 않았던 `events.status`(DRAFT/CONFIRMED/CANCELLED/POSTPONED/ENDED/ARCHIVED), `event_schedules.status`(SCHEDULED/CONFIRMED/CANCELLED/POSTPONED/COMPLETED) 등 세부 상태값을 이번에 확정했다. 구현 중 부족하면 CHECK 제약을 조정한다.
+- **staff_sessions 추가**: 최초 ERD 확정 시에는 없던 테이블이다. Phase 1 구현 중 루트 관리자 로그인을 세션+쿠키 방식으로 확정하면서([07-admin-dashboard.md §7.6.3](../07-admin-dashboard.md#763-권한-부여-절차-초안)) 추가했다.
 
 ## 다음 단계
 

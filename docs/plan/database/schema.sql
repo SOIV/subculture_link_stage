@@ -572,6 +572,16 @@ CREATE TABLE staff_accounts (
   updated_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- 루트 관리자 로그인 세션 (§7.6.3 결정 — DB 저장 세션 + 쿠키, JWT 미사용).
+-- token_hash에는 쿠키로 내려가는 토큰 원문이 아닌 sha256 해시만 저장한다.
+CREATE TABLE staff_sessions (
+  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  staff_account_id  UUID NOT NULL REFERENCES staff_accounts(id) ON DELETE CASCADE,
+  token_hash        TEXT UNIQUE NOT NULL,
+  expires_at        TIMESTAMPTZ NOT NULL,
+  created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE event_organizer_accounts (
   id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   login_method      TEXT NOT NULL,
@@ -800,6 +810,7 @@ CREATE INDEX idx_review_tasks_status     ON review_tasks (status);
 CREATE INDEX idx_entity_localizations_lookup ON entity_localizations (entity_type, entity_id);
 CREATE INDEX idx_translation_jobs_status     ON translation_jobs (status);
 
+CREATE INDEX idx_staff_sessions_account            ON staff_sessions (staff_account_id);
 CREATE INDEX idx_event_organizer_permissions_event ON event_organizer_permissions (event_id);
 CREATE INDEX idx_notification_jobs_status           ON notification_jobs (status);
 CREATE INDEX idx_storage_links_event                ON storage_links (event_id);
