@@ -89,7 +89,7 @@ Onstage와 Backstage는 인증 방식을 완전히 분리한다. 두 시스템�
 
 > **미결 사항**: 신원 확인 절차의 구체적 기준(공식 SNS 계정 DM만 인정할지, 이메일 도메인 검증을 병행할지 등)과, 행사 관리자 대표 지정 기준(최초 등록자를 대표로 고정할지, 루트 관리자가 별도 지정할지)은 아직 정해지지 않았다. 구현 착수 전 확정 필요.
 
-> **미결 사항**: 루트 관리자 계정 자체의 세션/JWT 구현 방식과 복구 수단(비밀번호 분실 등)은 아직 확정되지 않았다.
+> **결정 (2026-09-01)**: 루트 관리자 세션은 DB 저장 세션 + HttpOnly 쿠키 방식으로 구현했다(JWT 대신 — 1인 운영 규모에서 즉시 무효화가 쉬운 쪽을 택함). `staff_sessions` 테이블에 세션 토큰의 해시만 저장한다. 비밀번호 복구는 별도 셀프서비스 없이, 운영자가 `create-root-admin` 스크립트로 직접 재설정한다(이메일 발송 인프라가 없으므로). 구현: `scls-platform` repo의 `apps/api/src/lib/session.ts`, `apps/api/src/routes/auth.ts`, `apps/api/src/scripts/create-root-admin.ts` 참고.
 
 권한 역할 구분은 [10-infra-ops-security.md §보안 및 권한](10-infra-ops-security.md)의 역할 목록을 따르되, 행사 관리자 관련 권한은 전역 역할이 아니라 event_id 단위로 스코프되는 별도 권한 매핑으로 관리한다.
 
