@@ -119,7 +119,7 @@
 - [x] Repository 구조 확정 (2-Repo: `scls-onstage` 별도 공개 저장소 + `scls-platform` 비공개 Monorepo — [03-architecture-and-domain.md §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))
 - [x] ERD 확정 (도메인별 6개 다이어그램 + 전체 DDL — [database/erd.md](database/erd.md), [database/schema.sql](database/schema.sql))
 - [x] DB 제공자 확정 (Supabase, Neon은 상시 커넥션 시 과금 급증 리스크로 제외 — [10-infra-ops-security.md §10.1.1](10-infra-ops-security.md#1011-권장-기술-스택))
-- [ ] 행사 관리자 권한 부여 세부 절차 확정 (신원 확인 기준, 대표 지정 기준, 루트 관리자 계정 복구 수단 — 07-admin-dashboard.md §7.6.3 미결 항목)
+- [x] 행사 관리자 권한 부여 세부 절차 확정 (신원 확인은 행사 공식 SNS 계정 DM, 대표는 최초 신원 확인된 요청자로 고정 — [07-admin-dashboard.md §7.6.3](07-admin-dashboard.md#763-권한-부여-절차))
 - [ ] 행사 관리자 계정 도입 Phase 배치 (현재 로드맵 미배치 — [02-users-and-scope.md §2.1.3](02-users-and-scope.md#213-행사-측-담당자-행사-관리자) 참고)
 - [ ] 비용 상한 및 트리거 확정
 
