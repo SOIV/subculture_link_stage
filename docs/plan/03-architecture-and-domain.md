@@ -92,6 +92,8 @@ scls-platform          (비공개, 단일 Monorepo — pnpm workspaces 등)
 - AI 코딩 에이전트는 하나의 워킹 디렉터리 컨텍스트 안에서 여러 서비스에 걸친 변경(예: DB 스키마 변경 → api/worker/backstage 동시 반영)을 한 번에 처리할 때 가장 효율적이다. 4개로 쪼개진 저장소를 오가며 각각에서 세션을 새로 여는 구조는 이런 작업에서 불필요한 마찰을 만든다.
 - 따라서 공개 범위 경계(Onstage vs 나머지)에서만 저장소를 나누고, 비공개 영역은 하나의 Monorepo로 묶어 공유 패키지(`packages/db`, `packages/domain`)를 통해 타입을 직접 공유한다.
 
+> **결정 (2026-09-03)**: 프론트엔드 프레임워크는 두 앱을 다르게 가져간다. `apps/backstage`는 React + Vite + TanStack Router/Query + Tailwind v4로 구현한다 — CRUD/폼 위주의 내부 관리자 도구라 관리자 UI 생태계와 AI 코딩 어시스트 학습량이 풍부한 React가 유리하다. `scls-onstage`(착수 전)는 Svelte/SvelteKit을 사용할 예정이다 — 공개 웹이라 SEO·초기 로딩이 중요하고, 특히 iframe 위젯(embed/overlay/ambient, [08-api-and-ics.md §8.1.1](08-api-and-ics.md#811-노출-채널-계층-구조))은 번들 크기에 민감해 Svelte의 작은 런타임이 이점이 크다. Backstage는 기존 Fastify `/admin` API를 그대로 소비하는 순수 SPA이며, 개발 환경에서는 CORS 설정 대신 Vite dev server 프록시(`/admin` → API)로 동일 오리진처럼 동작시킨다.
+
 ## 3.3 Event Series와 Event 구분
 
 `Event Series`는 반복되는 행사 브랜드 또는 시리즈다.
