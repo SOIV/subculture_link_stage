@@ -96,6 +96,7 @@ Backstage 3단계 인증 구조([07-admin-dashboard.md §7.6](07-admin-dashboard
 
 ```text
 staff_accounts
+staff_sessions
 event_organizer_accounts
 event_organizer_permissions
 event_organizer_invites
