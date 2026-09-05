@@ -104,6 +104,12 @@ Onstage와 Backstage는 인증 방식을 완전히 분리한다. 두 시스템�
 
 권한 역할 구분은 [10-infra-ops-security.md §보안 및 권한](10-infra-ops-security.md)의 역할 목록을 따르되, 행사 관리자 관련 권한은 전역 역할이 아니라 event_id 단위로 스코프되는 별도 권한 매핑으로 관리한다.
 
+## 7.7 관리자 UI 다국어 지원
+
+Backstage 관리자 화면 자체의 표시 언어(라벨·버튼·테이블 헤더 등)를 다국어로 지원한다. 이는 행사 콘텐츠(제목·요약 등)의 다국어 저장 구조인 `entity_localizations`([04-database-design.md](04-database-design.md), [06-i18n-translation-glossary.md](06-i18n-translation-glossary.md))와는 완전히 별개의 개념이다 — 전자는 "관리자가 보는 화면 자체의 언어", 후자는 "관리자가 입력하는 행사 데이터의 언어"다.
+
+> **결정 (2026-09-05)**: Backstage는 한국어·영어·일본어 3개 언어를 지원한다. 현재는 운영자 1인만 사용하지만, 향후 [7.6.2](#762-backstage-인증--3단계-구조)의 행사 관리자(대표·하위 계정)가 해외(특히 일본) 행사 담당자로 유입될 가능성이 있어 미리 기반을 잡아둔다. `i18next` + `react-i18next` 기반으로 구현했고, 사이트명("SCLS Backstage")만 언어와 무관하게 고정한다. 언어 선택은 헤더의 드롭다운으로 전환하며 `localStorage`에 저장돼 재방문 시 유지된다. 구현: `scls-platform` repo의 `apps/backstage/src/i18n/`.
+
 ---
 
 [← 목차](README.md) · 이전: [06. 다국어, 번역, 용어집](06-i18n-translation-glossary.md) · 다음: [08. SCLS API 및 ICS 설계](08-api-and-ics.md)

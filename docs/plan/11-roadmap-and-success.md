@@ -18,13 +18,13 @@
 ### Phase 1 — Core MVP
 
 - [x] PostgreSQL 및 Migration 구성 (Supabase 프로젝트 연결, `scls-platform` 비공개 저장소의 `packages/db`에 Phase 1 범위 Prisma 스키마 및 초기 migration 적용 완료)
-- [ ] Event Series, Event, Event Schedule 구현 (Prisma 스키마·테이블은 위 migration에 포함됨 — 여기서는 CRUD API/관리자 UI까지의 완성을 의미. `/admin` 프리픽스 CRUD API는 구현·인증 연결 완료(`scls-platform`의 `apps/api/src/routes/event-series.ts`, `events.ts`, `event-schedules.ts`), 관리자 UI는 Event Series만 CRUD 구현 완료(`scls-platform`의 `apps/backstage`), Event·Event Schedule 화면은 아직 미착수)
-- [ ] Venue, Organizer, Tag 구현 (스키마는 포함됨 — `/admin` CRUD API는 구현·인증 연결 완료(`scls-platform`의 `apps/api/src/routes/venues.ts`, `organizers.ts`, `tag-groups.ts`, `tags.ts`), 관리자 UI는 아직 미착수)
-- [ ] Localizations 구현 (스키마는 포함됨, CRUD API/UI 남음)
+- [x] Event Series, Event, Event Schedule 구현 (Prisma 스키마·테이블은 위 migration에 포함됨. `/admin` 프리픽스 CRUD API 구현·인증 연결 완료(`scls-platform`의 `apps/api/src/routes/event-series.ts`, `events.ts`, `event-schedules.ts`), 관리자 UI도 3종 모두 CRUD 구현 완료(`scls-platform`의 `apps/backstage/src/routes/EventSeriesPage.tsx`, `EventsPage.tsx`, `EventSchedulesPanel.tsx`) — Event Schedule은 선택된 행사에 종속되는 패널 형태)
+- [x] Venue, Organizer, Tag 구현 (스키마 포함 — `/admin` CRUD API 구현·인증 연결 완료(`scls-platform`의 `apps/api/src/routes/venues.ts`, `organizers.ts`, `tag-groups.ts`, `tags.ts`), 관리자 UI도 구현 완료(`scls-platform`의 `apps/backstage/src/routes/VenuesPage.tsx`, `OrganizersPage.tsx`, `TagsPage.tsx` — Tag는 그룹 선택형 2단 구성))
+- [ ] Localizations 구현 (스키마는 포함됨, CRUD API/UI 남음 — 행사 등 각 엔티티의 표시용 title/summary/description은 전부 이 `entity_localizations` 테이블에만 존재하므로, 실제 행사 데이터 입력 전에 우선순위 높게 다뤄야 함)
 - [x] 루트 관리자 로그인 구현 (DB 저장 세션 + 쿠키 방식 — [07-admin-dashboard.md §7.6.3](07-admin-dashboard.md#763-권한-부여-절차-초안) 결정 사항 참고. `scls-platform`의 `apps/api/src/routes/auth.ts`)
-- [ ] 행사 수동 등록·수정 UI
-- [ ] 공개 GET API (`GET /events`, `GET /events/:slug` 최소 스텁만 구현됨(`scls-platform`의 `apps/api/src/server.ts`) — [08-api-and-ics.md §8.2](08-api-and-ics.md#82-공개-api-예시) 스펙 대비 `/v1` 버전 프리픽스, `{success,data}` 응답 봉투, `event-series`/`schedules`/`venues`/`tags`/`search`/`health` 등 나머지 엔드포인트, `category`/`tags`/`franchise`/`from`/`to` 필터 전부 미구현)
-- [ ] ICS 전체 피드
+- [x] 행사 수동 등록·수정 UI (위 Event 관리자 UI로 충족 — `scls-platform`의 `apps/backstage/src/routes/EventsPage.tsx`)
+- [x] 공개 GET API ([08-api-and-ics.md §8.2](08-api-and-ics.md#82-공개-api-예시) 스펙대로 `/v1` 프리픽스, `{success,data}` 응답 봉투로 구현 완료 — `scls-platform`의 `apps/api/src/routes/public-*.ts`. `events`/`events/:slug`/`event-series`/`schedules`/`venues`/`tags`/`search`/`health` 전부 구현, `events` 목록은 `country`/`tags`/`from`/`to` 필터 지원. `category`/`franchise` 필터는 대응 데이터 모델이 아직 없어(franchises는 Phase 1 범위 밖) 보류. title/summary는 `entity_localizations` 조회로 채워지나 입력 UI가 아직 없어 대부분 null)
+- [x] ICS 전체 피드 ([08-api-and-ics.md §8.6](08-api-and-ics.md#86-ics-및-캘린더-설계) 기준 `/v1/calendars/all.ics`·`online.ics`·`custom.ics`(country/tags/from/to 필터)와 국가 코드 기반 피드(`kr.ics`/`jp.ics` 등, 하드코딩 없이 일반화) 구현 완료 — `scls-platform`의 `apps/api/src/routes/public-calendars.ts`. VTIMEZONE 블록 없이 TZID만 쓰는 최소 RFC 5545 구현)
 - [ ] 테스트 행사 20개 이상 등록
 
 ### Phase 2 — 수집 및 검수
@@ -122,6 +122,7 @@
 - [x] DB 제공자 확정 (Supabase, Neon은 상시 커넥션 시 과금 급증 리스크로 제외 — [10-infra-ops-security.md §10.1.1](10-infra-ops-security.md#1011-권장-기술-스택))
 - [x] 행사 관리자 권한 부여 세부 절차 확정 (신원 확인은 행사 공식 SNS 계정 DM, 대표는 최초 신원 확인된 요청자로 고정 — [07-admin-dashboard.md §7.6.3](07-admin-dashboard.md#763-권한-부여-절차))
 - [x] 행사 관리자 계정 도입 Phase 배치 (Change Proposal 파이프라인이 구축되는 Phase 2로 확정 — [02-users-and-scope.md §2.1.3](02-users-and-scope.md#213-행사-측-담당자-행사-관리자) 참고)
+- [x] Backstage 관리자 UI 다국어 지원 범위 확정 (ko/en/ja 3개 언어, `i18next` 기반 — 행사 콘텐츠 다국어(`entity_localizations`)와는 별개 개념. 결정 및 구현 완료 — [07-admin-dashboard.md §7.7](07-admin-dashboard.md#77-관리자-ui-다국어-지원))
 - [ ] 비용 상한 및 트리거 확정
 
 ### 구현
