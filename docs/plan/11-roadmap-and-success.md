@@ -2,6 +2,10 @@
 
 # 11. 개발 단계, 성공 기준, 구현 체크리스트
 
+> [!NOTE]
+> 현황 기준: 2026-09-07. 현재 Phase 1 Core MVP 개발을 Private `scls-platform`에서 진행 중이다. API·Backstage 초기 기능과 공개 GET API·ICS 피드를 구현했으며, Localizations CRUD API/UI와 테스트 데이터 등록 등은 남아 있다. Subculture Onstage는 아직 미착수이며 이 공식 공개 Repository에서 개발할 예정이다.
+> `[x]`는 해당 기획·설계 또는 개별 구현 항목의 완료를 뜻하며, 세부 기능 완료만으로 Phase 전체 완료나 운영 배포를 뜻하지 않는다. Private 파일 경로는 개발 기록의 구현 근거로만 남긴다.
+
 ## 11.1 개발 단계
 
 ### Phase 0 — 기획 및 기반 설계
@@ -12,7 +16,7 @@
 - [x] 일정 분류 코드 정의 (`schedule_type` 15종 — [database/schema.sql](database/schema.sql) §1)
 - [x] 번역 상태 및 검수 상태 정의 (`translation_source`/`translation_status` — [06-i18n-translation-glossary.md §6.1.3](06-i18n-translation-glossary.md#613-번역-출처-및-상태))
 - [x] 태그 분류 코드 확정 (트리 구조는 [04-database-design.md §4.4](04-database-design.md#44-태그-구조), 확정 9개 행사 기준 초기 시드 매핑은 [§4.4.1](04-database-design.md#441-초기-시드-매핑-확정-9개-행사-기준) — 티켓 방식 세부 구분 등 잔여 항목은 Phase 1 구현과 병행)
-- [x] 초기 대상 행사 10개 선정 ([02-users-and-scope.md §2.3.3](02-users-and-scope.md#233-초기-대상-행사-시리즈-확정) — 실제 DB 등록 콘텐츠 작업은 Phase 1 구현과 병행)
+- [x] 초기 대상 행사 시리즈 9개 선정 ([02-users-and-scope.md §2.3.3](02-users-and-scope.md#233-초기-대상-행사-시리즈-확정) — 실제 DB 등록 콘텐츠 작업은 Phase 1 구현과 병행)
 - [ ] 초기 수집 출처 및 이용 조건 확인 (X/Instagram 등 SNS API 접근 가능 여부 포함 — Phase 2에서 필요, Phase 1 착수를 막지 않음)
 
 ### Phase 1 — Core MVP
@@ -21,11 +25,12 @@
 - [x] Event Series, Event, Event Schedule 구현 (Prisma 스키마·테이블은 위 migration에 포함됨. `/admin` 프리픽스 CRUD API 구현·인증 연결 완료(`scls-platform`의 `apps/api/src/routes/event-series.ts`, `events.ts`, `event-schedules.ts`), 관리자 UI도 3종 모두 CRUD 구현 완료(`scls-platform`의 `apps/backstage/src/routes/EventSeriesPage.tsx`, `EventsPage.tsx`, `EventSchedulesPanel.tsx`) — Event Schedule은 선택된 행사에 종속되는 패널 형태)
 - [x] Venue, Organizer, Tag 구현 (스키마 포함 — `/admin` CRUD API 구현·인증 연결 완료(`scls-platform`의 `apps/api/src/routes/venues.ts`, `organizers.ts`, `tag-groups.ts`, `tags.ts`), 관리자 UI도 구현 완료(`scls-platform`의 `apps/backstage/src/routes/VenuesPage.tsx`, `OrganizersPage.tsx`, `TagsPage.tsx` — Tag는 그룹 선택형 2단 구성))
 - [ ] Localizations 구현 (스키마는 포함됨, CRUD API/UI 남음 — 행사 등 각 엔티티의 표시용 title/summary/description은 전부 이 `entity_localizations` 테이블에만 존재하므로, 실제 행사 데이터 입력 전에 우선순위 높게 다뤄야 함)
-- [x] 루트 관리자 로그인 구현 (DB 저장 세션 + 쿠키 방식 — [07-admin-dashboard.md §7.6.3](07-admin-dashboard.md#763-권한-부여-절차-초안) 결정 사항 참고. `scls-platform`의 `apps/api/src/routes/auth.ts`)
+- [x] 루트 관리자 로그인 구현 (DB 저장 세션 + 쿠키 방식 — [07-admin-dashboard.md §7.6.3](07-admin-dashboard.md#763-권한-부여-절차) 결정 사항 참고. `scls-platform`의 `apps/api/src/routes/auth.ts`)
 - [x] 행사 수동 등록·수정 UI (위 Event 관리자 UI로 충족 — `scls-platform`의 `apps/backstage/src/routes/EventsPage.tsx`)
-- [x] 공개 GET API ([08-api-and-ics.md §8.2](08-api-and-ics.md#82-공개-api-예시) 스펙대로 `/v1` 프리픽스, `{success,data}` 응답 봉투로 구현 완료 — `scls-platform`의 `apps/api/src/routes/public-*.ts`. `events`/`events/:slug`/`event-series`/`schedules`/`venues`/`tags`/`search`/`health` 전부 구현, `events` 목록은 `country`/`tags`/`from`/`to` 필터 지원. `category`/`franchise` 필터는 대응 데이터 모델이 아직 없어(franchises는 Phase 1 범위 밖) 보류. title/summary는 `entity_localizations` 조회로 채워지나 입력 UI가 아직 없어 대부분 null)
+- [x] 공개 GET API ([08-api-and-ics.md §8.2](08-api-and-ics.md#82-공개-api-예시)의 현재 구현 범위로 `/v1` 프리픽스, `{success,data}` 응답 봉투로 구현 완료 — `scls-platform`의 `apps/api/src/routes/public-*.ts`. `events`/`events/:slug`/`event-series`/`schedules`/`venues`/`tags`/`search`/`health` 전부 구현, `events` 목록은 `country`/`tags`/`from`/`to` 필터 지원. `category`/`franchise` 필터는 대응 데이터 모델이 아직 없어(franchises는 Phase 1 범위 밖) 보류. title/summary는 `entity_localizations` 조회로 채워지나 입력 UI가 아직 없어 대부분 null)
 - [x] ICS 전체 피드 ([08-api-and-ics.md §8.6](08-api-and-ics.md#86-ics-및-캘린더-설계) 기준 `/v1/calendars/all.ics`·`online.ics`·`custom.ics`(country/tags/from/to 필터)와 국가 코드 기반 피드(`kr.ics`/`jp.ics` 등, 하드코딩 없이 일반화) 구현 완료 — `scls-platform`의 `apps/api/src/routes/public-calendars.ts`. VTIMEZONE 블록 없이 TZID만 쓰는 최소 RFC 5545 구현)
 - [ ] 테스트 행사 20개 이상 등록
+- [ ] Subculture Onstage 행사 상세 웹페이지 — 미착수, 이 공개 Repository에서 개발 예정 ([02-users-and-scope.md §2.2.1](02-users-and-scope.md#221-core-mvp-기능-phase-1))
 
 ### Phase 2 — 수집 및 검수
 
@@ -113,11 +118,11 @@
 - [x] 계획 문서를 카테고리별 파일로 분리 ([docs/plan/](README.md))
 - [x] OpenAPI 공개 시점 확정 (Phase 2 개발 착수 / Phase 3 전체 공개)
 - [x] 운영 형태 확정 (무료 + 부분 유료화, 유료화 전에는 후원 기반)
-- [x] 소스 공개 범위 확정 (Onstage만 오픈소스, API/Worker/Backstage는 비공개)
+- [x] 공개 범위 확정 (프로젝트·개발/설계·ERD·참고 DDL·Roadmap·Legacy 문서 공개, 향후 OpenAPI/API 문서·Onstage 소스 공개, API/Backstage/Worker/Scheduler 및 내부 운영 구현 비공개)
 - [x] 개발·운영 참여 방식 확정 (메인 개발자 문의 기반)
-- [ ] 초기 데이터 분류 코드 확정
+- [ ] 초기 데이터 분류 코드 잔여 항목 확정 (기본 schedule/translation/tag 코드는 §11.1 Phase 0에서 정리, 티켓 방식 등 세부 분류는 구현과 병행)
 - [x] 관리자 인증 방식 확정 (루트 관리자 / 행사 관리자 대표 / 행사 관리자 하위 계정 3단계 구조 — [07-admin-dashboard.md §7.6](07-admin-dashboard.md#76-인증-및-권한-구조))
-- [x] Repository 구조 확정 (2-Repo: `scls-onstage` 별도 공개 저장소 + `scls-platform` 비공개 Monorepo — [03-architecture-and-domain.md §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))
+- [x] Repository 구조 확정 (2-Repo: 현재 `Subculture_Link_Stage` 공식 공개 Repository에 문서와 향후 Onstage를 함께 관리 + `scls-platform` 비공개 Monorepo — [03-architecture-and-domain.md §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))
 - [x] ERD 확정 (도메인별 6개 다이어그램 + 전체 DDL — [database/erd.md](database/erd.md), [database/schema.sql](database/schema.sql))
 - [x] DB 제공자 확정 (Supabase, Neon은 상시 커넥션 시 과금 급증 리스크로 제외 — [10-infra-ops-security.md §10.1.1](10-infra-ops-security.md#1011-권장-기술-스택))
 - [x] 행사 관리자 권한 부여 세부 절차 확정 (신원 확인은 행사 공식 SNS 계정 DM, 대표는 최초 신원 확인된 요청자로 고정 — [07-admin-dashboard.md §7.6.3](07-admin-dashboard.md#763-권한-부여-절차))
@@ -127,7 +132,8 @@
 
 ### 구현
 
-- [ ] Phase 1: Core MVP
+- [x] Phase 1: Core MVP 개발 착수
+- [ ] Phase 1: Core MVP — 진행 중 (§11.1 세부 항목 기준)
 - [ ] Phase 2: 수집 및 검수
 - [ ] Phase 3: 다국어 번역
 - [ ] Phase 4: 커뮤니티 기여

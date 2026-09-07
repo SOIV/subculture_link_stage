@@ -2,19 +2,21 @@
 
 [한국어](README.md) | [English](README.en.md) | [日本語](README.ja.md)
 
-> A multilingual event information platform that collects, reviews, and translates official subculture and gaming event information — including events in Korea, Japan, and online — and provides it through a website, API, ICS calendars, and external services.
+> A multilingual relational event data platform for official subculture and gaming events in Korea, Japan, and worldwide, both online and in person. SCLS collects, reviews, and translates information, structuring the relationships between works/IP, event series, individual events, schedules, venues, organizers, participants/performers, and tags for reuse through the Web, API, ICS, and external services.
 
-The project is currently in the **planning stage (Phase 0)**; no code has been written yet. The full development plan is maintained in Korean at [docs/plan/](docs/plan/README.md).
+SCLS is in **early development, with Phase 1 Core MVP underway**. This official public repository (`Subculture_Link_Stage`) maintains the project’s planning and design documents and will also host the Subculture Onstage source. SCLS API, Subculture Backstage, and internal services are being developed in the separate private repository `scls-platform`, where some API and Backstage features are already implemented. This repository does not yet contain Onstage code. The development plan and implementation status are maintained in Korean at [docs/plan/](docs/plan/README.md).
 
 ## Why we're building this
 
-- In Korea, apps already exist that aggregate domestic event information, but very few (if any) also cover overseas events, including those in Japan.
-- There is essentially no service that offers this kind of event information as an ICS feed that can be subscribed to directly from Google Calendar and similar apps.
+- Apps already aggregate domestic events in Korea, while services that bring domestic and overseas events, including those in Japan, together remain limited.
+- Services offering subculture event information as a unified ICS feed for direct subscription in Google Calendar and similar apps are also limited.
 - SCLS's core differentiators are **unified event information covering overseas events, plus a public ICS feed**.
 
 See [docs/plan/01-overview-and-principles.md](docs/plan/01-overview-and-principles.md) (Korean) for background.
 
 ## Services
+
+The following describes both features under development and future plans.
 
 | Name | Role |
 |---|---|
@@ -37,27 +39,30 @@ See [docs/plan/01-overview-and-principles.md](docs/plan/01-overview-and-principl
 
 See [docs/plan/03-architecture-and-domain.md](docs/plan/03-architecture-and-domain.md) (Korean) for the full architecture.
 
-## Tech stack (planned)
+## Tech stack (current and planned)
 
 | Area | Stack |
 |---|---|
-| Backend | Node.js + TypeScript (evaluating Express / Fastify / NestJS) |
-| Web | Next.js + React |
+| Backend | Node.js + TypeScript + Fastify (initial implementation) |
+| Backstage | React + Vite + TanStack Router/Query + Tailwind v4, ko/en/ja UI (`i18next`) (initial implementation) |
+| Onstage | Svelte/SvelteKit (planned; not started) |
 | DB | PostgreSQL (Supabase) |
-| ORM | Prisma or Drizzle |
-| Queue | Redis + BullMQ |
-| Storage | Cloudflare R2 / S3 |
-| Search | PostgreSQL FTS → pgvector (once data accumulates) |
-| ICS | ical-generator |
-| CDN/DNS | Cloudflare |
+| ORM | Prisma (Phase 1 schema/migration applied) |
+| Queue | Redis + BullMQ (planned) |
+| Storage | Cloudflare R2 / S3 (planned) |
+| Search | Initial public search API implemented; PostgreSQL FTS → pgvector expansion planned as data accumulates |
+| ICS | Initial basic feeds implemented; ical-generator is a candidate library |
+| CDN/DNS | Cloudflare (operations plan) |
 
 See [docs/plan/10-infra-ops-security.md](docs/plan/10-infra-ops-security.md) (Korean) for infrastructure and operations details.
 
-## Open source scope
+## Repository publication scope
 
-- Only **Subculture Onstage** (the public web app) will be open-sourced, to invite outside contributions in UI/UX and design — an area the maintainer is weaker in.
-- The API server, Workers (collection/translation/notifications), and Subculture Backstage (admin web app) remain closed source. Publishing the OpenAPI spec (usage documentation) is separate from publishing source code.
-- Participation in the closed-source areas happens through direct outreach to the maintainer rather than public PRs — see Contact below.
+- **Official public repository — `Subculture_Link_Stage` (this repository)**: project and development documentation, architecture and data models, ERDs and reference DDL, the roadmap, and legacy designs. Future OpenAPI/API developer documentation and Subculture Onstage source will also live here. ERDs and DDL are design references, not production database dumps or guaranteed one-to-one copies of the private ORM schema/migrations.
+- **Private implementation — `scls-platform`**: the SCLS API server, Subculture Backstage, Collectors/Workers, Scheduler, actual database migrations/ORM schema, and other internal services and operations code.
+- Among service implementations, **Subculture Onstage** (the public web app) will be open source, welcoming contributions to UI/UX, design, and related work. A separate public `scls-onstage` repository is not required; the frontend’s directory within this repository is still undecided.
+- Publishing the OpenAPI specification (usage documentation) is separate from publishing the API server’s source code.
+- Contributors can also participate in private development and operations by contacting the maintainer directly, rather than through public PRs; see Contact below.
 
 See [docs/plan/01-overview-and-principles.md §1.6.3](docs/plan/01-overview-and-principles.md#163-소스-공개-및-참여-정책) (Korean) for details.
 
@@ -89,9 +94,14 @@ Earlier single-document versions (v1–v3) are archived in [docs/legacy/](docs/l
 - [x] Planning docs split by topic
 - [x] Admin authentication model (3-tier permission structure) finalized
 - [x] Operating model and open-source scope finalized
-- [x] PostgreSQL ERD finalized
-- [x] Repository structure finalized (2-repo: `scls-onstage` public + `scls-platform` private monorepo)
-- [ ] Phase 1 (Core MVP) implementation started
+- [x] PostgreSQL ERD design baseline documented
+- [x] Repository structure finalized (this public repository for docs and future Onstage + private `scls-platform` monorepo)
+- [x] Phase 1 Core MVP development started
+- [ ] Phase 1 Core MVP — in progress
+- [ ] Initial API implementation — in progress (core data CRUD, root admin login, public GET API, and ICS feeds implemented)
+- [ ] Initial Backstage implementation — in progress (manual event, schedule, and reference data management UI, plus ko/en/ja UI implemented)
+- [ ] Localizations CRUD API/UI and registration of at least 20 test events
+- [ ] Subculture Onstage — not started; planned for this public repository
 
 See [docs/plan/11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md) (Korean) for the full roadmap and checklist.
 

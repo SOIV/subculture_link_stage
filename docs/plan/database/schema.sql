@@ -1,9 +1,11 @@
 -- Subculture Link Stage (SCLS) — Reference Schema
 --
 -- docs/plan/04-database-design.md §4.2(주요 테이블 그룹)·§4.3(핵심 테이블 예시)를 기준으로
--- 전체 테이블을 확정한 참고용 DDL이다. 실제 Migration(Prisma/Drizzle 등) 도구가 정해지면
--- 이 파일을 1:1로 옮기지 않고 해당 도구의 스키마 정의로 재작성하되, 테이블/컬럼/관계는
--- 이 문서를 기준으로 삼는다.
+-- SCLS의 논리적 데이터 모델과 설계 기준을 정리한 참고용 DDL이다.
+-- 실제 운영 DB와 Private scls-platform의 ORM schema/migration은 구현 시점에 따라
+-- 차이가 있을 수 있으며, 이 파일과 항상 1:1로 동일함을 보장하지 않는다.
+-- 현재 Phase 1 범위 Prisma 스키마와 초기 migration은 Private Repository에서 관리한다.
+-- 이 파일은 production database dump가 아니며 credential 또는 실제 DB connection 정보를 포함하지 않는다.
 --
 -- 표기 규칙
 --   - PK는 전부 UUID (gen_random_uuid())

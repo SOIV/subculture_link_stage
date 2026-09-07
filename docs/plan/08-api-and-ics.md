@@ -2,6 +2,10 @@
 
 # 08. SCLS API 및 ICS 설계
 
+> [!NOTE]
+> 현재 Private `scls-platform`에서 Phase 1 공개 GET API와 기본 ICS 피드의 초기 구현을 완료했다. 이는 외부 서비스 배포나 OpenAPI 문서 공개 완료를 의미하지 않는다.
+> 아래에는 현재 구현과 향후 설계 예시가 함께 있으며, 필터·응답 필드·후기 채널 전체가 구현된 것은 아니다. 구현 근거와 남은 작업은 [로드맵](11-roadmap-and-success.md)을 참고한다.
+
 ## 8.1 SCLS API 원칙
 
 - 공개 읽기 API와 내부 관리자 API 분리
@@ -14,7 +18,7 @@
 
 ### 8.1.1 노출 채널 계층 구조
 
-서비스가 지원하는 실제 전송 계층은 Pull 1개(API)와 Push 4개(WebSocket · Webhook · Discord · Web Push)이며, 그 외 노출 채널은 모두 이들을 소비하는 클라이언트이거나 포맷 변형이다.
+설계상 목표로 하는 전송 계층은 Pull 1개(API)와 Push 4개(WebSocket · Webhook · Discord · Web Push)이며, 그 외 노출 채널은 모두 이들을 소비하는 클라이언트이거나 포맷 변형이다.
 
 ```text
 [전송 계층]
@@ -44,6 +48,14 @@ EMAIL 채널 제외로 생겼던 "일반 웹 사용자의 개인화 알림 공�
 
 ## 8.2 공개 API 예시
 
+| 구분 | 현재 상태 |
+|---|---|
+| 구현됨 (Phase 1) | `/v1/events`, `/v1/events/:slug`, `/v1/event-series`, `/v1/schedules`, `/v1/venues`, `/v1/tags`, `/v1/search`, `/v1/health` |
+| 구현됨 (행사 목록 필터) | `country`, `tags`, `from`, `to` |
+| 계획/보류 | `/v1/franchises`, `category`/`franchise` 필터 — 대응 데이터 모델 미구현 |
+
+아래는 설계 기준 예시다. 행사 상세의 설계상 `{eventId}` 표기와 달리 현재 구현은 `:slug`로 조회한다. `locale` 등 나머지 파라미터와 응답 필드의 실제 지원 범위는 구현 및 향후 OpenAPI 문서에서 확인해야 한다.
+
 ```http
 GET /v1/events
 GET /v1/events/{eventId}
@@ -70,6 +82,8 @@ GET /v1/events
 ```
 
 ## 8.3 응답 예시
+
+다국어·번역 필드를 포함한 목표 응답 형식의 예시다. 현재 title/summary는 `entity_localizations`에서 조회하지만 Localizations CRUD API/UI가 미완료여서 대부분 null이며, 아래 예시 전체가 현재 응답 계약이라는 의미는 아니다.
 
 ```json
 {
@@ -106,7 +120,7 @@ GET /v1/events
 
 ## 8.4 디스코드 봇 연동 예시
 
-디스코드 봇은 필요에 따라 다음 공개 API를 사용할 수 있다.
+디스코드 봇 연동 시 활용할 API의 설계 예시다. `/v1/events/upcoming`과 `/v1/changes`는 현재 구현 완료 목록에 포함되지 않은 계획이며, 행사 상세의 현재 식별자는 §8.2를 참고한다.
 
 ```http
 GET /v1/events/upcoming
@@ -119,7 +133,7 @@ GET /v1/changes?since=...
 
 ## 8.5 OpenAPI 공개 전략
 
-현재 이 서비스 영역의 API가 공식적으로 존재하지 않아, 관심 있는 개발자들이 각자 개인 앱을 만들어 개별적으로 정보를 수집해 쓰고 있는 상태다. 이런 앱들은 대부분 국내(한국) 행사에 한정되어 있고, 캘린더에서 바로 구독 가능한 ICS 피드를 제공하는 서비스는 사실상 없는 수준이라 이 두 지점이 비어 있다. OpenAPI 스펙을 공개하면 "매번 따로 확인하지 않고 한 곳에서 볼 수 있는" 대안이 될 수 있고, 이는 SCLS의 초기 사용자 확보 포인트가 될 수 있다. 시장 차별점 전반은 [01-overview-and-principles.md §1.6](01-overview-and-principles.md#16-운영-형태-및-공개-정책) 참고.
+관심 있는 개발자들이 개인 앱에서 행사 정보를 개별 수집해 쓰는 경우가 있다. 일본·해외 행사까지 통합적으로 다루는 API와 캘린더에서 바로 구독 가능한 통합 ICS 피드 서비스는 제한적이다. OpenAPI 스펙을 공개하면 "매번 따로 확인하지 않고 한 곳에서 볼 수 있는" 대안이 될 수 있고, 이는 SCLS의 초기 사용자 확보 포인트가 될 수 있다. 시장 차별점 전반은 [01-overview-and-principles.md §1.6](01-overview-and-principles.md#16-운영-형태-및-공개-정책) 참고.
 
 OpenAPI 스펙 공개는 API의 사용법(엔드포인트, 파라미터, 응답 형식)을 공개하는 것이며, 서버 구현 소스코드를 오픈소스로 공개하는 것과는 다르다. 소스 공개 및 개발 참여 정책은 [01-overview-and-principles.md §1.6.3](01-overview-and-principles.md#163-소스-공개-및-참여-정책) 참고.
 
@@ -129,11 +143,11 @@ OpenAPI 스펙 공개는 API의 사용법(엔드포인트, 파라미터, 응답 
 
 ```text
 Phase 1 (Core MVP)
-- 공개 읽기 API 라우트 구현
+- 공개 읽기 API 라우트와 기본 ICS 피드 초기 구현 완료 (§8.2, §8.6 범위)
 - OpenAPI 스펙은 아직 작성하지 않음
 
 Phase 2 (수집 및 검수)
-- 라우트 구현과 동시에 OpenAPI 3.x 스펙 작성 착수
+- Phase 1 구현 라우트 및 추가 라우트를 기준으로 OpenAPI 3.x 스펙 작성 착수
 - API Docs 페이지(예: Swagger UI/Redoc 기반) 개발 착수
 - 이 시점에는 비공개 상태로 관리자만 접근 (내부 정합성 확인용)
 
@@ -155,11 +169,18 @@ Phase 6 (운영 확장)
 ### 8.5.2 미결 사항
 
 - 스펙 우선(Spec-first) vs 코드 우선(Code-first, 라우트 주석에서 자동 생성) 방식 중 어느 쪽으로 OpenAPI 스펙을 유지보수할지는 Phase 2 착수 시점에 결정한다.
-- Docs 페이지를 별도 서브도메인으로 둘지, `scls-onstage` 내 경로로 둘지는 미정이다.
+- API 문서는 이 공식 공개 Repository에서 관리할 예정이다. Subculture Onstage 내 developer/API docs route로 둘지 별도 docs deployment로 둘지와 서브도메인 구성은 미정이다.
 
 ## 8.6 ICS 및 캘린더 설계
 
 ### 8.6.1 기본 피드
+
+| 구분 | 현재 상태 |
+|---|---|
+| 구현됨 (Phase 1) | `all.ics`, `online.ics`, 국가 코드 기반 피드(`kr.ics`/`jp.ics` 등), `custom.ics`의 `country`/`tags`/`from`/`to` 필터 |
+| 계획 | `game.ics`, `concert.ics`, `ticket.ics` 등 카테고리별 고정 피드와 작품별 피드 |
+
+현재 구현은 VTIMEZONE 블록 없이 TZID를 사용하는 최소 형태이며, 캘린더 클라이언트 호환성 확인은 별도로 필요하다. 아래 경로 목록에는 계획 중인 피드도 포함한다.
 
 ```text
 /v1/calendars/all.ics
@@ -177,7 +198,7 @@ Phase 6 (운영 확장)
 /v1/calendars/custom.ics?country=JP&tags=concert&locale=ko-KR
 ```
 
-개인화 피드는 사용자 인증 기능 도입 이후 제공한다.
+위 예시의 `locale`을 통한 언어 선택은 설계 기준이며 현재 구현 지원을 확정한 항목은 아니다. 개인화 피드는 사용자 인증 기능 도입 이후 제공한다.
 
 ### 8.6.3 일정 표현 원칙
 

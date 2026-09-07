@@ -2,19 +2,21 @@
 
 [한국어](README.md) | [English](README.en.md) | [日本語](README.ja.md)
 
-> 한국·일본·글로벌 온·오프라인을 포함한 서브컬처 및 게임 관련 공식 행사 정보를 수집·검수·번역하여 웹, API, ICS 캘린더 및 외부 서비스에 제공하는 다국어 행사 정보 플랫폼
+> 한국·일본·글로벌 온·오프라인의 서브컬처 및 게임 관련 공식 행사 정보를 수집·검수·번역하고, 작품/IP·행사 시리즈·개별 행사·일정·장소·주최사·참가/출연 주체·태그의 관계를 구조화하여 Web/API/ICS 및 외부 서비스에서 재사용할 수 있도록 제공하는 다국어 관계형 행사 데이터 플랫폼
 
-현재 프로젝트는 **기획 단계(Phase 0)** 이며, 아직 코드는 작성되지 않았습니다. 개발 계획 전체는 [docs/plan/](docs/plan/README.md)에 정리되어 있습니다.
+현재 SCLS는 **초기 개발 단계(Phase 1 Core MVP 진행 중)** 입니다. 프로젝트의 기획·설계 문서와 향후 Subculture Onstage 소스는 이 공식 공개 Repository(`Subculture_Link_Stage`)에서 관리합니다. SCLS API, Subculture Backstage 및 내부 서비스는 별도 비공개 Repository인 `scls-platform`에서 개발 중이며, API·Backstage 일부 기능이 구현되어 있습니다. 이 저장소에는 아직 Onstage 코드가 없습니다. 개발 계획과 구현 현황은 [docs/plan/](docs/plan/README.md)에 정리되어 있습니다.
 
 ## 왜 만드는가
 
-- 국내에는 국내 한정 행사 정보를 모아 보여주는 앱이 이미 있지만, 일본을 포함한 해외 행사까지 함께 다루는 서비스는 거의 없습니다.
-- Google Calendar 등에서 바로 구독 가능한 ICS 피드로 이런 행사 정보를 제공하는 서비스도 사실상 없습니다.
+- 국내에는 국내 한정 행사 정보를 모아 보여주는 앱이 이미 있지만, 일본을 포함한 해외 행사까지 통합적으로 다루는 서비스는 제한적입니다.
+- Google Calendar 등에서 바로 구독 가능한 통합 ICS 피드로 서브컬처 행사 정보를 제공하는 서비스 역시 제한적입니다.
 - SCLS는 **해외 포함 통합 행사 정보 + ICS 피드 공개**를 핵심 차별점으로 삼습니다.
 
 자세한 배경은 [docs/plan/01-overview-and-principles.md](docs/plan/01-overview-and-principles.md) 참고.
 
 ## 서비스 구성
+
+아래는 구현 중인 기능과 향후 계획을 포함한 서비스 구성입니다.
 
 | 명칭 | 역할 |
 |---|---|
@@ -37,27 +39,30 @@
 
 전체 아키텍처는 [docs/plan/03-architecture-and-domain.md](docs/plan/03-architecture-and-domain.md) 참고.
 
-## 기술 스택 (예정)
+## 기술 스택 (현재 및 예정)
 
 | 영역 | 스택 |
 |---|---|
-| Backend | Node.js + TypeScript (Express / Fastify / NestJS 검토 중) |
-| Web | Next.js + React |
+| Backend | Node.js + TypeScript + Fastify (초기 구현) |
+| Backstage | React + Vite + TanStack Router/Query + Tailwind v4, ko/en/ja UI (`i18next`) (초기 구현) |
+| Onstage | Svelte/SvelteKit (예정, 미착수) |
 | DB | PostgreSQL (Supabase) |
-| ORM | Prisma 또는 Drizzle |
-| Queue | Redis + BullMQ |
-| Storage | Cloudflare R2 / S3 |
-| Search | PostgreSQL FTS → pgvector (데이터 축적 후) |
-| ICS | ical-generator |
-| CDN/DNS | Cloudflare |
+| ORM | Prisma (Phase 1 schema/migration 적용) |
+| Queue | Redis + BullMQ (예정) |
+| Storage | Cloudflare R2 / S3 (예정) |
+| Search | 공개 검색 API 초기 구현; PostgreSQL FTS → pgvector 확장 계획 (데이터 축적 후) |
+| ICS | 기본 피드 초기 구현; ical-generator는 라이브러리 후보 |
+| CDN/DNS | Cloudflare (운영 계획) |
 
 자세한 인프라·운영 계획은 [docs/plan/10-infra-ops-security.md](docs/plan/10-infra-ops-security.md) 참고.
 
-## 소스 공개 범위
+## Repository 공개 범위
 
-- **Subculture Onstage**(사용자 공개 웹)만 오픈소스로 공개합니다. UI/UX·디자인 역량 보강을 위해 외부 기여를 받으려는 목적입니다.
-- API 서버, Worker(수집·번역·알림), Subculture Backstage(관리자 웹)는 비공개로 유지합니다. OpenAPI 스펙 공개(사용법 공개)는 소스코드 공개와 다릅니다.
-- 비공개 영역의 개발·운영 참여는 공개 PR이 아니라 아래 연락처로 개별 문의를 통해 진행합니다.
+- **공식 공개 Repository — `Subculture_Link_Stage` (현재 이 저장소)**: 프로젝트·개발 문서, 아키텍처·데이터 모델, ERD·참고용 DDL, Roadmap, Legacy 설계 문서를 관리합니다. 향후 OpenAPI/API 개발자 문서와 Subculture Onstage 소스도 이 저장소에 포함합니다. ERD·DDL은 설계/참고 자료이며 실제 운영 DB dump나 Private ORM schema/migration과의 1:1 일치를 의미하지 않습니다.
+- **비공개 구현 — `scls-platform`**: SCLS API 서버, Subculture Backstage, Collector/Worker, Scheduler, 실제 DB migration/ORM schema, 기타 내부 서비스 및 운영 구현을 관리합니다.
+- 서비스 구현 소스 중 **Subculture Onstage**(사용자 공개 웹)를 오픈소스로 공개하여 UI/UX·디자인 등의 외부 기여를 받을 예정입니다. 별도 `scls-onstage` 공개 Repository를 전제로 하지 않으며, 이 저장소 안의 프론트엔드 경로는 미정입니다.
+- OpenAPI 스펙 공개(사용법 공개)는 API 서버 소스코드 공개와 별개입니다.
+- 비공개 영역도 공동 개발·운영 참여가 가능하며, 공개 PR이 아니라 아래 연락처로 개별 문의를 통해 진행합니다.
 
 자세한 내용은 [docs/plan/01-overview-and-principles.md §1.6.3](docs/plan/01-overview-and-principles.md#163-소스-공개-및-참여-정책) 참고.
 
@@ -89,9 +94,14 @@
 - [x] 계획 문서 주제별 분리
 - [x] 관리자 인증 방식(3단계 권한 구조) 확정
 - [x] 운영 형태 및 소스 공개 범위 확정
-- [x] PostgreSQL ERD 확정
-- [x] Repository 구조 확정 (2-Repo: `scls-onstage` 공개 + `scls-platform` 비공개 Monorepo)
-- [ ] Phase 1 (Core MVP) 구현 착수
+- [x] PostgreSQL ERD 설계 기준 정리
+- [x] Repository 구조 확정 (현재 공개 Repository에 문서·향후 Onstage + `scls-platform` 비공개 Monorepo)
+- [x] Phase 1 Core MVP 개발 착수
+- [ ] Phase 1 Core MVP — 진행 중
+- [ ] API 초기 구현 — 진행 중 (기본 데이터 CRUD, 루트 관리자 로그인, Public GET API·ICS feeds 구현 완료)
+- [ ] Backstage 초기 구현 — 진행 중 (행사·일정·기준 데이터 수동 관리 UI, ko/en/ja UI 구현 완료)
+- [ ] Localizations CRUD API/UI 및 테스트 행사 20개 이상 등록
+- [ ] Subculture Onstage — 미착수, 이 공개 Repository에서 개발 예정
 
 전체 로드맵과 체크리스트는 [docs/plan/11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md) 참고.
 

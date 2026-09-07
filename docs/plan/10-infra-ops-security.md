@@ -2,21 +2,26 @@
 
 # 10. 인프라, 데이터 보관, 보안, 운영 모니터링
 
+> [!NOTE]
+> 본 문서는 공개 가능한 설계 및 운영 정책을 다룬다. 실제 credential, API key, secret, token, DB connection string, 운영 접속 정보, origin IP, SSH 정보 등 실제 접근에 사용 가능한 민감정보는 별도 비공개 설정에서 관리한다.
+> 아래 운영 정책과 예정 스택 전체가 현재 적용되었다는 의미는 아니며, 구현 현황은 [로드맵](11-roadmap-and-success.md)을 참고한다.
+
 ## 10.1 인프라 및 기술 스택
 
 ### 10.1.1 권장 기술 스택
 
 | 영역 | 권장안 | 비고 |
 |---|---|---|
-| Backend | Node.js + TypeScript | Express, Fastify 또는 NestJS 검토 |
-| Web | Next.js + React | 공개 웹과 관리자 UI 분리 가능 |
+| Backend | Node.js + TypeScript + Fastify | Private API 초기 구현에 사용 |
+| Backstage | React + Vite + TanStack Router/Query + Tailwind v4 | Private 관리자 UI 초기 구현에 사용, ko/en/ja (`i18next`) |
+| Onstage | Svelte/SvelteKit | 이 공개 Repository에서 개발 예정, 미착수 |
 | DB | PostgreSQL (Supabase) | 초기 확정, 비용 부담 커지면 자체 호스팅 이전 검토 — 아래 결정 사항 참고 |
-| ORM | Prisma 또는 Drizzle | Migration 관리 필수 |
+| ORM | Prisma | Private `scls-platform`에 Phase 1 schema/migration 적용 |
 | Queue | Redis + BullMQ | 수집·번역·알림 Worker |
 | Storage | Cloudflare R2 / S3 | 원본 및 이미지 |
-| Search | PostgreSQL FTS | 초기 |
+| Search | PostgreSQL FTS | 설계상 초기 검색 방향, 현재 공개 검색 API 초기 구현 범위는 로드맵 참고 |
 | Vector | pgvector | 데이터 축적 후 도입 |
-| ICS | ical-generator | Node.js 기준 |
+| ICS | 최소 RFC 5545 피드 구현 / ical-generator (라이브러리 후보) | 피드 초기 구현 완료, 라이브러리 채택 여부는 현재 문서에서 확정하지 않음 |
 | Monitoring | Sentry + Metrics | 초기 무료/저비용 플랜 |
 | CDN/DNS | Cloudflare | 기존 환경 활용 |
 

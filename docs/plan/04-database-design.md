@@ -2,6 +2,11 @@
 
 # 04. 데이터베이스 설계
 
+> [!NOTE]
+> 이 ERD와 DDL은 SCLS의 논리적 데이터 모델 및 설계 기준을 기록한 설계/참고 문서입니다.
+> 실제 운영 DB와 Private `scls-platform`의 ORM schema/migration은 구현 시점에 따라 차이가 있을 수 있으며, 항상 1:1로 동일함을 보장하지 않습니다.
+> production database dump가 아니며, credential 또는 실제 DB connection 정보는 포함하지 않습니다.
+
 ## 4.1 DB 선택
 
 기본 DB는 PostgreSQL을 사용한다.
@@ -317,7 +322,7 @@ is_active
 
 전체 테이블 간 관계를 다이어그램으로 정리한 ERD는 [database/erd.md](database/erd.md)에 있다. 도메인별로 6개 다이어그램(행사/일정, 조직·장소·작품·인물·태그, 수집·분석, 검수·변경, 다국어·번역, 인증·사용자·알림·스토리지)으로 나누어 정리했으며, 본 파일 §4.2~4.4에서 "또는"으로 열려 있던 세부 사항(태그 현지화 방식, change_proposals 제출 주체 표현, 다형 참조 허용 범위 등)을 확정한 내용도 포함한다.
 
-컬럼 단위 정의와 제약조건의 원본은 [database/schema.sql](database/schema.sql)이다. 실제 Migration 도구(Prisma/Drizzle) 선정 후에는 이 SQL을 그대로 옮기지 않고 해당 도구의 스키마 정의로 재작성하되, 테이블·컬럼·관계는 이 파일을 기준으로 삼는다.
+설계상 컬럼 단위 정의와 제약조건은 [database/schema.sql](database/schema.sql)에 정리한다. 현재 Private `scls-platform`에는 Phase 1 범위의 Prisma 스키마와 초기 migration이 적용되어 있다. 이 SQL은 논리적 데이터 모델의 설계 기준으로 활용하며, 실제 적용 스키마와 migration은 Private Repository에서 관리한다.
 
 ---
 

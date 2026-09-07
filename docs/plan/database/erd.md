@@ -2,6 +2,11 @@
 
 # SCLS ERD
 
+> [!NOTE]
+> 이 ERD와 DDL은 SCLS의 논리적 데이터 모델 및 설계 기준을 기록한 설계/참고 문서입니다.
+> 실제 운영 DB와 Private `scls-platform`의 ORM schema/migration은 구현 시점에 따라 차이가 있을 수 있으며, 항상 1:1로 동일함을 보장하지 않습니다.
+> production database dump가 아니며, credential 또는 실제 DB connection 정보는 포함하지 않습니다.
+
 [04-database-design.md §4.5](../04-database-design.md#45-erd)에서 미결로 남아 있던 ERD를 확정한 문서다. 테이블 그룹 구성은 [§4.2](../04-database-design.md#42-주요-테이블-그룹)를 그대로 따르며, 컬럼 단위 정의와 제약조건의 원본은 [schema.sql](schema.sql)이다 — 이 문서의 다이어그램은 관계 파악용으로 PK/FK와 핵심 컬럼만 표시한다.
 
 전체 테이블을 하나의 다이어그램에 넣으면 가독성이 떨어지므로, §4.2의 9개 그룹을 6개 다이어그램으로 묶어 정리한다(태그·인증 등 소규모 그룹은 인접 그룹과 합침).
@@ -434,9 +439,9 @@ erDiagram
 - **change_proposals 제출 주체**: `staff_accounts`와 `event_organizer_accounts`를 가리키는 두 개의 nullable FK(`submitted_by_staff_id`, `submitted_by_organizer_account_id`)로 표현한다. 신뢰 수준이 다른 두 계정 체계를 하나의 다형 FK로 묶지 않기 위함이며, 둘 다 NULL이면 시스템(자동 파이프라인) 제출로 간주한다.
 - **다형 참조 허용 범위**: `entity_id`/`target_id`/`scope_id` 형태의 다형 컬럼은 `entity_localizations`, `user_subscriptions`, `glossary_terms`/`glossary_suggestions` 세 곳에만 남기고, 나머지 핵심 관계(행사·태그·조직·스토리지 등)는 전부 대상별 전용 FK로 분리했다 — §4.2 원칙("target_type+target_id 범용 연결 테이블은 사용하지 않는다")과의 정합성을 유지하기 위함이다.
 - **event/event_schedule status 값**: 문서에 명시되지 않았던 `events.status`(DRAFT/CONFIRMED/CANCELLED/POSTPONED/ENDED/ARCHIVED), `event_schedules.status`(SCHEDULED/CONFIRMED/CANCELLED/POSTPONED/COMPLETED) 등 세부 상태값을 이번에 확정했다. 구현 중 부족하면 CHECK 제약을 조정한다.
-- **staff_sessions 추가**: 최초 ERD 확정 시에는 없던 테이블이다. Phase 1 구현 중 루트 관리자 로그인을 세션+쿠키 방식으로 확정하면서([07-admin-dashboard.md §7.6.3](../07-admin-dashboard.md#763-권한-부여-절차-초안)) 추가했다.
+- **staff_sessions 추가**: 최초 ERD 확정 시에는 없던 테이블이다. Phase 1 구현 중 루트 관리자 로그인을 세션+쿠키 방식으로 확정하면서([07-admin-dashboard.md §7.6.3](../07-admin-dashboard.md#763-권한-부여-절차)) 추가했다.
 
 ## 다음 단계
 
-- 실제 Migration 도구(Prisma/Drizzle) 선정 후 [schema.sql](schema.sql)을 해당 도구의 스키마 정의로 옮긴다.
-- [11-roadmap-and-success.md](../11-roadmap-and-success.md) Phase 1 착수 시 이 스키마를 기준으로 초기 Migration을 생성한다.
+- 현재 Private `scls-platform`에서 Phase 1 범위의 Prisma 스키마와 초기 migration 적용을 완료했다([로드맵](../11-roadmap-and-success.md)).
+- 이후 구현 범위 확장에 따라 [schema.sql](schema.sql)과 ERD의 설계 기준을 갱신하며, 실제 ORM schema/migration은 Private Repository에서 관리한다.
