@@ -111,4 +111,8 @@
 
 ## 라이선스
 
-[MIT License](LICENSE) © 2026 SOIV Studio
+[Apache License 2.0](LICENSE) © 2026 SOIV Studio
+
+별도 표시가 없는 한 이 공개 저장소의 프로젝트·개발/설계 문서, ERD, 참고 DDL, Roadmap, Legacy 문서 및 소스코드에 Apache-2.0를 적용합니다. 향후 이 저장소에 추가할 Subculture Onstage 소스도 같은 라이선스를 기본으로 합니다.
+
+저작권 고지는 [NOTICE](NOTICE)를 참고하세요. 별도 Private `scls-platform`의 구현은 이 라이선스의 적용 대상에 포함되지 않으며, 제3자 자료에 별도 라이선스가 표시된 경우 해당 조건을 따릅니다. 기존 MIT 라이선스로 제공된 버전에 대한 권리는 이 변경으로 소급하여 철회되지 않습니다.

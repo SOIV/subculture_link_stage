@@ -111,4 +111,8 @@ SCLSは現在、**初期開発段階（Phase 1 Core MVPを開発中）**です�
 
 ## ライセンス
 
-[MIT License](LICENSE) © 2026 SOIV Studio
+[Apache License 2.0](LICENSE) © 2026 SOIV Studio
+
+別途明記されていない限り、この公開リポジトリのプロジェクト・開発/設計ドキュメント、ERD、参考DDL、Roadmap、Legacy文書およびソースコードにはApache-2.0を適用します。今後このリポジトリに追加するSubculture Onstageのソースも、原則として同じライセンスを使用します。
+
+著作権表示は[NOTICE](NOTICE)を参照してください。別の非公開リポジトリ `scls-platform` の実装は本ライセンスの適用対象に含まれません。第三者の資料に個別のライセンス表示がある場合は、その条件に従います。過去にMIT Licenseで提供されたバージョンに対する権利が、この変更によって遡って撤回されることはありません。

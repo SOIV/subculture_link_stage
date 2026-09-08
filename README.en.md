@@ -111,4 +111,8 @@ For development/operations participation, partnerships, or other inquiries: `biz
 
 ## License
 
-[MIT License](LICENSE) © 2026 SOIV Studio
+[Apache License 2.0](LICENSE) © 2026 SOIV Studio
+
+Unless otherwise noted, Apache-2.0 applies to this public repository’s project, development and design documentation, ERDs, reference DDL, roadmap, legacy documents, and source code. Future Subculture Onstage source added to this repository will use the same license by default.
+
+See [NOTICE](NOTICE) for the copyright notice. This license does not cover implementations in the separate private `scls-platform` repository; third-party materials with their own license notices remain subject to those terms. This change does not retroactively revoke rights granted for versions previously provided under the MIT License.
