@@ -4,7 +4,7 @@
 
 > 한국·일본·글로벌 온·오프라인의 서브컬처 및 게임 관련 공식 행사 정보를 수집·검수·번역하고, 작품/IP·행사 시리즈·개별 행사·일정·장소·주최사·참가/출연 주체·태그의 관계를 구조화하여 Web/API/ICS 및 외부 서비스에서 재사용할 수 있도록 제공하는 다국어 관계형 행사 데이터 플랫폼
 
-현재 SCLS는 **초기 개발 단계(Phase 1 Core MVP 진행 중)** 입니다. 프로젝트의 기획·설계 문서와 향후 Subculture Onstage 소스는 이 공식 공개 Repository(`Subculture_Link_Stage`)에서 관리합니다. SCLS API, Subculture Backstage 및 내부 서비스는 별도 비공개 Repository인 `scls-platform`에서 개발 중이며, API·Backstage 일부 기능이 구현되어 있습니다. 이 저장소에는 아직 Onstage 코드가 없습니다. 개발 계획과 구현 현황은 [docs/plan/](docs/plan/README.md)에 정리되어 있습니다.
+현재 SCLS는 **초기 개발 단계(Phase 1 Core MVP 진행 중)** 입니다. 프로젝트의 기획·설계 문서와 향후 Subculture Onstage 소스는 이 공식 공개 Repository(`Subculture_Link_Stage`)에서 관리합니다. SCLS API, Subculture Backstage 및 내부 서비스는 별도 비공개 Repository인 `scls-platform`에서 개발 중이며, API·Backstage 일부 기능과 Localizations(다국어 콘텐츠) CRUD가 구현되어 있습니다. 이 저장소에는 아직 Onstage 코드가 없습니다. 개발 계획과 구현 현황은 [docs/plan/](docs/plan/README.md)에 정리되어 있습니다.
 
 ## 왜 만드는가
 
@@ -100,7 +100,8 @@
 - [ ] Phase 1 Core MVP — 진행 중
 - [ ] API 초기 구현 — 진행 중 (기본 데이터 CRUD, 루트 관리자 로그인, Public GET API·ICS feeds 구현 완료)
 - [ ] Backstage 초기 구현 — 진행 중 (행사·일정·기준 데이터 수동 관리 UI, ko/en/ja UI 구현 완료)
-- [ ] Localizations CRUD API/UI 및 테스트 행사 20개 이상 등록
+- [x] Localizations(다국어 콘텐츠) CRUD API/UI 구현 완료
+- [ ] 테스트 행사 20개 이상 등록
 - [ ] Subculture Onstage — 미착수, 이 공개 Repository에서 개발 예정
 
 전체 로드맵과 체크리스트는 [docs/plan/11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md) 참고.
