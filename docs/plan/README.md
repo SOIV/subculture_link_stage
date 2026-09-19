@@ -46,7 +46,7 @@
 - **Repository 구조 확정** ([03-architecture-and-domain.md §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정)) — 공식 공개 Repository `Subculture_Link_Stage`에 프로젝트·개발 문서, 아키텍처·데이터 모델, ERD·참고 DDL, Roadmap, Legacy, 향후 OpenAPI/API 문서와 Subculture Onstage 소스를 함께 두고, `scls-api`·`scls-backstage`·`scls-worker`·`scls-scheduler`는 `scls-platform` 비공개 Monorepo로 묶어 DB 스키마·도메인 타입을 공유 패키지로 직접 공유한다. AI 페어 프로그래밍(Claude Code/Codex) 환경에서 서비스 간 공유 타입을 사설 패키지로 나누어 관리하는 비용이 실이익보다 크다는 판단이 근거.
 - **ERD 확정** ([database/erd.md](database/erd.md), [database/schema.sql](database/schema.sql)) — 약 50개 테이블의 관계를 도메인별 6개 다이어그램으로 정리하고, 전체 컬럼·제약조건을 담은 참고용 DDL을 작성. 기존 문서에 "또는"으로 열려 있던 태그 현지화 방식, `change_proposals` 제출 주체 표현, 다형 참조 허용 범위 등도 함께 확정.
 
-- **프론트엔드 호스팅·위젯·실시간 경로 결정** ([10-infra-ops-security.md §10.1.2](10-infra-ops-security.md#1012-배포-구조-예시), [§10.3.3](10-infra-ops-security.md#1033-위젯-임베드-격리-정책)) — Onstage·Backstage·위젯 셸은 Cloudflare에 배포(Vercel 제외), 위젯은 Onstage와 분리해 별도 서브도메인의 정적 셸로 두고 API/WS에 직접 접속, 실시간(WS/SSE)은 별도 서버 없이 API 서버의 별도 경로로 제공한다. API/Worker 호스트와 Backstage↔API 오리진 구성은 미결.
+- **프론트엔드 호스팅·위젯·실시간 경로 결정** ([10-infra-ops-security.md §10.1.2](10-infra-ops-security.md#1012-배포-구조-예시), [§10.3.3](10-infra-ops-security.md#1033-위젯-임베드-격리-정책)) — Onstage·Backstage·위젯 셸은 Cloudflare에 배포(Vercel 제외), 위젯은 Onstage와 분리해 별도 서브도메인의 정적 셸로 두고 API/WS에 직접 접속, 실시간(WS/SSE)은 별도 서버 없이 API 서버의 별도 경로로 제공하며, Backstage↔API는 `backstage.*`에서 `/admin/*`를 프록시해 동일 오리진을 유지한다. API/Worker 호스트는 미결.
 
 ## 진행 방식 메모
 

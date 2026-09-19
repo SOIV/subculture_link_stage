@@ -70,7 +70,14 @@ Queue
 > - 배포·재시작 때 모든 연결이 끊기므로 SDK와 위젯은 지수 백오프에 지터를 넣은 자동 재연결을 기본으로 한다.
 > - embed/ambient 위젯은 WS 없이 캐시된 공개 GET 폴링(카운트다운은 클라이언트 계산)을 기본으로 하고, 상시 연결은 overlay 등 실시간성이 필요한 경우로 한정한다. 이를 위해 공개 GET에 짧은 `Cache-Control`과 Cloudflare 캐시 규칙을 적용한다(Cloudflare는 API JSON을 기본 캐시하지 않는다).
 
-> **미결 사항 — API 호스트 및 Backstage ↔ API 오리진**: ① API·Worker·Redis를 실제로 어디서 돌릴지는 정하지 않았다(위 조건을 만족하는 Railway, Fly.io, VPS 등이 후보). ② [03 §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정)에서 Backstage는 개발 환경에서 Vite proxy로 동일 오리진처럼 동작시키지만, 프로덕션에서 `backstage.*`와 `api.*`가 다른 origin이면 HttpOnly 쿠키 세션([07 §7.6](07-admin-dashboard.md#76-인증-및-권한-구조))에 SameSite와 CORS credentials 정책이 필요하다. `backstage.*`에서 `/admin/*`를 API origin으로 프록시해 동일 오리진을 유지할지, cross-origin + credentials CORS로 갈지는 미정이다.
+> **결정 (2026-09-19) — Backstage ↔ API는 프록시로 동일 오리진 유지**: 프로덕션에서도 Backstage는 `/admin/*`를 상대 경로로 호출하고, `backstage.*` 호스트가 이 경로만 API origin으로 프록시한다(Backstage 정적 자산과 함께 Cloudflare Workers에 두는 얇은 프록시를 상정하며, 구체 구현은 착수 시점에 확인). 개발 환경의 Vite proxy([03 §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))와 같은 구조라 Backstage 코드를 바꾸지 않아도 되고, CORS credentials 설정이 필요 없으며, HttpOnly 쿠키 세션([07 §7.6](07-admin-dashboard.md#76-인증-및-권한-구조))은 `backstage.*` 한 곳에서만 쓰인다. 외부 행사 담당자가 사용자에 포함되므로([07 §7.6.2](07-admin-dashboard.md#762-backstage-인증--3단계-구조)) 공격 면을 줄이는 쪽을 택했다. 관리자 요청은 소수 사용자의 CRUD라 프록시를 한 번 더 거치는 비용은 무시할 수 있다. 조건과 주의:
+>
+> - `/admin/*`는 `api.*` 호스트로 받지 않는다(WAF 규칙으로 차단하거나 API가 프록시 경유 요청만 수락하는 식). 방식은 구현 시 확정한다.
+> - 프록시 Worker의 요청 수가 Cloudflare 플랜 한도 안에 들어오는지 착수 시점에 확인한다.
+> - `widget.*`와 `api.*`는 같은 사이트라 SameSite만으로는 구분되지 않으므로, `/admin`의 상태 변경 요청에는 프록시 여부와 무관하게 Origin 검증 등 CSRF 방어를 둔다.
+> - Backstage에서 외부 IdP(소셜·SSO) 로그인을 쓰게 되면 콜백 URL도 `backstage.*` 아래에 둔다.
+
+> **미결 사항 — API 호스트**: API·Worker·Redis를 실제로 어디서 돌릴지는 정하지 않았다(위 조건을 만족하는 Railway, Fly.io, VPS 등이 후보).
 
 ### 10.1.3 무료 운영 원칙 수정
 
