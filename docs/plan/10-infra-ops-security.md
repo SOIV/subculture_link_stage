@@ -54,13 +54,13 @@ Queue
 | 호스트 | 용도 | 배포 |
 |---|---|---|
 | `scls.app` | Subculture Onstage | Cloudflare (SvelteKit) |
-| `backstage.scls.app` | Subculture Backstage | Cloudflare (정적 SPA) |
+| `backstage.scls.app` | Subculture Backstage | Cloudflare Workers (정적 SPA + `/admin/*` 프록시) |
 | `widget.scls.app` | iFrame 위젯 정적 셸 | Cloudflare (정적) |
 | `api.scls.app` | 공개 REST API + 실시간(WS/SSE) 경로 | Fly.io 도쿄, 앞단 Cloudflare |
 
 서버 프로세스는 `api`(와 Worker/Scheduler)뿐이며, 나머지 세 호스트는 Cloudflare의 정적/엣지 배포라 추가 서버 비용이 없다.
 
-> **결정 (2026-09-19) — 프론트엔드 호스팅: Cloudflare (Vercel 제외)**: Backstage(정적 SPA), Onstage(SvelteKit), 위젯 셸을 모두 Cloudflare에 올린다. 이유는 ① DNS·CDN·WAF·R2를 이미 Cloudflare로 쓰므로 벤더가 늘지 않고, ② Vercel Hobby는 비상업용으로 제한되는 것으로 알고 있어 부분 유료화(F2P)가 확정된 SCLS는 처음부터 유료 플랜이 필요할 수 있기 때문이다(약관은 착수 시점에 재확인). 조건과 주의: Cloudflare는 Pages에서 Workers(Static Assets)로 권장 방식이 옮겨가는 중이라 Onstage 착수 시점에 공식 문서로 어느 쪽을 쓸지 확인한다. Onstage는 `adapter-cloudflare`로 Node와 다른 Workers 런타임에서 동작하므로 공개 API `fetch` 위주로 유지하고 Node 전용 라이브러리 의존을 지양한다. 이 조건이 깨지면 재검토한다.
+> **결정 (2026-09-19) — 프론트엔드 호스팅: Cloudflare (Vercel 제외)**: Backstage(정적 SPA), Onstage(SvelteKit), 위젯 셸을 모두 Cloudflare에 올린다. 이유는 ① DNS·CDN·WAF·R2를 이미 Cloudflare로 쓰므로 벤더가 늘지 않고, ② Vercel Hobby는 비상업용으로 제한되는 것으로 알고 있어 부분 유료화(F2P)가 확정된 SCLS는 처음부터 유료 플랜이 필요할 수 있기 때문이다(약관은 착수 시점에 재확인). 조건과 주의: Cloudflare는 Pages에서 Workers(Static Assets)로 권장 방식이 옮겨가는 중이라 Onstage 착수 시점에 공식 문서로 어느 쪽을 쓸지 확인한다(Backstage는 `/admin/*` 프록시를 같은 Worker에 두기 위해 Workers Static Assets로 배포했다). Onstage는 `adapter-cloudflare`로 Node와 다른 Workers 런타임에서 동작하므로 공개 API `fetch` 위주로 유지하고 Node 전용 라이브러리 의존을 지양한다. 이 조건이 깨지면 재검토한다.
 
 > **결정 (2026-09-19) — 위젯은 Onstage와 분리 배포**: 위젯 정적 셸은 Onstage와 별개로 `widget.*` 호스트에 배포한다. 런타임 경로는 `위젯 셸(정적, CDN 캐시) 로드 → 브라우저가 API/WS에 직접 접속`이며 Onstage를 경유하지 않는다(Onstage의 위젯 설정 화면은 임베드 코드를 만들어 줄 뿐). `api.*/widget/**`처럼 API 오리진 아래에 두지 않는 이유는, 위젯이 옵션을 받아 렌더링하므로 XSS 가능성이 0이 아니고 API와 same-origin이면 이후 쿠키 인증 엔드포인트가 생겼을 때 피해가 커지기 때문이다. 격리 정책은 [§10.3.3](#1033-위젯-임베드-격리-정책) 참고.
 
@@ -70,11 +70,13 @@ Queue
 > - 배포·재시작 때 모든 연결이 끊기므로 SDK와 위젯은 지수 백오프에 지터를 넣은 자동 재연결을 기본으로 한다.
 > - embed/ambient 위젯은 WS 없이 캐시된 공개 GET 폴링(카운트다운은 클라이언트 계산)을 기본으로 하고, 상시 연결은 overlay 등 실시간성이 필요한 경우로 한정한다. 이를 위해 공개 GET에 짧은 `Cache-Control`과 Cloudflare 캐시 규칙을 적용한다(Cloudflare는 API JSON을 기본 캐시하지 않는다).
 
-> **결정 (2026-09-19) — Backstage ↔ API는 프록시로 동일 오리진 유지**: 프로덕션에서도 Backstage는 `/admin/*`를 상대 경로로 호출하고, `backstage.*` 호스트가 이 경로만 API origin으로 프록시한다(Backstage 정적 자산과 함께 Cloudflare Workers에 두는 얇은 프록시를 상정하며, 구체 구현은 착수 시점에 확인). 개발 환경의 Vite proxy([03 §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))와 같은 구조라 Backstage 코드를 바꾸지 않아도 되고, CORS credentials 설정이 필요 없으며, HttpOnly 쿠키 세션([07 §7.6](07-admin-dashboard.md#76-인증-및-권한-구조))은 `backstage.*` 한 곳에서만 쓰인다. 외부 행사 담당자가 사용자에 포함되므로([07 §7.6.2](07-admin-dashboard.md#762-backstage-인증--3단계-구조)) 공격 면을 줄이는 쪽을 택했다. 관리자 요청은 소수 사용자의 CRUD라 프록시를 한 번 더 거치는 비용은 무시할 수 있다. 조건과 주의:
+> **결정 (2026-09-19) — Backstage ↔ API는 프록시로 동일 오리진 유지**: 프로덕션에서도 Backstage는 `/admin/*`를 상대 경로로 호출하고, `backstage.*` 호스트가 이 경로만 API origin으로 프록시한다(Backstage 정적 자산과 함께 Cloudflare Workers에 얇은 프록시를 두는 방식으로 구현했다). 개발 환경의 Vite proxy([03 §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))와 같은 구조라 Backstage 코드를 바꾸지 않아도 되고, CORS credentials 설정이 필요 없으며, HttpOnly 쿠키 세션([07 §7.6](07-admin-dashboard.md#76-인증-및-권한-구조))은 `backstage.*` 한 곳에서만 쓰인다. 외부 행사 담당자가 사용자에 포함되므로([07 §7.6.2](07-admin-dashboard.md#762-backstage-인증--3단계-구조)) 공격 면을 줄이는 쪽을 택했다. 관리자 요청은 소수 사용자의 CRUD라 프록시를 한 번 더 거치는 비용은 무시할 수 있다. 조건과 주의:
 >
-> - `/admin/*`는 `api.*` 호스트로 받지 않는다(WAF 규칙으로 차단하거나 API가 프록시 경유 요청만 수락하는 식). 방식은 구현 시 확정한다.
-> - 프록시 Worker의 요청 수가 Cloudflare 플랜 한도 안에 들어오는지 착수 시점에 확인한다.
-> - `widget.*`와 `api.*`는 같은 사이트라 SameSite만으로는 구분되지 않으므로, `/admin`의 상태 변경 요청에는 프록시 여부와 무관하게 Origin 검증 등 CSRF 방어를 둔다.
+> - `/admin/*`는 `api.*` 호스트로 받지 않는다. 프록시가 요청에 공유 시크릿 헤더를 붙이고, API가 이 시크릿이 맞는 `/admin` 요청만 수락한다(구현 완료). 코드로 강제하므로 호스트·Cloudflare 설정과 무관하게 직접 접근이 막히고, 운영에서 시크릿이 설정되지 않으면 `/admin` 요청을 모두 거부한다(fail closed). WAF 차단 방식은 채택하지 않았다.
+> - 프록시 Worker의 요청 수: 정적 자산 요청은 Worker를 거치지 않고(`/admin/*`만 Worker가 먼저 실행) Worker 요청으로 집계되지 않는다. `/admin/*` 요청 수가 Cloudflare 플랜 한도 안에 들어오는지는 정식 운영 시작 시 확인한다.
+> - `widget.*`와 `api.*`는 같은 사이트라 SameSite만으로는 구분되지 않으므로, `/admin`의 상태 변경 요청에는 프록시 여부와 무관하게 Origin 검증 등 CSRF 방어를 둔다. 구현: 상태 변경 요청(POST/PUT/PATCH/DELETE)은 Origin을 API의 허용 목록(Backstage 주소)과 대조해 다르면 403으로 거부한다. Backstage에 새 도메인을 연결하거나 바꾸면 이 허용 목록에도 함께 추가해야 하며, 빠뜨리면 로그인 요청이 403으로 실패한다(2026-09-19 임시 도메인을 붙였을 때 실제로 발생).
+> - 프록시 뒤에서는 API가 보는 접속 IP가 프록시 주소다. 프록시가 방문자 IP를 헤더로 넘기고, API는 위 시크릿이 확인된 요청에서만 이 값을 로그인 시도 제한(rate limit)의 기준으로 쓴다. 그렇지 않으면 모든 사용자가 한 사람으로 집계된다.
+> - 프록시 Worker의 설정: API 주소는 시크릿이 아니므로 Worker 설정 파일(코드)에서 관리하고, 프록시 공유 시크릿만 Secret으로 넣는다. Wrangler로 배포하면 대시보드에서 넣은 일반 변수는 다음 배포 때 덮어써지고 Secret만 유지되기 때문이다(실제로 일반 변수가 지워져 프록시가 오류를 낸 적이 있다). 미리보기 주소(`preview_urls`)는 어떤 배포든 실제 API에 연결되므로 만들지 않는다.
 > - Backstage에서 외부 IdP(소셜·SSO) 로그인을 쓰게 되면 콜백 URL도 `backstage.*` 아래에 둔다.
 
 > **결정 (2026-09-19) — API/Worker 호스트: Fly.io 도쿄(nrt) 리전**: API, Worker, Scheduler는 Fly.io 도쿄 리전에서 돌린다. Supabase가 도쿄 리전이라 API·Worker와 DB 사이의 왕복 지연을 줄이는 것이 가장 큰 이유다. 검토한 대안은 다음과 같다.
@@ -84,10 +86,20 @@ Queue
 >
 > 비용은 API·Worker 각 512MB에 Redis 256MB(Phase 2 이후)를 더해 월 약 $9로 추정한다(2026-09 공식 가격 기준으로 shared-cpu-1x 512MB가 월 $3.32이며, 가격은 착수 시점에 재확인). 조건과 주의:
 >
-> - 서비스별로 Dockerfile과 `fly.toml`을 두고, 수동 배포는 `fly deploy` 한 번으로, 자동 배포는 GitHub Actions 워크플로(push 시 `flyctl deploy --remote-only`, 배포 토큰을 `FLY_API_TOKEN` 시크릿으로 저장)로 한다. 워크플로 파일은 직접 작성해야 한다. `scls-platform`이 monorepo라 앱별 config·Dockerfile 지정과 빌드 컨텍스트(공유 패키지 포함 여부)는 구현 시 확인한다.
+> - 서비스별로 Dockerfile과 `fly.toml`을 두고, 수동 배포는 `fly deploy` 한 번으로, 자동 배포는 GitHub Actions 워크플로(push 시 `flyctl deploy --remote-only`, 배포 토큰을 `FLY_API_TOKEN` 시크릿으로 저장)로 한다. 워크플로 파일은 직접 작성해야 한다. `scls-platform`이 monorepo라 저장소 루트를 빌드 컨텍스트로 하고 앱별 `fly.toml`·Dockerfile은 `--config`/`--dockerfile`로 지정한다. 공유 패키지(DB 클라이언트·도메인 타입)가 TS 소스를 그대로 가리키므로 컨테이너에서는 빌드 산출물 대신 `tsx`로 소스를 직접 실행하며, 실제 접속 정보 파일(`.env`)은 이미지에서 제외한다(2026-09-19 구현 및 배포 확인).
 > - Fly는 머신을 상시 켜 두는 과금이라 한가해도 비용이 줄지 않는다.
-> - Supabase 직접 연결은 IPv6 전용이므로, 호스트에서 연결되지 않으면 풀러(IPv4)를 쓰고 Prisma의 풀러 모드 설정을 착수 시 확인한다.
+> - 머신은 1대로 고정한다(`--ha=false`). Fly는 첫 배포에서 기본으로 2대를 만드는데, 비용이 2배가 되고 현재 로그인 시도 제한이 프로세스 메모리 기반이라 머신마다 따로 집계되어 실질 한도가 늘어난다. 2대 이상이 필요해지면(고가용성·규모 확장) 시도 제한 저장소를 머신 간에 공유하도록(Redis 등) 먼저 바꾼다.
+> - Supabase 직접 연결은 IPv6 전용이므로 런타임은 풀러(IPv4) 주소, migration은 직접 연결 주소로 나누어 설정한다. Fly에서 API의 DB 조회가 정상 동작함을 확인했다(2026-09-19). Prisma의 풀러 모드 세부 설정은 부하가 생기면 다시 확인한다.
 > - 배포 때마다 프로세스가 재시작되므로 위 실시간 연결의 재연결 조건이 필요하다.
+> - Fly 대시보드의 GitHub 연동(Launch from GitHub)은 쓰지 않는다. 자동 배포는 위 GitHub Actions로 하며, 비공개 monorepo에서 앱 하나만 배포하는 구조에 맞지 않고 저장소 동기화 단계가 진행되지 않는 문제도 있었다.
+
+> **절차 — API 커스텀 도메인 연결 (Fly + Cloudflare 프록시)**: API 도메인이 확정되면 Fly 공식 권장 구성(Cloudflare 프록시 + Full (strict))에 따라 다음 순서로 연결한다.
+>
+> 1. Fly에 도메인을 등록한다(`fly certs add <API 호스트>`). 이어서 `fly certs setup`이 알려 주는 소유권 확인용 TXT 레코드(`_fly-ownership`)를 Cloudflare DNS에 추가한다.
+> 2. Cloudflare DNS에 API 호스트의 `A`·`AAAA`(또는 `CNAME`) 레코드를 Fly 앱 주소로 추가하고 프록시(주황 구름)를 켠다. 앞단 Cloudflare 구성([호스트 표](#1012-배포-구조-예시))과 캐시 규칙 적용을 위한 것이다.
+> 3. Cloudflare SSL/TLS 모드를 Full (strict)로, Always Use HTTPS를 켠다. 이후 Fly가 인증서를 자동 발급하며 `fly certs check`로 진행을 확인한다. 발급이 실패하면 Cloudflare Origin Certificate 가져오기를 검토한다.
+> 4. Backstage 프록시는 기존 Fly 주소를 계속 쓰므로 바꾸지 않는다(`/admin/*`는 `api.*`로 받지 않는다). Backstage 허용 Origin 목록도 API 도메인과 무관하다.
+> 5. 브라우저에서 `api.*`를 직접 호출하는 클라이언트(Onstage·위젯)가 붙기 전에 CORS 허용 목록([§10.3.3](#1033-위젯-임베드-격리-정책))을 구현해야 한다. 또 앞단 Cloudflare 때문에 API가 보는 접속 IP가 Cloudflare 주소가 되므로, 공개 API의 요청 제한을 도입할 때 방문자 IP 헤더를 신뢰하는 설정을 함께 해야 한다. 둘 다 아직 구현 전이다.
 
 > **미결 사항 — 작업 대기열(Queue)**: Worker가 필요해지는 Phase 2 착수 때 정한다. 후보는 Redis(BullMQ)를 Fly에 볼륨과 함께 직접 띄우는 방식, 관리형 Redis(Upstash 고정 플랜 등), Supabase Postgres 기반 대기열(pg-boss 등)로 Redis 없이 가는 방식이다. Phase 1에는 필요하지 않다.
 
@@ -189,6 +201,7 @@ EVENT_ORGANIZER      (행사 관리자 하위 계정)
 ### 10.3.2 기본 정책
 
 - 관리자 API 인증 필수
+- 관리자 API(`/admin/*`)는 Backstage 프록시를 거친 요청만 수락하고, 상태 변경 요청은 Origin을 검증한다 ([§10.1.2](#1012-배포-구조-예시) 결정 참고)
 - 공개 API Rate Limit 적용
 - 수집 Worker와 API의 DB 권한 분리
 - 오브젝트 스토리지 비공개 Bucket 기본
