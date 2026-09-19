@@ -36,11 +36,11 @@ Cloudflare
 - R2
 - WAF / Rate Limit
 
-Web Hosting
-- Cloudflare Pages 또는 Vercel
+Web Hosting (Onstage / Backstage / 위젯 셸)
+- Cloudflare (Vercel 제외 — 아래 결정 사항 참고)
 
 API / Worker
-- Render, Railway, Fly.io, VPS 등
+- 미정. 컨테이너/VPS형 호스트 (Render, Railway, Fly.io, VPS 등) — 상시 연결 지원 필요
 
 Database
 - Supabase (초기 확정, Neon 제외 — §10.1.1 결정 사항 참고)
@@ -48,6 +48,29 @@ Database
 Queue
 - Managed Redis 또는 소형 자체 Redis
 ```
+
+**호스트 구성** (호스트명은 `scls.app`을 가정한 예시이며 실제 도메인·서브도메인은 확정 전이다)
+
+| 호스트 | 용도 | 배포 |
+|---|---|---|
+| `scls.app` | Subculture Onstage | Cloudflare (SvelteKit) |
+| `backstage.scls.app` | Subculture Backstage | Cloudflare (정적 SPA) |
+| `widget.scls.app` | iFrame 위젯 정적 셸 | Cloudflare (정적) |
+| `api.scls.app` | 공개 REST API + 실시간(WS/SSE) 경로 | 컨테이너/VPS형 호스트 (미정), 앞단 Cloudflare |
+
+서버 프로세스는 `api`(와 Worker/Scheduler)뿐이며, 나머지 세 호스트는 Cloudflare의 정적/엣지 배포라 추가 서버 비용이 없다.
+
+> **결정 (2026-09-19) — 프론트엔드 호스팅: Cloudflare (Vercel 제외)**: Backstage(정적 SPA), Onstage(SvelteKit), 위젯 셸을 모두 Cloudflare에 올린다. 이유는 ① DNS·CDN·WAF·R2를 이미 Cloudflare로 쓰므로 벤더가 늘지 않고, ② Vercel Hobby는 비상업용으로 제한되는 것으로 알고 있어 부분 유료화(F2P)가 확정된 SCLS는 처음부터 유료 플랜이 필요할 수 있기 때문이다(약관은 착수 시점에 재확인). 조건과 주의: Cloudflare는 Pages에서 Workers(Static Assets)로 권장 방식이 옮겨가는 중이라 Onstage 착수 시점에 공식 문서로 어느 쪽을 쓸지 확인한다. Onstage는 `adapter-cloudflare`로 Node와 다른 Workers 런타임에서 동작하므로 공개 API `fetch` 위주로 유지하고 Node 전용 라이브러리 의존을 지양한다. 이 조건이 깨지면 재검토한다.
+
+> **결정 (2026-09-19) — 위젯은 Onstage와 분리 배포**: 위젯 정적 셸은 Onstage와 별개로 `widget.*` 호스트에 배포한다. 런타임 경로는 `위젯 셸(정적, CDN 캐시) 로드 → 브라우저가 API/WS에 직접 접속`이며 Onstage를 경유하지 않는다(Onstage의 위젯 설정 화면은 임베드 코드를 만들어 줄 뿐). `api.*/widget/**`처럼 API 오리진 아래에 두지 않는 이유는, 위젯이 옵션을 받아 렌더링하므로 XSS 가능성이 0이 아니고 API와 same-origin이면 이후 쿠키 인증 엔드포인트가 생겼을 때 피해가 커지기 때문이다. 격리 정책은 [§10.3.3](#1033-위젯-임베드-격리-정책) 참고.
+
+> **결정 (2026-09-19) — 실시간 연결(WS/SSE)은 API 서버의 별도 경로로 제공**: 별도 서버나 호스트명을 두지 않고 `api` 서버 한 대가 REST와 함께 받는다(예: `/v1/stream`). 실제 경로명은 제3자 클라이언트가 붙기 전에 확정해야 한다. 경로로 나눠 두면 Cloudflare 캐시 규칙(REST 공개 GET은 캐시, 스트림 경로는 우회)을 걸기 쉽고, 부하가 커지면 Cloudflare에서 특정 경로만 다른 origin으로 보내 URL을 유지한 채 분리할 수 있다(플랜·한도는 그때 확인). 조건과 주의:
+>
+> - API 호스트는 상시 연결을 유지할 수 있는 컨테이너/VPS형이어야 한다. 요청 단위 서버리스와 유휴 시 자동 종료(scale-to-zero)는 맞지 않는다.
+> - 배포·재시작 때 모든 연결이 끊기므로 SDK와 위젯은 지수 백오프에 지터를 넣은 자동 재연결을 기본으로 한다.
+> - embed/ambient 위젯은 WS 없이 캐시된 공개 GET 폴링(카운트다운은 클라이언트 계산)을 기본으로 하고, 상시 연결은 overlay 등 실시간성이 필요한 경우로 한정한다. 이를 위해 공개 GET에 짧은 `Cache-Control`과 Cloudflare 캐시 규칙을 적용한다(Cloudflare는 API JSON을 기본 캐시하지 않는다).
+
+> **미결 사항 — API 호스트 및 Backstage ↔ API 오리진**: ① API·Worker·Redis를 실제로 어디서 돌릴지는 정하지 않았다(위 조건을 만족하는 Railway, Fly.io, VPS 등이 후보). ② [03 §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정)에서 Backstage는 개발 환경에서 Vite proxy로 동일 오리진처럼 동작시키지만, 프로덕션에서 `backstage.*`와 `api.*`가 다른 origin이면 HttpOnly 쿠키 세션([07 §7.6](07-admin-dashboard.md#76-인증-및-권한-구조))에 SameSite와 CORS credentials 정책이 필요하다. `backstage.*`에서 `/admin/*`를 API origin으로 프록시해 동일 오리진을 유지할지, cross-origin + credentials CORS로 갈지는 미정이다.
 
 ### 10.1.3 무료 운영 원칙 수정
 
@@ -160,9 +183,9 @@ EVENT_ORGANIZER      (행사 관리자 하위 계정)
 
 iFrame 위젯([08-api-and-ics.md §8.1.1](08-api-and-ics.md#811-노출-채널-계층-구조))을 제3자 사이트에 삽입 가능하게 열어주는 것과, 메인 플랫폼(공개 웹·관리자 대시보드)의 보안 설정은 완전히 분리한다.
 
-- **라우트 격리**: 위젯 렌더링 페이지(`/embed/*`, 필요시 서브도메인)와 위젯이 소비하는 API 네임스페이스를 메인 사이트 라우트와 분리한다. iframe 허용을 위한 예외 설정은 이 격리된 라우트 안에서만 적용하고, 메인 플랫폼 라우트에는 손대지 않는다.
-- **CSP `frame-ancestors` / X-Frame-Options**: 메인 플랫폼(공개 웹, 관리자 대시보드)은 기본적으로 프레임 삽입을 차단한다(클릭재킹 방지). `/embed/*`만 예외로 모든 origin에서의 프레임 삽입을 허용한다 — 위젯이 보여주는 데이터는 인증 없이 공개된 읽기 전용 정보(§8.5.1 Phase 3)라 열어줘도 노출되는 것이 없다.
-- **CORS**: 위젯 페이지는 SCLS가 직접 호스팅하며 그 안의 API 호출은 same-origin이 기본이므로, 공개 API에 별도로 넓은 CORS를 열어줄 필요는 없다. 제3자 사이트의 JS가 iframe 없이 API를 직접 fetch하는 것까지 지원할지는 아직 결정하지 않았으며, 필요해지면 그때 CORS 정책을 추가한다.
+- **라우트 격리**: 위젯 렌더링 페이지는 별도 서브도메인(`widget.*`, [§10.1.2](#1012-배포-구조-예시))의 정적 셸로 분리하고, 위젯이 소비하는 API 네임스페이스도 메인 사이트 라우트와 분리한다. iframe 허용을 위한 예외 설정은 이 격리된 호스트 안에서만 적용하고, 메인 플랫폼(Onstage·Backstage·`api.*`)에는 손대지 않는다.
+- **CSP `frame-ancestors` / X-Frame-Options**: 메인 플랫폼(공개 웹, 관리자 대시보드)은 기본적으로 프레임 삽입을 차단한다(클릭재킹 방지). 위젯 호스트(`widget.*`)만 예외로 모든 origin에서의 프레임 삽입을 허용한다 — 위젯이 보여주는 데이터는 인증 없이 공개된 읽기 전용 정보(§8.5.1 Phase 3)라 열어줘도 노출되는 것이 없다. 헤더를 호스트 단위로 걸 수 있어 경로 단위 예외보다 단순하다.
+- **CORS**: 위젯 셸이 API와 다른 origin(`widget.*` → `api.*`)이므로 위젯의 API 호출은 cross-origin이다. 기본은 SCLS 자체 호스트(위젯, Onstage)만 허용하는 allow-list로 두고, 인증이 필요한 경로(`/admin/*` 등)에는 위젯 origin을 허용하지 않는다. 제3자 사이트의 JS가 iframe 없이 API를 직접 fetch하는 것까지 지원할지는 아직 결정하지 않았으며, 지원하기로 하면 인증 없는 공개 읽기 전용 GET에 한해 credentials 없이 `Access-Control-Allow-Origin: *`로 넓힌다.
 - **계정 필수 여부**: 위젯 API도 일반 공개 API와 동일하게 **계정/로그인 없이 기본 Rate Limit 안에서 사용 가능**하다(§8.5.1 Phase 3과 동일 정책 상속). 계정(API Key)은 상향 Rate Limit·사용량 통계 등 심화 기능을 위한 선택 사항이며(§8.5.1 Phase 6), 위젯 이용 자체의 전제 조건이 아니다.
 
 ## 10.4 운영 및 모니터링
