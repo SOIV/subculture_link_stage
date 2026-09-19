@@ -40,7 +40,7 @@ Web Hosting (Onstage / Backstage / 위젯 셸)
 - Cloudflare (Vercel 제외 — 아래 결정 사항 참고)
 
 API / Worker
-- 미정. 컨테이너/VPS형 호스트 (Render, Railway, Fly.io, VPS 등) — 상시 연결 지원 필요
+- Fly.io 도쿄(nrt) 리전 (Railway, VPS 제외 — 아래 결정 사항 참고)
 
 Database
 - Supabase (초기 확정, Neon 제외 — §10.1.1 결정 사항 참고)
@@ -56,7 +56,7 @@ Queue
 | `scls.app` | Subculture Onstage | Cloudflare (SvelteKit) |
 | `backstage.scls.app` | Subculture Backstage | Cloudflare (정적 SPA) |
 | `widget.scls.app` | iFrame 위젯 정적 셸 | Cloudflare (정적) |
-| `api.scls.app` | 공개 REST API + 실시간(WS/SSE) 경로 | 컨테이너/VPS형 호스트 (미정), 앞단 Cloudflare |
+| `api.scls.app` | 공개 REST API + 실시간(WS/SSE) 경로 | Fly.io 도쿄, 앞단 Cloudflare |
 
 서버 프로세스는 `api`(와 Worker/Scheduler)뿐이며, 나머지 세 호스트는 Cloudflare의 정적/엣지 배포라 추가 서버 비용이 없다.
 
@@ -77,7 +77,19 @@ Queue
 > - `widget.*`와 `api.*`는 같은 사이트라 SameSite만으로는 구분되지 않으므로, `/admin`의 상태 변경 요청에는 프록시 여부와 무관하게 Origin 검증 등 CSRF 방어를 둔다.
 > - Backstage에서 외부 IdP(소셜·SSO) 로그인을 쓰게 되면 콜백 URL도 `backstage.*` 아래에 둔다.
 
-> **미결 사항 — API 호스트**: API·Worker·Redis를 실제로 어디서 돌릴지는 정하지 않았다(위 조건을 만족하는 Railway, Fly.io, VPS 등이 후보).
+> **결정 (2026-09-19) — API/Worker 호스트: Fly.io 도쿄(nrt) 리전**: API, Worker, Scheduler는 Fly.io 도쿄 리전에서 돌린다. Supabase가 도쿄 리전이라 API·Worker와 DB 사이의 왕복 지연을 줄이는 것이 가장 큰 이유다. 검토한 대안은 다음과 같다.
+>
+> - **Railway**: 아시아 리전이 싱가포르뿐이라 도쿄 DB와의 왕복이 대략 70ms 안팎으로 늘어난다(추정, 실측하지 않음). 공개 GET은 Cloudflare 캐시가 흡수하지만 관리자 API, 쓰기, 쿼리를 반복하는 Worker에서는 누적된다.
+> - **VPS**: 요금은 가장 유리하지만 OS·배포·TLS·백업을 직접 운영해야 해서 1인 운영에는 부담이 커 제외했다. Hetzner는 저렴한 플랜이 유럽에만 있어 부적합하다.
+>
+> 비용은 API·Worker 각 512MB에 Redis 256MB(Phase 2 이후)를 더해 월 약 $9로 추정한다(2026-09 공식 가격 기준으로 shared-cpu-1x 512MB가 월 $3.32이며, 가격은 착수 시점에 재확인). 조건과 주의:
+>
+> - 서비스별로 Dockerfile과 `fly.toml`을 두고, 수동 배포는 `fly deploy` 한 번으로, 자동 배포는 GitHub Actions 워크플로(push 시 `flyctl deploy --remote-only`, 배포 토큰을 `FLY_API_TOKEN` 시크릿으로 저장)로 한다. 워크플로 파일은 직접 작성해야 한다. `scls-platform`이 monorepo라 앱별 config·Dockerfile 지정과 빌드 컨텍스트(공유 패키지 포함 여부)는 구현 시 확인한다.
+> - Fly는 머신을 상시 켜 두는 과금이라 한가해도 비용이 줄지 않는다.
+> - Supabase 직접 연결은 IPv6 전용이므로, 호스트에서 연결되지 않으면 풀러(IPv4)를 쓰고 Prisma의 풀러 모드 설정을 착수 시 확인한다.
+> - 배포 때마다 프로세스가 재시작되므로 위 실시간 연결의 재연결 조건이 필요하다.
+
+> **미결 사항 — 작업 대기열(Queue)**: Worker가 필요해지는 Phase 2 착수 때 정한다. 후보는 Redis(BullMQ)를 Fly에 볼륨과 함께 직접 띄우는 방식, 관리형 Redis(Upstash 고정 플랜 등), Supabase Postgres 기반 대기열(pg-boss 등)로 Redis 없이 가는 방식이다. Phase 1에는 필요하지 않다.
 
 ### 10.1.3 무료 운영 원칙 수정
 
