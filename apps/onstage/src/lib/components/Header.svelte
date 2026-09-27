@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { localeHref, t, type Locale } from '$lib/i18n';
 	import LocaleSwitcher from './LocaleSwitcher.svelte';
+	import ThemeToggle from './ThemeToggle.svelte';
 
 	let { locale }: { locale: Locale } = $props();
 </script>
@@ -33,6 +34,7 @@
 					{t(locale, 'nav.search')}
 				</a>
 			</nav>
+			<ThemeToggle {locale} />
 			<LocaleSwitcher {locale} />
 		</div>
 	</div>

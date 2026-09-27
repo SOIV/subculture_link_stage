@@ -15,6 +15,10 @@ const ko = {
 	'nav.events': '행사',
 	'nav.search': '검색',
 
+	'theme.system': '시스템',
+	'theme.light': '라이트',
+	'theme.dark': '다크',
+
 	'filter.country': '국가',
 	'filter.country.all': '전체',
 	'filter.country.KR': '한국',
@@ -103,6 +107,10 @@ const ja: Record<keyof typeof ko, string> = {
 	'site.tagline': '韓国・日本・グローバルのサブカルチャーイベントカレンダー',
 	'nav.events': 'イベント',
 	'nav.search': '検索',
+
+	'theme.system': 'システム',
+	'theme.light': 'ライト',
+	'theme.dark': 'ダーク',
 
 	'filter.country': '国',
 	'filter.country.all': 'すべて',
@@ -193,6 +201,10 @@ const en: Record<keyof typeof ko, string> = {
 	'site.tagline': 'A calendar for Korean, Japanese, and global subculture events',
 	'nav.events': 'Events',
 	'nav.search': 'Search',
+
+	'theme.system': 'System',
+	'theme.light': 'Light',
+	'theme.dark': 'Dark',
 
 	'filter.country': 'Country',
 	'filter.country.all': 'All',

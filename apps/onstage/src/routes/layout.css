@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+/* 다크 모드를 OS 설정이 아니라 data-theme 속성으로 직접 제어한다(시스템/라이트/다크
+	3단 전환 버튼 — src/lib/components/ThemeToggle.svelte, src/app.html의 인라인 스크립트). */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
 @theme {
 	/* 제목·브랜드 전용 — 본문은 계속 시스템 폰트를 쓴다(추가 로딩 비용 최소화). */
 	--font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
