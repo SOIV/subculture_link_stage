@@ -17,7 +17,7 @@
 <a
 	href={localeHref(locale, `/events/${event.slug}`)}
 	style:--accent={accent}
-	class="group block overflow-hidden rounded-2xl border border-slate-200/70 bg-white/70 backdrop-blur-sm transition-all duration-200 hover:-translate-y-1 hover:border-[var(--accent)]/40 hover:shadow-[var(--accent)]/15 hover:shadow-xl dark:border-white/10 dark:bg-white/[0.04]"
+	class="group block overflow-hidden rounded-2xl border border-slate-200 bg-white/90 shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-1 hover:border-[var(--accent)]/40 hover:shadow-[var(--accent)]/15 hover:shadow-xl dark:border-white/10 dark:bg-white/[0.04] dark:shadow-none"
 >
 	<div class="h-1.5 w-full bg-[var(--accent)]"></div>
 	<div class="p-4">

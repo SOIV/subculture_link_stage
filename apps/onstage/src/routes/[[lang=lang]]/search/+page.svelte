@@ -23,7 +23,7 @@
 			name="q"
 			value={data.q}
 			placeholder={t(locale, 'search.placeholder')}
-			class="flex-1 rounded-full border border-slate-300 bg-white/70 px-4 py-2.5 text-sm backdrop-blur-sm focus:border-violet-400 focus:outline-none dark:border-white/10 dark:bg-white/[0.04]"
+			class="flex-1 rounded-full border border-slate-300 bg-white/90 px-4 py-2.5 text-sm shadow-sm backdrop-blur-sm focus:border-violet-400 focus:outline-none dark:border-white/10 dark:bg-white/[0.04] dark:shadow-none"
 		/>
 		<button
 			type="submit"

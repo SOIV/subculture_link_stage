@@ -30,7 +30,7 @@
 	const linkButtonClass =
 		'rounded-full border border-violet-300 px-4 py-2 text-sm font-bold text-violet-700 hover:bg-violet-50 dark:border-violet-700 dark:text-violet-300 dark:hover:bg-violet-950';
 	const infoCardClass =
-		'rounded-2xl border border-slate-200/70 bg-white/60 p-4 backdrop-blur-sm dark:border-white/10 dark:bg-white/[0.03]';
+		'rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-white/[0.03] dark:shadow-none';
 	const sectionHeadingClass =
 		'mb-3 flex items-center gap-1.5 text-sm font-bold tracking-wide text-slate-500 uppercase dark:text-slate-400';
 </script>

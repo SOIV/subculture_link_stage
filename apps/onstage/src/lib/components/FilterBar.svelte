@@ -26,7 +26,7 @@
 	새 쿼리스트링으로 다시 실행된다. 태그는 한 번에 하나만 고를 수 있다(다중 선택은 이후 확장). -->
 <form
 	method="GET"
-	class="flex flex-wrap items-end gap-3 rounded-2xl border border-slate-200/70 bg-white/60 p-4 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.03]"
+	class="flex flex-wrap items-end gap-3 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-white/[0.03] dark:shadow-none"
 >
 	<label class={labelClass}>
 		{t(locale, 'filter.country')}
