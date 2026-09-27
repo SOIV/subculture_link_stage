@@ -1,0 +1,118 @@
+// 날짜·시간 표시와 코드값(status/scheduleType/urlType/국가) → 사람이 읽는 문구 변환.
+// API가 주는 코드값 자체는 packages/domain(scls-platform)의 TEXT+CHECK 목록과 같다.
+import type { EventScheduleItem, EventSummary } from './api';
+import { t, type Locale } from './i18n';
+
+const COUNTRY_TIMEZONE: Record<string, string> = {
+	KR: 'Asia/Seoul',
+	JP: 'Asia/Tokyo'
+};
+
+export type TimeRange = {
+	startsAt: string | null;
+	endsAt: string | null;
+	isAllDay: boolean;
+	timezone: string;
+};
+
+/**
+ * 카드/상세에 보여줄 대표 기간을 고른다. EVENT_START 일정이 있으면 그 timezone·isAllDay를
+ * 그대로 쓴다(가장 신뢰할 수 있는 값). 없으면 최상위 startsAt/endsAt과 countryCode로 추정한
+ * 타임존으로 대체한다(온라인 전용 등 국가가 없으면 UTC).
+ */
+export function eventPeriod(event: EventSummary): TimeRange {
+	const start = event.schedules.find((schedule) => schedule.type === 'EVENT_START');
+	if (start) {
+		return {
+			startsAt: start.startsAt,
+			endsAt: start.endsAt,
+			isAllDay: start.isAllDay,
+			timezone: start.timezone
+		};
+	}
+	return {
+		startsAt: event.startsAt,
+		endsAt: event.endsAt,
+		isAllDay: event.isAllDay,
+		timezone: (event.countryCode && COUNTRY_TIMEZONE[event.countryCode]) || 'UTC'
+	};
+}
+
+function localeTag(locale: Locale) {
+	return locale === 'ko' ? 'ko-KR' : locale === 'ja' ? 'ja-JP' : 'en-US';
+}
+
+function dateFormatter(locale: Locale, timeZone: string, withTime: boolean) {
+	return new Intl.DateTimeFormat(localeTag(locale), {
+		timeZone,
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric',
+		weekday: 'short',
+		...(withTime ? { hour: '2-digit', minute: '2-digit' } : {})
+	});
+}
+
+function timeFormatter(locale: Locale, timeZone: string) {
+	return new Intl.DateTimeFormat(localeTag(locale), {
+		timeZone,
+		hour: '2-digit',
+		minute: '2-digit'
+	});
+}
+
+/**
+ * 사람이 읽는 기간 문자열. 종일 일정은 날짜만, 시각이 있으면 시간까지 보여준다. 종일 일정의
+ * endsAt은 "마지막 날 다음 날 00:00"(배타적 종료) 관례이므로(apps/api의 seed-events.ts와 동일)
+ * 표시 전에 하루를 뺀다. EventScheduleItem도 같은 4개 필드 모양이라 그대로 넘길 수 있다.
+ */
+export function formatRange(locale: Locale, range: TimeRange): string {
+	if (!range.startsAt) return t(locale, 'card.dateUnknown');
+
+	const start = new Date(range.startsAt);
+	const longFormatter = dateFormatter(locale, range.timezone, !range.isAllDay);
+	if (!range.endsAt) return longFormatter.format(start);
+
+	const rawEnd = new Date(range.endsAt);
+	const end = range.isAllDay ? new Date(rawEnd.getTime() - 24 * 60 * 60 * 1000) : rawEnd;
+	if (end.getTime() <= start.getTime()) return longFormatter.format(start);
+
+	// 자정 기준 UTC 비교라 타임존 경계의 극히 드문 사례에서는 실제 표시 날짜와 하루 어긋날 수
+	// 있지만, "같은 날이면 시각만 붙인다"는 표시 단순화가 목적이라 문제되지 않는다.
+	const sameDay = start.toDateString() === end.toDateString();
+	if (sameDay && !range.isAllDay) {
+		return `${longFormatter.format(start)} ~ ${timeFormatter(locale, range.timezone).format(end)}`;
+	}
+	return `${longFormatter.format(start)} ~ ${longFormatter.format(end)}`;
+}
+
+export function formatSchedule(locale: Locale, schedule: EventScheduleItem): string {
+	return formatRange(locale, schedule);
+}
+
+export function statusLabel(locale: Locale, status: string): string {
+	return t(locale, `status.${status}`);
+}
+
+export function scheduleTypeLabel(locale: Locale, type: string): string {
+	return t(locale, `schedule.${type}`);
+}
+
+export function urlTypeLabel(locale: Locale, type: string): string {
+	return t(locale, `url.${type}`);
+}
+
+export function tagGroupLabel(locale: Locale, groupSlug: string, fallback: string): string {
+	const key = `group.${groupSlug}`;
+	const label = t(locale, key);
+	return label === key ? fallback : label;
+}
+
+/** isOnline은 호출하는 쪽에서 따로 판단한다 — 국가가 없다고 해서 항상 온라인 행사는
+ * 아니므로(예: 아직 장소 미정) 이 함수에서 온라인 여부를 추측하지 않는다. */
+export function countryLabel(locale: Locale, countryCode: string | null): string {
+	if (!countryCode) return '—';
+	const key = `filter.country.${countryCode}`;
+	const label = t(locale, key);
+	return label === key ? countryCode : label;
+}
