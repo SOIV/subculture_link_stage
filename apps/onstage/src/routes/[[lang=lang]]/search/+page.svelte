@@ -7,8 +7,15 @@
 	let locale = $derived(data.locale);
 </script>
 
-<div class="space-y-6">
-	<h1 class="text-2xl font-bold tracking-tight">{t(locale, 'nav.search')}</h1>
+<div class="space-y-8">
+	<section class="space-y-2 pt-2">
+		<p class="text-xs font-bold tracking-[0.25em] text-violet-600 uppercase dark:text-violet-400">
+			{t(locale, 'site.tagline')}
+		</p>
+		<h1 class="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
+			{t(locale, 'nav.search')}
+		</h1>
+	</section>
 
 	<form method="GET" class="flex gap-2">
 		<input
@@ -16,11 +23,11 @@
 			name="q"
 			value={data.q}
 			placeholder={t(locale, 'search.placeholder')}
-			class="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950"
+			class="flex-1 rounded-full border border-slate-300 bg-white/70 px-4 py-2.5 text-sm backdrop-blur-sm focus:border-violet-400 focus:outline-none dark:border-white/10 dark:bg-white/[0.04]"
 		/>
 		<button
 			type="submit"
-			class="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-500"
+			class="rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-6 py-2.5 text-sm font-bold text-white shadow-md shadow-violet-600/20 transition-transform hover:scale-[1.03] hover:shadow-lg hover:shadow-violet-600/30"
 		>
 			{t(locale, 'search.button')}
 		</button>
@@ -32,7 +39,7 @@
 		</p>
 		{#if data.results.items.length === 0}
 			<p
-				class="rounded-xl border border-dashed border-slate-300 p-8 text-center text-slate-500 dark:border-slate-700"
+				class="rounded-2xl border border-dashed border-slate-300 p-8 text-center text-slate-500 dark:border-slate-700"
 			>
 				{t(locale, 'search.empty')}
 			</p>

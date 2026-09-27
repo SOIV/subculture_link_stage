@@ -5,17 +5,20 @@
 	let { locale }: { locale: Locale } = $props();
 </script>
 
-<footer
-	class="mt-16 border-t border-slate-200 py-8 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400"
->
-	<div class="mx-auto max-w-5xl space-y-3 px-4">
+<footer class="mt-20 border-t border-slate-200/70 dark:border-white/10">
+	<div
+		class="mx-auto max-w-5xl space-y-3 px-4 py-8 text-sm text-slate-500 sm:px-6 dark:text-slate-400"
+	>
+		<p class="font-display text-base font-bold text-slate-700 dark:text-slate-200">
+			{t(locale, 'site.name')}
+		</p>
 		<p>{t(locale, 'footer.about')}</p>
-		<div class="flex flex-wrap gap-x-6 gap-y-1">
+		<div class="flex flex-wrap gap-x-6 gap-y-1 pt-1">
 			<a
 				class="hover:text-violet-600 dark:hover:text-violet-400"
 				href={icsUrl('all', { locale }).toString()}
 			>
-				{t(locale, 'footer.icsAll')}
+				📅 {t(locale, 'footer.icsAll')}
 			</a>
 			<a
 				class="hover:text-violet-600 dark:hover:text-violet-400"

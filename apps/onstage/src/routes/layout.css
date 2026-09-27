@@ -1,1 +1,6 @@
 @import 'tailwindcss';
+
+@theme {
+	/* 제목·브랜드 전용 — 본문은 계속 시스템 폰트를 쓴다(추가 로딩 비용 최소화). */
+	--font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+}

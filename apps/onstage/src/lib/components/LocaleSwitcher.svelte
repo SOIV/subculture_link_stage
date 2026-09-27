@@ -10,14 +10,16 @@
 	}
 </script>
 
-<div class="flex items-center gap-1 rounded-full border border-slate-200 p-1 dark:border-slate-700">
+<div
+	class="flex items-center gap-1 rounded-full border border-slate-200/70 bg-white/50 p-1 backdrop-blur-sm dark:border-white/10 dark:bg-white/5"
+>
 	{#each LOCALES as target (target)}
 		<a
 			href={hrefFor(target)}
 			aria-current={target === locale ? 'true' : undefined}
-			class="rounded-full px-2 py-1 text-xs font-semibold uppercase transition-colors {target ===
+			class="rounded-full px-2.5 py-1 text-xs font-bold uppercase transition-colors {target ===
 			locale
-				? 'bg-violet-600 text-white'
+				? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-sm'
 				: 'text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-400'}"
 		>
 			{target}

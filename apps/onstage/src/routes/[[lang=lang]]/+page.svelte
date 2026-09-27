@@ -9,16 +9,23 @@
 	let locale = $derived(data.locale);
 </script>
 
-<div class="space-y-6">
-	<div class="flex flex-wrap items-center justify-between gap-3">
-		<h1 class="text-2xl font-bold tracking-tight">{t(locale, 'nav.events')}</h1>
-		<a
-			href={icsUrl('custom', { locale, ...data.filters }).toString()}
-			class="rounded-lg border border-violet-300 px-3 py-1.5 text-sm font-semibold text-violet-700 hover:bg-violet-50 dark:border-violet-700 dark:text-violet-300 dark:hover:bg-violet-950"
-		>
-			{t(locale, 'subscribe.title')}
-		</a>
-	</div>
+<div class="space-y-8">
+	<section class="space-y-2 pt-2">
+		<p class="text-xs font-bold tracking-[0.25em] text-violet-600 uppercase dark:text-violet-400">
+			{t(locale, 'site.tagline')}
+		</p>
+		<div class="flex flex-wrap items-end justify-between gap-4">
+			<h1 class="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
+				{t(locale, 'nav.events')}
+			</h1>
+			<a
+				href={icsUrl('custom', { locale, ...data.filters }).toString()}
+				class="rounded-full border border-violet-300 px-4 py-2 text-sm font-bold text-violet-700 hover:bg-violet-50 dark:border-violet-700 dark:text-violet-300 dark:hover:bg-violet-950"
+			>
+				📅 {t(locale, 'subscribe.title')}
+			</a>
+		</div>
+	</section>
 
 	<FilterBar {locale} tagGroups={data.tagGroups.items} filters={data.filters} />
 
