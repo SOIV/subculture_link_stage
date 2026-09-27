@@ -3,7 +3,7 @@
 # 11. 개발 단계, 성공 기준, 구현 체크리스트
 
 > [!NOTE]
-> 현황 기준: 2026-09-19. 현재 Phase 1 Core MVP 개발을 Private `scls-platform`에서 진행 중이다. API·Backstage 초기 기능과 공개 GET API·ICS 피드, Localizations CRUD API/UI를 구현했고, Backstage(Cloudflare Workers)와 API(Fly.io 도쿄)를 임시 도메인으로 초기 배포해 테스트 중이다. 정식 도메인 확정, 테스트 행사 데이터 등록 등은 남아 있다. Subculture Onstage는 아직 미착수이며 이 공식 공개 Repository에서 개발할 예정이다.
+> 현황 기준: 2026-09-27. 현재 Phase 1 Core MVP 개발을 Private `scls-platform`에서 진행 중이다. API·Backstage 초기 기능과 공개 GET API·ICS 피드, Localizations CRUD API/UI를 구현했고, Backstage(Cloudflare Workers)와 API(Fly.io 도쿄)를 임시 도메인으로 초기 배포해 테스트 중이다. §2.3.3 확정 9개 시리즈 기준 초기 행사 데이터 22건(장소 7·태그 16·다국어 이름 162건 포함)을 등록했다 — 공식 출처로 확인한 것은 13건, 기사 등 간접 출처로 확인한 것은 9건이며 공식 표기가 없는 언어의 제목 다수는 기계번역(검수 필요) 상태다. 정식 도메인 확정 등은 남아 있다. Subculture Onstage는 아직 미착수이며 이 공식 공개 Repository에서 개발할 예정이다.
 > `[x]`는 해당 기획·설계 또는 개별 구현 항목의 완료를 뜻하며, 세부 기능 완료만으로 Phase 전체 완료나 운영 배포를 뜻하지 않는다. Private 파일 경로는 개발 기록의 구현 근거로만 남긴다.
 
 ## 11.1 개발 단계
@@ -27,11 +27,11 @@
 - [x] Localizations 구현 (스키마 포함, `/admin` CRUD API 구현·인증 연결 완료 — `scls-platform`의 `apps/api/src/routes/entity-localizations.ts`. EVENT/EVENT_SERIES/EVENT_SCHEDULE/VENUE/ORGANIZER/TAG 대상 `/admin/localizations/:entityType/:entityId` GET·POST, `/admin/localizations/:id` PATCH·DELETE 구현. 관리자 UI도 구현 완료 — `scls-platform`의 `apps/backstage/src/routes/LocalizationsPanel.tsx`를 EventSeries/Events/Venues/Organizers/Tags 각 관리 화면에 연결)
 - [x] 루트 관리자 로그인 구현 (DB 저장 세션 + 쿠키 방식 — [07-admin-dashboard.md §7.6.3](07-admin-dashboard.md#763-권한-부여-절차) 결정 사항 참고. `scls-platform`의 `apps/api/src/routes/auth.ts`)
 - [x] 행사 수동 등록·수정 UI (위 Event 관리자 UI로 충족 — `scls-platform`의 `apps/backstage/src/routes/EventsPage.tsx`)
-- [x] 공개 GET API ([08-api-and-ics.md §8.2](08-api-and-ics.md#82-공개-api-예시)의 현재 구현 범위로 `/v1` 프리픽스, `{success,data}` 응답 봉투로 구현 완료 — `scls-platform`의 `apps/api/src/routes/public-*.ts`. `events`/`events/:slug`/`event-series`/`schedules`/`venues`/`tags`/`search`/`health` 전부 구현, `events` 목록은 `country`/`tags`/`from`/`to` 필터 지원. `category`/`franchise` 필터는 대응 데이터 모델이 아직 없어(franchises는 Phase 1 범위 밖) 보류. title/summary는 `entity_localizations` 조회로 채워지며, 입력 UI는 구현되었으나 실제 행사 데이터 등록은 아직이라 대부분 null)
+- [x] 공개 GET API ([08-api-and-ics.md §8.2](08-api-and-ics.md#82-공개-api-예시)의 현재 구현 범위로 `/v1` 프리픽스, `{success,data}` 응답 봉투로 구현 완료 — `scls-platform`의 `apps/api/src/routes/public-*.ts`. `events`/`events/:slug`/`event-series`/`schedules`/`venues`/`tags`/`search`/`health` 전부 구현, `events` 목록은 `country`/`tags`/`from`/`to` 필터 지원. `category`/`franchise` 필터는 대응 데이터 모델이 아직 없어(franchises는 Phase 1 범위 밖) 보류. title/summary는 `entity_localizations` 조회로 채워지며, 초기 행사 데이터 22건 등록 후 대부분 채워졌다 — 공식 표기가 없는 언어는 기계번역·검수 필요 상태로 남아 있다)
 - [x] ICS 전체 피드 ([08-api-and-ics.md §8.6](08-api-and-ics.md#86-ics-및-캘린더-설계) 기준 `/v1/calendars/all.ics`·`online.ics`·`custom.ics`(country/tags/from/to 필터)와 국가 코드 기반 피드(`kr.ics`/`jp.ics` 등, 하드코딩 없이 일반화) 구현 완료 — `scls-platform`의 `apps/api/src/routes/public-calendars.ts`. VTIMEZONE 블록 없이 TZID만 쓰는 최소 RFC 5545 구현)
 - [x] Backstage·API 초기 배포 (Backstage는 Cloudflare Workers, API는 Fly.io 도쿄 — [10-infra-ops-security.md §10.1.2](10-infra-ops-security.md#1012-배포-구조-예시) 결정 기준. API는 GitHub Actions, Backstage는 Cloudflare의 Git 연동으로 push 시 자동 배포. 임시 도메인으로 테스트 중이며 정식 공개는 아님)
 - [ ] 정식 도메인 확정 및 연결 (Backstage·API 호스트 — API 도메인 연결 절차는 [10-infra-ops-security.md §10.1.2](10-infra-ops-security.md#1012-배포-구조-예시) 참고)
-- [ ] 테스트 행사 20개 이상 등록
+- [x] 테스트 행사 20개 이상 등록 (22개 등록 완료 — §2.3.3 확정 9개 시리즈 기준, 공식 확인 13건·간접 확인 9건. 등록 스크립트는 Private `scls-platform`의 `apps/api/src/scripts/seed-events.ts`, 데이터는 같은 경로의 `seed-data/events-2026.ts`)
 - [ ] Subculture Onstage 행사 상세 웹페이지 — 미착수, 이 공개 Repository에서 개발 예정 ([02-users-and-scope.md §2.2.1](02-users-and-scope.md#221-core-mvp-기능-phase-1))
 
 ### Phase 2 — 수집 및 검수
@@ -145,11 +145,11 @@
 
 ### 초기 데이터
 
-- [ ] Event Series 10개 이상
-- [ ] Event 20개 이상
-- [ ] Event Schedule 50개 이상
-- [ ] Venue 10개 이상
-- [ ] Tag 30개 이상
+- [ ] Event Series 10개 이상 (현재 9개 — §2.3.3 확정 시리즈 전부 등록, 10개째는 반복 투어형 시리즈 추가 검토와 함께 이후 확대)
+- [x] Event 20개 이상 (22개 등록)
+- [ ] Event Schedule 50개 이상 (현재 27개)
+- [ ] Venue 10개 이상 (현재 7개)
+- [ ] Tag 30개 이상 (현재 16개 — [04-database-design.md §4.4](04-database-design.md#44-태그-구조) 트리 전체 등록, 세부 확장은 이후 검토)
 - [ ] 공식 용어집 100개 이상
 - [ ] 수집 출처 3개 이상
 
