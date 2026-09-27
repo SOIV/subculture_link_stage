@@ -32,7 +32,7 @@
 - [x] Backstage·API 초기 배포 (Backstage는 Cloudflare Workers, API는 Fly.io 도쿄 — [10-infra-ops-security.md §10.1.2](10-infra-ops-security.md#1012-배포-구조-예시) 결정 기준. API는 GitHub Actions, Backstage는 Cloudflare의 Git 연동으로 push 시 자동 배포. 임시 도메인으로 테스트 중이며 정식 공개는 아님)
 - [ ] 정식 도메인 확정 및 연결 (Backstage·API 호스트 — API 도메인 연결 절차는 [10-infra-ops-security.md §10.1.2](10-infra-ops-security.md#1012-배포-구조-예시) 참고)
 - [x] 테스트 행사 20개 이상 등록 (22개 등록 완료 — §2.3.3 확정 9개 시리즈 기준, 공식 확인 13건·간접 확인 9건. 등록 스크립트는 Private `scls-platform`의 `apps/api/src/scripts/seed-events.ts`, 데이터는 같은 경로의 `seed-data/events-2026.ts`)
-- [ ] Subculture Onstage 행사 상세 웹페이지 — 미착수, 이 공개 Repository에서 개발 예정 ([02-users-and-scope.md §2.2.1](02-users-and-scope.md#221-core-mvp-기능-phase-1))
+- [ ] Subculture Onstage 행사 상세 웹페이지 — 착수. `apps/onstage`(SvelteKit, `adapter-cloudflare`)에 행사 목록·필터·검색·상세와 ICS 구독 링크, ko/ja/en(로케일 접두사 `/ja`, `/en`, 기본 `/`) 구현 완료. 로컬 개발 서버로 실제 공개 API 데이터로 확인함 — 정식 도메인 미연결로 아직 배포 전이고, 사용자 제보·수정 요청 등 이후 기능은 범위 밖([02-users-and-scope.md §2.2.1](02-users-and-scope.md#221-core-mvp-기능-phase-1))
 
 ### Phase 2 — 수집 및 검수
 

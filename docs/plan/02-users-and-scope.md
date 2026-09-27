@@ -61,7 +61,7 @@ Backstage에 제한적으로 접근하는 외부 사용자군. 일반 사용자(
 - 전체 ICS 피드
 - 행사 상세 웹페이지
 
-> **범위 메모**: Phase 1은 진행 중이다. Private `scls-platform`에서 관리자 로그인, 행사·일정·기준 데이터 CRUD API/UI, 공개 GET API와 기본 ICS 피드를 구현했다. Localizations는 스키마만 있고 CRUD API/UI가 남아 있으며, 행사 상세 웹페이지를 포함한 Onstage는 이 공개 Repository에서 개발할 예정으로 아직 미착수다. 세부 완료 여부는 [로드맵](11-roadmap-and-success.md)을 참고한다.
+> **범위 메모**: Phase 1은 진행 중이다. Private `scls-platform`에서 관리자 로그인, 행사·일정·기준 데이터 CRUD API/UI, Localizations CRUD API/UI, 공개 GET API와 기본 ICS 피드를 구현했다. 행사 상세 웹페이지를 포함한 Onstage는 이 공개 Repository의 `apps/onstage`(SvelteKit)에서 착수했다 — 정식 도메인 미연결로 아직 배포 전이다. 세부 완료 여부는 [로드맵](11-roadmap-and-success.md)을 참고한다.
 
 ### 2.2.2 수집 및 번역 확장 기능 (Phase 2~3)
 
