@@ -14,7 +14,7 @@
 |---|---|---|
 | Backend | Node.js + TypeScript + Fastify | Private API 초기 구현에 사용 |
 | Backstage | React + Vite + TanStack Router/Query + Tailwind v4 | Private 관리자 UI 초기 구현에 사용, ko/en/ja (`i18next`) |
-| Onstage | Svelte/SvelteKit | 이 공개 Repository에서 개발 예정, 미착수 |
+| Onstage | Svelte/SvelteKit | 이 공개 Repository(`apps/onstage`)에서 개발 중, 배포 전 |
 | DB | PostgreSQL (Supabase) | 초기 확정, 비용 부담 커지면 자체 호스팅 이전 검토 — 아래 결정 사항 참고 |
 | ORM | Prisma | Private `scls-platform`에 Phase 1 schema/migration 적용 |
 | Queue | Redis + BullMQ | 수집·번역·알림 Worker |

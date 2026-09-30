@@ -4,7 +4,7 @@
 
 > 韓国・日本をはじめ世界各地のオンライン・オフラインのサブカルチャー・ゲーム関連公式イベント情報を収集・確認・翻訳する、多言語のリレーショナルなイベントデータプラットフォーム。作品/IP・イベントシリーズ・個別イベント・日程・会場・主催者・参加者/出演者・タグの関係を構造化し、Web/API/ICSや外部サービスで再利用できる形で提供することを目指します。
 
-SCLSは現在、**初期開発段階（Phase 1 Core MVPを開発中）**です。企画・設計ドキュメントと今後のSubculture Onstageのソースは、この公式公開リポジトリ（`Subculture_Link_Stage`）で管理します。SCLS API、Subculture Backstage、内部サービスは別の非公開リポジトリ `scls-platform` で開発しており、API・Backstageの一部機能は実装済みです。このリポジトリにはまだOnstageのコードはありません。開発計画と実装状況は韓国語で [docs/plan/](docs/plan/README.md) にまとめています。
+SCLSは現在、**初期開発段階（Phase 1 Core MVPを開発中）**です。企画・設計ドキュメントとSubculture Onstageのソースは、この公式公開リポジトリ（`Subculture_Link_Stage`）で管理します。SCLS API、Subculture Backstage、内部サービスは別の非公開リポジトリ `scls-platform` で開発しており、API・Backstageの一部機能とLocalizations（多言語コンテンツ）のCRUDは実装済みで、Backstage（Cloudflare Workers）とAPI（Fly.io 東京）は一時的なドメインで初期デプロイしてテスト中です。Onstageはこのリポジトリの `apps/onstage`（SvelteKit）で開発中で、メインページ・イベント一覧（検索・フィルター）・イベント詳細を実装済みです。正式ドメイン未接続のため、まだデプロイ前です。開発計画と実装状況は韓国語で [docs/plan/](docs/plan/README.md) にまとめています。
 
 ## なぜ作るのか
 
@@ -45,7 +45,7 @@ SCLSは現在、**初期開発段階（Phase 1 Core MVPを開発中）**です�
 |---|---|
 | Backend | Node.js + TypeScript + Fastify（初期実装） |
 | Backstage | React + Vite + TanStack Router/Query + Tailwind v4、ko/en/ja UI（`i18next`、初期実装） |
-| Onstage | Svelte/SvelteKit（予定・未着手） |
+| Onstage | Svelte/SvelteKit（着手済み・デプロイ前 — `apps/onstage`） |
 | DB | PostgreSQL (Supabase) |
 | ORM | Prisma（Phase 1のschema/migration適用済み） |
 | Queue | Redis + BullMQ（予定） |
@@ -53,14 +53,15 @@ SCLSは現在、**初期開発段階（Phase 1 Core MVPを開発中）**です�
 | Search | 公開検索APIの初期実装済み。PostgreSQL FTS → pgvectorへの拡張を計画（データ蓄積後） |
 | ICS | 基本フィードの初期実装済み。ical-generatorはライブラリ候補 |
 | CDN/DNS | Cloudflare（運用計画） |
+| Hosting | Onstage・Backstage: Cloudflare（Workers）、API/Worker: Fly.io 東京（BackstageとAPIは一時ドメインで初期デプロイ） |
 
 インフラ・運用計画の詳細は [docs/plan/10-infra-ops-security.md](docs/plan/10-infra-ops-security.md)（韓国語）を参照してください。
 
 ## リポジトリの公開範囲
 
-- **公式公開リポジトリ — `Subculture_Link_Stage`（このリポジトリ）**: プロジェクト・開発ドキュメント、アーキテクチャ・データモデル、ERD・参考用DDL、Roadmap、Legacy設計文書を管理します。今後のOpenAPI/API開発者向けドキュメントとSubculture Onstageのソースもここに含めます。ERD・DDLは設計の参考資料であり、本番DBのダンプや非公開ORM schema/migrationとの完全な一致を意味しません。
+- **公式公開リポジトリ — `Subculture_Link_Stage`（このリポジトリ）**: プロジェクト・開発ドキュメント、アーキテクチャ・データモデル、ERD・参考用DDL、Roadmap、Legacy設計文書を管理します。Subculture Onstageのソース（`apps/onstage`）と今後のOpenAPI/API開発者向けドキュメントもここに含めます。ERD・DDLは設計の参考資料であり、本番DBのダンプや非公開ORM schema/migrationとの完全な一致を意味しません。
 - **非公開の実装 — `scls-platform`**: SCLS APIサーバー、Subculture Backstage、Collector/Worker、Scheduler、実際のDB migration/ORM schema、その他の内部サービスと運用実装を管理します。
-- サービス実装のうち、**Subculture Onstage**（ユーザー向け公開Web）のソースを公開し、UI/UX・デザインなどの外部貢献を受け入れる予定です。独立した `scls-onstage` 公開リポジトリを前提とはしていません。このリポジトリ内のフロントエンドの配置先は未定です。
+- サービス実装のうち、**Subculture Onstage**（ユーザー向け公開Web）は、このリポジトリの `apps/onstage` でオープンソースとして開発しており、サービス公開後にUI/UX・デザインなどの外部貢献を受け入れる予定です。独立した `scls-onstage` 公開リポジトリを前提とはしていません。
 - OpenAPI仕様の公開（利用方法の公開）とAPIサーバーのソースコード公開は別です。
 - 非公開領域の共同開発・運営にも参加可能です。公開PRではなく、下記の連絡先への個別問い合わせを通じて進めます。
 
@@ -100,8 +101,11 @@ SCLSは現在、**初期開発段階（Phase 1 Core MVPを開発中）**です�
 - [ ] Phase 1 Core MVP — 開発中
 - [ ] APIの初期実装 — 開発中（基本データCRUD、ルート管理者ログイン、Public GET API・ICS feedsは実装済み）
 - [ ] Backstageの初期実装 — 開発中（イベント・日程・基本データの手動管理UI、ko/en/ja UIは実装済み）
-- [ ] Localizations CRUD API/UIおよびテストイベント20件以上の登録
-- [ ] Subculture Onstage — 未着手。この公開リポジトリで開発予定
+- [x] Localizations（多言語コンテンツ）CRUD API/UIを実装
+- [x] テストイベント20件以上を登録（22件 — [11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md) 参照）
+- [x] BackstageとAPIの初期デプロイ（Backstage: Cloudflare Workers、API: Fly.io 東京 — 一時ドメインでテスト中）
+- [ ] 正式ドメインの確定と接続
+- [ ] Subculture Onstage — 着手済み。`apps/onstage`（SvelteKit）にメインページ、イベント一覧・フィルター・検索・詳細、ko/ja/en、ICS購読リンクを実装。正式ドメイン未接続のためデプロイ前
 
 全体のロードマップとチェックリストは [docs/plan/11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md)（韓国語）を参照してください。
 
@@ -113,6 +117,6 @@ SCLSは現在、**初期開発段階（Phase 1 Core MVPを開発中）**です�
 
 [Apache License 2.0](LICENSE) © 2026 SOIV Studio
 
-別途明記されていない限り、この公開リポジトリのプロジェクト・開発/設計ドキュメント、ERD、参考DDL、Roadmap、Legacy文書およびソースコードにはApache-2.0を適用します。今後このリポジトリに追加するSubculture Onstageのソースも、原則として同じライセンスを使用します。
+別途明記されていない限り、この公開リポジトリのプロジェクト・開発/設計ドキュメント、ERD、参考DDL、Roadmap、Legacy文書およびソースコード（`apps/onstage` のSubculture Onstageのソースを含む）にはApache-2.0を適用します。
 
-著作権表示は[NOTICE](NOTICE)を参照してください。別の非公開リポジトリ `scls-platform` の実装は本ライセンスの適用対象に含まれません。第三者の資料に個別のライセンス表示がある場合は、その条件に従います。過去にMIT Licenseで提供されたバージョンに対する権利が、この変更によって遡って撤回されることはありません。
+著作権表示とOnstageが利用する第三者素材（国旗SVG・アイコン）の出典は[NOTICE](NOTICE)を参照してください。別の非公開リポジトリ `scls-platform` の実装は本ライセンスの適用対象に含まれません。第三者の資料に個別のライセンス表示がある場合は、その条件に従います。過去にMIT Licenseで提供されたバージョンに対する権利が、この変更によって遡って撤回されることはありません。

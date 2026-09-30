@@ -4,7 +4,7 @@
 
 > A multilingual relational event data platform for official subculture and gaming events in Korea, Japan, and worldwide, both online and in person. SCLS collects, reviews, and translates information, structuring the relationships between works/IP, event series, individual events, schedules, venues, organizers, participants/performers, and tags for reuse through the Web, API, ICS, and external services.
 
-SCLS is in **early development, with Phase 1 Core MVP underway**. This official public repository (`Subculture_Link_Stage`) maintains the project’s planning and design documents and will also host the Subculture Onstage source. SCLS API, Subculture Backstage, and internal services are being developed in the separate private repository `scls-platform`, where some API and Backstage features are already implemented. This repository does not yet contain Onstage code. The development plan and implementation status are maintained in Korean at [docs/plan/](docs/plan/README.md).
+SCLS is in **early development, with Phase 1 Core MVP underway**. This official public repository (`Subculture_Link_Stage`) maintains the project’s planning and design documents and the Subculture Onstage source. SCLS API, Subculture Backstage, and internal services are being developed in the separate private repository `scls-platform`, where some API and Backstage features and Localizations (multilingual content) CRUD are implemented; Backstage (Cloudflare Workers) and the API (Fly.io, Tokyo) have had an initial deployment on temporary domains and are being tested. Onstage is under development in this repository’s `apps/onstage` (SvelteKit), with the home page, event list (search and filters), and event details implemented; it is not yet deployed because no official domain is connected. The development plan and implementation status are maintained in Korean at [docs/plan/](docs/plan/README.md).
 
 ## Why we're building this
 
@@ -45,7 +45,7 @@ See [docs/plan/03-architecture-and-domain.md](docs/plan/03-architecture-and-doma
 |---|---|
 | Backend | Node.js + TypeScript + Fastify (initial implementation) |
 | Backstage | React + Vite + TanStack Router/Query + Tailwind v4, ko/en/ja UI (`i18next`) (initial implementation) |
-| Onstage | Svelte/SvelteKit (planned; not started) |
+| Onstage | Svelte/SvelteKit (started, not yet deployed — `apps/onstage`) |
 | DB | PostgreSQL (Supabase) |
 | ORM | Prisma (Phase 1 schema/migration applied) |
 | Queue | Redis + BullMQ (planned) |
@@ -53,14 +53,15 @@ See [docs/plan/03-architecture-and-domain.md](docs/plan/03-architecture-and-doma
 | Search | Initial public search API implemented; PostgreSQL FTS → pgvector expansion planned as data accumulates |
 | ICS | Initial basic feeds implemented; ical-generator is a candidate library |
 | CDN/DNS | Cloudflare (operations plan) |
+| Hosting | Onstage and Backstage: Cloudflare (Workers); API/Worker: Fly.io Tokyo (Backstage and API initially deployed on temporary domains) |
 
 See [docs/plan/10-infra-ops-security.md](docs/plan/10-infra-ops-security.md) (Korean) for infrastructure and operations details.
 
 ## Repository publication scope
 
-- **Official public repository — `Subculture_Link_Stage` (this repository)**: project and development documentation, architecture and data models, ERDs and reference DDL, the roadmap, and legacy designs. Future OpenAPI/API developer documentation and Subculture Onstage source will also live here. ERDs and DDL are design references, not production database dumps or guaranteed one-to-one copies of the private ORM schema/migrations.
+- **Official public repository — `Subculture_Link_Stage` (this repository)**: project and development documentation, architecture and data models, ERDs and reference DDL, the roadmap, and legacy designs. The Subculture Onstage source (`apps/onstage`) and future OpenAPI/API developer documentation also live here. ERDs and DDL are design references, not production database dumps or guaranteed one-to-one copies of the private ORM schema/migrations.
 - **Private implementation — `scls-platform`**: the SCLS API server, Subculture Backstage, Collectors/Workers, Scheduler, actual database migrations/ORM schema, and other internal services and operations code.
-- Among service implementations, **Subculture Onstage** (the public web app) will be open source, welcoming contributions to UI/UX, design, and related work. A separate public `scls-onstage` repository is not required; the frontend’s directory within this repository is still undecided.
+- Among service implementations, **Subculture Onstage** (the public web app) is developed as open source in this repository’s `apps/onstage`, and we plan to welcome contributions to UI/UX, design, and related work once the service is public. A separate public `scls-onstage` repository is not required.
 - Publishing the OpenAPI specification (usage documentation) is separate from publishing the API server’s source code.
 - Contributors can also participate in private development and operations by contacting the maintainer directly, rather than through public PRs; see Contact below.
 
@@ -100,8 +101,11 @@ Earlier single-document versions (v1–v3) are archived in [docs/legacy/](docs/l
 - [ ] Phase 1 Core MVP — in progress
 - [ ] Initial API implementation — in progress (core data CRUD, root admin login, public GET API, and ICS feeds implemented)
 - [ ] Initial Backstage implementation — in progress (manual event, schedule, and reference data management UI, plus ko/en/ja UI implemented)
-- [ ] Localizations CRUD API/UI and registration of at least 20 test events
-- [ ] Subculture Onstage — not started; planned for this public repository
+- [x] Localizations (multilingual content) CRUD API/UI implemented
+- [x] At least 20 test events registered (22 — see [11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md))
+- [x] Initial deployment of Backstage and the API (Backstage: Cloudflare Workers, API: Fly.io Tokyo — being tested on temporary domains)
+- [ ] Official domain finalized and connected
+- [ ] Subculture Onstage — started. Home page, event list with filters and search, event details, ko/ja/en, and ICS subscription links implemented in `apps/onstage` (SvelteKit); not yet deployed because no official domain is connected
 
 See [docs/plan/11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md) (Korean) for the full roadmap and checklist.
 
@@ -113,6 +117,6 @@ For development/operations participation, partnerships, or other inquiries: `biz
 
 [Apache License 2.0](LICENSE) © 2026 SOIV Studio
 
-Unless otherwise noted, Apache-2.0 applies to this public repository’s project, development and design documentation, ERDs, reference DDL, roadmap, legacy documents, and source code. Future Subculture Onstage source added to this repository will use the same license by default.
+Unless otherwise noted, Apache-2.0 applies to this public repository’s project, development and design documentation, ERDs, reference DDL, roadmap, legacy documents, and source code, including the Subculture Onstage source in `apps/onstage`.
 
-See [NOTICE](NOTICE) for the copyright notice. This license does not cover implementations in the separate private `scls-platform` repository; third-party materials with their own license notices remain subject to those terms. This change does not retroactively revoke rights granted for versions previously provided under the MIT License.
+See [NOTICE](NOTICE) for the copyright notice and the sources of third-party assets used by Onstage (flag SVGs and icons). This license does not cover implementations in the separate private `scls-platform` repository; third-party materials with their own license notices remain subject to those terms. This change does not retroactively revoke rights granted for versions previously provided under the MIT License.
