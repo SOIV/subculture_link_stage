@@ -3,7 +3,7 @@
 # 11. 개발 단계, 성공 기준, 구현 체크리스트
 
 > [!NOTE]
-> 현황 기준: 2026-09-27. 현재 Phase 1 Core MVP 개발을 Private `scls-platform`에서 진행 중이다. API·Backstage 초기 기능과 공개 GET API·ICS 피드, Localizations CRUD API/UI를 구현했고, Backstage(Cloudflare Workers)와 API(Fly.io 도쿄)를 임시 도메인으로 초기 배포해 테스트 중이다. §2.3.3 확정 9개 시리즈 기준 초기 행사 데이터 22건(장소 7·태그 16·다국어 이름 162건 포함)을 등록했다 — 공식 출처로 확인한 것은 13건, 기사 등 간접 출처로 확인한 것은 9건이며 공식 표기가 없는 언어의 제목 다수는 기계번역(검수 필요) 상태다. 정식 도메인 확정 등은 남아 있다. Subculture Onstage는 아직 미착수이며 이 공식 공개 Repository에서 개발할 예정이다.
+> 현황 기준: 2026-09-30. 현재 Phase 1 Core MVP 개발을 Private `scls-platform`에서 진행 중이다. API·Backstage 초기 기능과 공개 GET API·ICS 피드, Localizations CRUD API/UI를 구현했고, Backstage(Cloudflare Workers)와 API(Fly.io 도쿄)를 임시 도메인으로 초기 배포해 테스트 중이다. §2.3.3 확정 9개 시리즈 기준 초기 행사 데이터 22건(장소 7·태그 16·다국어 이름 162건 포함)을 등록했다 — 공식 출처로 확인한 것은 13건, 기사 등 간접 출처로 확인한 것은 9건이며 공식 표기가 없는 언어의 제목 다수는 기계번역(검수 필요) 상태다. 정식 도메인 확정 등은 남아 있다. Subculture Onstage는 이 공식 공개 Repository의 `apps/onstage`에서 착수해 메인 페이지·행사 목록·상세를 구현했으며, 정식 도메인 미연결로 아직 배포 전이다.
 > `[x]`는 해당 기획·설계 또는 개별 구현 항목의 완료를 뜻하며, 세부 기능 완료만으로 Phase 전체 완료나 운영 배포를 뜻하지 않는다. Private 파일 경로는 개발 기록의 구현 근거로만 남긴다.
 
 ## 11.1 개발 단계
@@ -32,14 +32,14 @@
 - [x] Backstage·API 초기 배포 (Backstage는 Cloudflare Workers, API는 Fly.io 도쿄 — [10-infra-ops-security.md §10.1.2](10-infra-ops-security.md#1012-배포-구조-예시) 결정 기준. API는 GitHub Actions, Backstage는 Cloudflare의 Git 연동으로 push 시 자동 배포. 임시 도메인으로 테스트 중이며 정식 공개는 아님)
 - [ ] 정식 도메인 확정 및 연결 (Backstage·API 호스트 — API 도메인 연결 절차는 [10-infra-ops-security.md §10.1.2](10-infra-ops-security.md#1012-배포-구조-예시) 참고)
 - [x] 테스트 행사 20개 이상 등록 (22개 등록 완료 — §2.3.3 확정 9개 시리즈 기준, 공식 확인 13건·간접 확인 9건. 등록 스크립트는 Private `scls-platform`의 `apps/api/src/scripts/seed-events.ts`, 데이터는 같은 경로의 `seed-data/events-2026.ts`)
-- [ ] Subculture Onstage 행사 상세 웹페이지 — 착수. `apps/onstage`(SvelteKit, `adapter-cloudflare`)에 행사 목록·필터·검색·상세와 ICS 구독 링크, ko/ja/en(로케일 접두사 `/ja`, `/en`, 기본 `/`) 구현 완료. 로컬 개발 서버로 실제 공개 API 데이터로 확인함 — 정식 도메인 미연결로 아직 배포 전이고, 사용자 제보·수정 요청 등 이후 기능은 범위 밖([02-users-and-scope.md §2.2.1](02-users-and-scope.md#221-core-mvp-기능-phase-1))
-  - [ ] Main HP 작업 - 메인 페이지가 없이 즉시 행사 검색 부분을 넘어가는 부분은 아니라고는 봄 / 메인 페이지에서 행사들 광고도 달 수 있도록 만들어주면 좋을 것 같기도 하고.(그쪽 수익도 얻어볼 수 있으니까)
-  - [ ] 검색 시스템 관련 - 검색을 행사 화면에서 필터쪽에 같이 검색창을 둬서 거기서 검색과 필터 검색을 둘다 할 수 있도록 하면 좋을 것 같음.
-  - [ ] 언어 및 배경 모드 - 오른쪽에 메뉴를 하나 만들어서 거기서 언어, 배경 모드를 변경할 수 있도록 해주는 것이 깔 끔할 것 같음.
-  - [ ] 행사별 보여주는 내용물 관련 - 띄워야 하는 내용들은 행사별로 다를 수 있지만 그래도 그만큼 양은 대부분 많기 때문에 그 부분을 띄우는 카드를 어떻게 해줄 것인지에 대한 부분을 조정
-  - [ ] 한국 국기 관련 - 뭔 이상한 국기 아이콘을 달아둔것 같은데;
-  - [ ] 그 외 - 필요 없는 부분은 덜어내고, 이동해야 되는 부분은 이동해서 재배치하고, 추가해야 되는 부분은 추개해서 배치하고 / 뭐 일단 수정할 것은 매우 많음;
-  - [ ] 필터 검색 관련 기능 - 태그에서 행사 형식 / 참가 방식 / 티켓 방식 으로 분리하여 하나식 선택하여 검색할 수 있도록 수정
+- [ ] Subculture Onstage 행사 상세 웹페이지 — 착수. `apps/onstage`(SvelteKit, `adapter-cloudflare`)에 메인 페이지(`/`), 행사 목록·필터·검색(`/events`), 상세와 ICS 구독 링크, ko/ja/en(로케일 접두사 `/ja`, `/en`, 기본 `/`) 구현 완료. 로컬 개발 서버로 실제 공개 API 데이터로 확인함 — 정식 도메인 미연결로 아직 배포 전이고, 사용자 제보·수정 요청 등 이후 기능은 범위 밖([02-users-and-scope.md §2.2.1](02-users-and-scope.md#221-core-mvp-기능-phase-1)). 아래는 1차 디자인 패스 뒤에 적어 둔 수정 항목이다(2026-09-30 반영)
+  - [x] Main HP 작업 — 메인 페이지가 없이 곧바로 행사 검색으로 넘어가던 구조를 바꿔 `/`를 메인 페이지로, 행사 목록은 `/events`로 분리했다(`apps/onstage`의 `routes/[[lang=lang]]/+page.svelte`, `events/+page.svelte`). 메인에는 소개 문구, 필터와 무관하게 검색어만 넘기는 단독 검색창, 국가·분류 바로가기, 곧 열리는 행사, 티켓·신청 임박 일정, 캘린더 구독 안내를 둔다. 행사 광고는 "광고" 표시가 붙는 추천 행사 자리(`lib/components/PromotedEvents.svelte`)만 마련했고, 광고 데이터가 없어 운영 화면에는 나오지 않는다(개발 모드에서만 점선 자리 표시) — 광고 등록·과금·표기 정책은 미정
+  - [x] 검색 시스템 관련 — 행사 목록의 필터 박스 맨 위에 검색창을 넣어 검색과 필터를 함께 쓴다(`lib/components/FilterBar.svelte`). 별도 `/search` 페이지와 헤더의 "검색" 메뉴는 없앴다. 공개 API에 검색어 `q`(모든 언어의 제목·slug 부분 일치)를 추가했다 — `scls-platform`의 `apps/api/src/lib/event-filter.ts`, `routes/public-events.ts` ([08-api-and-ics.md §8.2](08-api-and-ics.md#82-공개-api-예시))
+  - [x] 언어 및 배경 모드 — 헤더 오른쪽 "설정" 메뉴 하나에 언어(한국어/日本語/English)와 화면 모드(시스템/라이트/다크)를 모았다(`lib/components/SettingsMenu.svelte`). 언어를 바꿔도 현재 경로와 검색 조건은 유지된다
+  - [x] 행사별 보여주는 내용물 관련 — 카드를 "요약 + 다음 일정" 방식으로 바꿨다(`lib/components/EventCard.svelte`, `lib/schedule.ts`, `lib/tags.ts`). 기간·제목·장소·분류 칩(최대 4개)만 싣고, 그 행사에서 지금 시점 기준 가장 가까운 일정 1개(D-day, 진행 중이면 "진행 중")와 "일정 N개 더 보기"를 붙여 일정 종류가 행사마다 달라도 카드 크기가 일정하다. "확정" 표시는 빼고 연기·취소 등만 표시한다. 같은 종류 일정이 여러 개인 행사는 DB·API에 구분 이름이 없어 같은 이름으로 나온다(후속)
+  - [x] 한국 국기 관련 — 직접 그린 그림(태극기 4괘 누락)과 Windows에서 글자로 깨지는 이모지를 flag-icons(MIT)의 표준 국기 SVG로 교체했다(한국·일본, `lib/components/CountryBadge.svelte`). 국가 선택칸의 이모지는 뺐다
+  - [ ] 그 외 — 1차 정리 완료: 이모지를 통일된 선 아이콘(`@lucide/svelte`)으로 교체, 헤더 로고 아래 태그라인 중복 삭제, 목록 페이지 상단 정리, 한국어 줄바꿈을 단어 단위로, 언어 전환 시 `<html lang>` 갱신. 이후 화면을 쓰면서 발견되는 수정은 이어서 반영한다
+  - [x] 필터 검색 관련 기능 — 태그를 행사 형식 / 참가 방식 / 티켓 방식 드롭다운 3개로 나눠 각각 하나씩 골라 검색한다(`lib/components/FilterBar.svelte`, `events/+page.ts`). 같은 그룹 안의 태그는 "또는", 그룹 사이는 "그리고"로 처리하고 상위 태그를 고르면 하위 태그가 붙은 행사도 포함한다 — 공개 API `tags`와 ICS `custom.ics`가 같은 규칙을 쓰도록 `scls-platform`의 `apps/api/src/lib/event-filter.ts`로 조건 조립을 통합했다([08-api-and-ics.md §8.2](08-api-and-ics.md#82-공개-api-예시))
 
 ### Phase 2 — 수집 및 검수
 
