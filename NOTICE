@@ -2,3 +2,7 @@ Subculture Link Stage (SCLS)
 Copyright (c) 2026 SOIV Studio
 
 Licensed under the Apache License, Version 2.0.
+
+Subculture Onstage (apps/onstage) uses the following third-party assets:
+- flag-icons (https://github.com/lipis/flag-icons) — MIT License — country flag SVGs
+- Lucide (https://lucide.dev), via @lucide/svelte — ISC License — UI icons

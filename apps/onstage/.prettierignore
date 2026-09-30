@@ -7,3 +7,6 @@ bun.lockb
 
 # Miscellaneous
 /static/
+
+# wrangler가 생성하는 파일 — prettier로 고치면 `wrangler types --check`가 실패한다.
+worker-configuration.d.ts

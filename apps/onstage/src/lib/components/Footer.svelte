@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CalendarPlus from '@lucide/svelte/icons/calendar-plus';
 	import { icsUrl } from '$lib/api';
 	import { t, type Locale } from '$lib/i18n';
 
@@ -15,10 +16,11 @@
 		<p>{t(locale, 'footer.about')}</p>
 		<div class="flex flex-wrap gap-x-6 gap-y-1 pt-1">
 			<a
-				class="hover:text-violet-600 dark:hover:text-violet-400"
+				class="inline-flex items-center gap-1.5 hover:text-violet-600 dark:hover:text-violet-400"
 				href={icsUrl('all', { locale }).toString()}
 			>
-				📅 {t(locale, 'footer.icsAll')}
+				<CalendarPlus class="size-4" aria-hidden="true" />
+				{t(locale, 'footer.icsAll')}
 			</a>
 			<a
 				class="hover:text-violet-600 dark:hover:text-violet-400"

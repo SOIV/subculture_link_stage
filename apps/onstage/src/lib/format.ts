@@ -90,6 +90,49 @@ export function formatSchedule(locale: Locale, schedule: EventScheduleItem): str
 	return formatRange(locale, schedule);
 }
 
+/**
+ * 카드용 짧은 기간 표기: 시각 없이 날짜만 보여주고(같은 달이면 뒤쪽 달은 생략), 올해가 아니면
+ * 연도를 붙인다. 시각과 전체 날짜는 카드의 "다음 일정"과 상세 페이지에서 보여준다.
+ */
+export function formatCardPeriod(locale: Locale, range: TimeRange, now: Date): string {
+	if (!range.startsAt) return t(locale, 'card.dateUnknown');
+
+	const start = new Date(range.startsAt);
+	const yearOf = (date: Date) =>
+		new Intl.DateTimeFormat('en-CA', { timeZone: range.timezone, year: 'numeric' }).format(date);
+	const formatter = new Intl.DateTimeFormat(localeTag(locale), {
+		timeZone: range.timezone,
+		...(yearOf(start) === yearOf(now) ? {} : { year: 'numeric' }),
+		month: 'long',
+		day: 'numeric',
+		weekday: 'short'
+	});
+	if (!range.endsAt) return formatter.format(start);
+
+	// 종일 일정의 endsAt은 "마지막 날 다음 날 0시"(배타적 종료)라 표시 전에 하루를 뺀다(formatRange와 동일).
+	const rawEnd = new Date(range.endsAt);
+	const end = range.isAllDay ? new Date(rawEnd.getTime() - 24 * 60 * 60 * 1000) : rawEnd;
+	if (end.getTime() <= start.getTime()) return formatter.format(start);
+	// 같은 날로 접히면 Intl이 날짜 하나만 돌려준다(예: 하루짜리 행사의 시작·종료 시각이 다른 경우).
+	return formatter.formatRange(start, end);
+}
+
+/** 카드·목록의 한 줄 일정 표기용 짧은 날짜(연도 없이 월·일·요일, 종일이 아니면 시각까지). */
+export function formatShortDate(
+	locale: Locale,
+	iso: string,
+	timeZone: string,
+	withTime: boolean
+): string {
+	return new Intl.DateTimeFormat(localeTag(locale), {
+		timeZone,
+		month: 'long',
+		day: 'numeric',
+		weekday: 'short',
+		...(withTime ? { hour: '2-digit', minute: '2-digit' } : {})
+	}).format(new Date(iso));
+}
+
 export function statusLabel(locale: Locale, status: string): string {
 	return t(locale, `status.${status}`);
 }

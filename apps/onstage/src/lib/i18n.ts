@@ -9,24 +9,28 @@ export const DEFAULT_LOCALE: Locale = 'ko';
 // 기본 로케일은 URL에 접두사가 없다(/events/foo). 나머지만 접두사가 붙는다(/ja/events/foo).
 export const PREFIXED_LOCALES = LOCALES.filter((locale) => locale !== DEFAULT_LOCALE);
 
+/** 언어 메뉴에는 각 언어를 그 언어 자신의 이름으로 보여준다(현재 화면 언어와 무관). */
+export const LOCALE_NAMES: Record<Locale, string> = { ko: '한국어', ja: '日本語', en: 'English' };
+
 const ko = {
 	'site.name': 'Subculture Onstage',
 	'site.tagline': '한국·일본·글로벌 서브컬처 행사 캘린더',
 	'nav.events': '행사',
-	'nav.search': '검색',
+
+	'menu.settings': '설정',
+	'menu.language': '언어',
+	'menu.theme': '화면 모드',
 
 	'theme.system': '시스템',
 	'theme.light': '라이트',
 	'theme.dark': '다크',
 
+	'filter.all': '전체',
 	'filter.country': '국가',
-	'filter.country.all': '전체',
 	'filter.country.KR': '한국',
 	'filter.country.JP': '일본',
-	'filter.tags': '태그',
 	'filter.from': '시작일 이후',
 	'filter.to': '종료일 이전',
-	'filter.apply': '필터 적용',
 	'filter.reset': '초기화',
 
 	'subscribe.title': '캘린더 구독',
@@ -37,10 +41,17 @@ const ko = {
 
 	'list.empty': '조건에 맞는 행사가 없습니다.',
 	'list.count': '개 행사',
+	'list.searchResults': '‘{q}’ 검색 결과',
 
 	'card.online': '온라인',
 	'card.venueUnknown': '장소 미정',
 	'card.dateUnknown': '일정 미정',
+	'card.next': '다음 일정',
+	'card.inProgress': '진행 중',
+	'card.today': '오늘',
+	'card.dday': 'D-{n}',
+	'card.moreSchedules': '일정 {n}개 더 보기',
+	'card.autoTranslated': '자동 번역',
 
 	'status.DRAFT': '준비 중',
 	'status.CONFIRMED': '확정',
@@ -94,8 +105,22 @@ const ko = {
 
 	'search.placeholder': '행사 이름 검색',
 	'search.button': '검색',
-	'search.empty': '검색 결과가 없습니다.',
-	'search.resultsFor': '검색 결과',
+
+	'home.hero.title': '서브컬처 행사 일정, 한 곳에서 캘린더로',
+	'home.hero.desc':
+		'한국·일본·글로벌 공식 행사를 티켓 오픈, 추첨 발표 일정까지 한 번에 확인하고 내 캘린더에 그대로 담아 가세요.',
+	'home.upcoming': '곧 열리는 행사',
+	'home.upcoming.empty': '예정된 행사가 없습니다.',
+	'home.viewAll': '전체 행사 보기',
+	'home.promoted': '추천 행사',
+	'home.promoted.placeholder': '광고 자리 (개발 모드에서만 보입니다)',
+	'home.schedules': '티켓·신청 일정',
+	'home.schedules.desc': '앞으로 다가오는 티켓 오픈, 추첨, 신청 일정입니다.',
+	'home.schedules.empty': '예정된 티켓·신청 일정이 없습니다.',
+	'home.subscribe.title': '캘린더로 받아보기',
+	'home.subscribe.desc': '한 번 구독해 두면 새 행사와 일정 변경이 내 캘린더에 자동으로 반영됩니다.',
+
+	'ad.label': '광고',
 
 	'footer.about': 'SCLS는 한국·일본·글로벌 서브컬처 및 게임 관련 공식 행사 정보를 모아 제공합니다.',
 	'footer.sourceLink': '프로젝트 저장소',
@@ -106,20 +131,21 @@ const ja: Record<keyof typeof ko, string> = {
 	'site.name': 'Subculture Onstage',
 	'site.tagline': '韓国・日本・グローバルのサブカルチャーイベントカレンダー',
 	'nav.events': 'イベント',
-	'nav.search': '検索',
+
+	'menu.settings': '設定',
+	'menu.language': '言語',
+	'menu.theme': '表示モード',
 
 	'theme.system': 'システム',
 	'theme.light': 'ライト',
 	'theme.dark': 'ダーク',
 
+	'filter.all': 'すべて',
 	'filter.country': '国',
-	'filter.country.all': 'すべて',
 	'filter.country.KR': '韓国',
 	'filter.country.JP': '日本',
-	'filter.tags': 'タグ',
 	'filter.from': '開始日以降',
 	'filter.to': '終了日以前',
-	'filter.apply': '適用',
 	'filter.reset': 'リセット',
 
 	'subscribe.title': 'カレンダー購読',
@@ -130,10 +156,17 @@ const ja: Record<keyof typeof ko, string> = {
 
 	'list.empty': '条件に合うイベントがありません。',
 	'list.count': '件のイベント',
+	'list.searchResults': '「{q}」の検索結果',
 
 	'card.online': 'オンライン',
 	'card.venueUnknown': '会場未定',
 	'card.dateUnknown': '日程未定',
+	'card.next': '次の予定',
+	'card.inProgress': '開催中',
+	'card.today': '今日',
+	'card.dday': 'あと{n}日',
+	'card.moreSchedules': '他{n}件の予定を見る',
+	'card.autoTranslated': '自動翻訳',
 
 	'status.DRAFT': '準備中',
 	'status.CONFIRMED': '確定',
@@ -187,8 +220,23 @@ const ja: Record<keyof typeof ko, string> = {
 
 	'search.placeholder': 'イベント名で検索',
 	'search.button': '検索',
-	'search.empty': '検索結果がありません。',
-	'search.resultsFor': '検索結果',
+
+	'home.hero.title': 'サブカルチャーイベントの日程を、ひとつのカレンダーに',
+	'home.hero.desc':
+		'韓国・日本・グローバルの公式イベントを、チケット発売や抽選発表の日程までまとめて確認。自分のカレンダーにそのまま取り込めます。',
+	'home.upcoming': 'まもなく開催',
+	'home.upcoming.empty': '予定されているイベントはありません。',
+	'home.viewAll': 'すべてのイベントを見る',
+	'home.promoted': 'おすすめイベント',
+	'home.promoted.placeholder': '広告枠(開発モードでのみ表示されます)',
+	'home.schedules': 'チケット・申込スケジュール',
+	'home.schedules.desc': '今後のチケット発売・抽選・申込の日程です。',
+	'home.schedules.empty': '予定されているチケット・申込の日程はありません。',
+	'home.subscribe.title': 'カレンダーで受け取る',
+	'home.subscribe.desc':
+		'一度購読しておけば、新しいイベントや日程の変更がカレンダーに自動で反映されます。',
+
+	'ad.label': '広告',
 
 	'footer.about':
 		'SCLSは韓国・日本・グローバルのサブカルチャー及びゲーム関連の公式イベント情報をまとめて提供します。',
@@ -200,20 +248,21 @@ const en: Record<keyof typeof ko, string> = {
 	'site.name': 'Subculture Onstage',
 	'site.tagline': 'A calendar for Korean, Japanese, and global subculture events',
 	'nav.events': 'Events',
-	'nav.search': 'Search',
+
+	'menu.settings': 'Settings',
+	'menu.language': 'Language',
+	'menu.theme': 'Appearance',
 
 	'theme.system': 'System',
 	'theme.light': 'Light',
 	'theme.dark': 'Dark',
 
+	'filter.all': 'All',
 	'filter.country': 'Country',
-	'filter.country.all': 'All',
 	'filter.country.KR': 'Korea',
 	'filter.country.JP': 'Japan',
-	'filter.tags': 'Tags',
 	'filter.from': 'From',
 	'filter.to': 'To',
-	'filter.apply': 'Apply',
 	'filter.reset': 'Reset',
 
 	'subscribe.title': 'Subscribe',
@@ -224,10 +273,17 @@ const en: Record<keyof typeof ko, string> = {
 
 	'list.empty': 'No events match these filters.',
 	'list.count': ' events',
+	'list.searchResults': 'Results for “{q}”',
 
 	'card.online': 'Online',
 	'card.venueUnknown': 'Venue TBA',
 	'card.dateUnknown': 'Date TBA',
+	'card.next': 'Next',
+	'card.inProgress': 'Happening now',
+	'card.today': 'Today',
+	'card.dday': 'in {n} days',
+	'card.moreSchedules': '{n} more dates',
+	'card.autoTranslated': 'Auto-translated',
 
 	'status.DRAFT': 'Draft',
 	'status.CONFIRMED': 'Confirmed',
@@ -281,8 +337,23 @@ const en: Record<keyof typeof ko, string> = {
 
 	'search.placeholder': 'Search events',
 	'search.button': 'Search',
-	'search.empty': 'No results.',
-	'search.resultsFor': 'Results for',
+
+	'home.hero.title': 'Subculture event dates, all in one calendar',
+	'home.hero.desc':
+		'Official events in Korea, Japan and beyond — including ticket sales and lottery results — ready to add to your own calendar.',
+	'home.upcoming': 'Coming up',
+	'home.upcoming.empty': 'No upcoming events.',
+	'home.viewAll': 'View all events',
+	'home.promoted': 'Featured events',
+	'home.promoted.placeholder': 'Ad slot (visible in development mode only)',
+	'home.schedules': 'Tickets & sign-ups',
+	'home.schedules.desc': 'Upcoming ticket sales, lotteries and sign-up dates.',
+	'home.schedules.empty': 'No upcoming ticket or sign-up dates.',
+	'home.subscribe.title': 'Get it in your calendar',
+	'home.subscribe.desc':
+		'Subscribe once and new events and schedule changes show up in your calendar automatically.',
+
+	'ad.label': 'Ad',
 
 	'footer.about':
 		'SCLS collects official subculture and game event information across Korea, Japan, and worldwide.',
@@ -299,6 +370,17 @@ export type MessageKey = keyof typeof ko;
 // 사전에 없는 키는 마지막 수단으로 키 자체를 보여준다(문구가 통째로 빠지는 것보다 낫다).
 export function t(locale: Locale, key: MessageKey | (string & {})): string {
 	return dictionaries[locale]?.[key] ?? ko[key as MessageKey] ?? key;
+}
+
+/** "D-{n}"처럼 {이름} 자리표시자가 들어 있는 문구에 값을 채운다. 값이 없는 자리표시자는 그대로 둔다. */
+export function tv(
+	locale: Locale,
+	key: MessageKey | (string & {}),
+	vars: Record<string, string | number>
+): string {
+	return t(locale, key).replace(/\{(\w+)\}/g, (match, name: string) =>
+		name in vars ? String(vars[name]) : match
+	);
 }
 
 /** 로케일이 붙지 않은 절대 경로(예: '/events/agf-2026')를 그 로케일의 실제 경로로 바꾼다. */

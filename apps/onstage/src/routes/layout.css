@@ -8,3 +8,11 @@
 	/* 제목·브랜드 전용 — 본문은 계속 시스템 폰트를 쓴다(추가 로딩 비용 최소화). */
 	--font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
 }
+
+/* 한국어는 띄어쓰기 단위로 줄바꿈한다 — 기본값은 글자 단위로 끊겨서 "곳에/서"처럼 단어 중간에서
+	줄이 나뉜다. 일본어는 띄어쓰기가 없어 keep-all을 쓰면 줄바꿈이 아예 안 되므로 ko에만 적용한다
+	(<html lang>은 hooks.server.ts와 [[lang=lang]]/+layout.svelte가 맞춘다). */
+html:lang(ko) {
+	word-break: keep-all;
+	overflow-wrap: break-word;
+}

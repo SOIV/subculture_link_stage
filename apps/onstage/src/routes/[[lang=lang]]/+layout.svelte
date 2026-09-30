@@ -10,6 +10,12 @@
 	let basePath = $derived(stripLocale(page.url.pathname));
 
 	const HREFLANG: Record<(typeof LOCALES)[number], string> = { ko: 'ko-KR', ja: 'ja-JP', en: 'en' };
+
+	// <html lang>은 첫 응답에서만 hooks.server.ts가 맞춰 준다 — 설정 메뉴로 언어를 바꿔 페이지가
+	// 클라이언트에서 이동할 때는 여기서 따라가게 한다(글자 모양 선택과 스크린리더 발음이 lang을 따른다).
+	$effect(() => {
+		document.documentElement.lang = locale;
+	});
 </script>
 
 <svelte:head>

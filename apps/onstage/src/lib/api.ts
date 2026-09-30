@@ -132,7 +132,10 @@ async function request<T>(url: URL, fetchFn: typeof fetch): Promise<T> {
 
 export type EventListFilters = {
 	locale: Locale;
+	/** 이름 검색어. 모든 언어의 제목과 slug에서 부분 일치로 찾는다. */
+	q?: string;
 	country?: string;
+	/** 쉼표로 구분한 태그 slug. 같은 그룹의 태그끼리는 "또는", 서로 다른 그룹 사이는 "그리고"다. */
 	tags?: string;
 	from?: string;
 	to?: string;
@@ -167,11 +170,6 @@ export async function listVenues(fetchFn: typeof fetch, locale: Locale, country?
 export async function listTagGroups(fetchFn: typeof fetch, locale: Locale) {
 	const url = buildUrl('/tags', { locale });
 	return request<{ count: number; items: TagGroup[] }>(url, fetchFn);
-}
-
-export async function searchEvents(fetchFn: typeof fetch, query: string, locale: Locale) {
-	const url = buildUrl('/search', { q: query, locale });
-	return request<{ count: number; items: EventSummary[] }>(url, fetchFn);
 }
 
 /** /v1/calendars/*.ics URL을 만든다. kind는 'all' | 'online' | 2글자 국가 코드 | 'custom'. */

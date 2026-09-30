@@ -1,4 +1,11 @@
 <script lang="ts">
+	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
+	import CalendarDays from '@lucide/svelte/icons/calendar-days';
+	import Link from '@lucide/svelte/icons/link';
+	import MapPin from '@lucide/svelte/icons/map-pin';
+	import Mic from '@lucide/svelte/icons/mic';
+	import Tag from '@lucide/svelte/icons/tag';
+	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 	import { formatSchedule, scheduleTypeLabel, statusLabel, urlTypeLabel } from '$lib/format';
 	import { localeHref, t } from '$lib/i18n';
 	import { accentColor } from '$lib/theme';
@@ -42,10 +49,11 @@
 
 <article class="space-y-8">
 	<a
-		href={localeHref(locale, '/')}
-		class="text-sm font-bold text-violet-600 hover:underline dark:text-violet-400"
+		href={localeHref(locale, '/events')}
+		class="inline-flex items-center gap-1 text-sm font-bold text-violet-600 hover:underline dark:text-violet-400"
 	>
-		← {t(locale, 'detail.backToList')}
+		<ArrowLeft class="size-4" aria-hidden="true" />
+		{t(locale, 'detail.backToList')}
 	</a>
 
 	<!-- 시리즈 포인트 색을 배경 그라디언트 띠로 깔아 행사마다 다른 정체성을 준다(목록 카드의
@@ -77,8 +85,9 @@
 			<p class="text-lg text-slate-700 dark:text-slate-200">{event.summary}</p>
 		{/if}
 		{#if needsReview}
-			<p class="text-xs font-medium text-amber-700 dark:text-amber-400">
-				⚠ {t(locale, 'detail.translationNotice')}
+			<p class="flex items-center gap-1.5 text-xs font-medium text-amber-700 dark:text-amber-400">
+				<TriangleAlert class="size-3.5 shrink-0" aria-hidden="true" />
+				{t(locale, 'detail.translationNotice')}
 			</p>
 		{/if}
 	</header>
@@ -90,7 +99,7 @@
 	<div class="grid gap-4 sm:grid-cols-2">
 		<section class={infoCardClass}>
 			<h2 class={sectionHeadingClass}>
-				<span aria-hidden="true">📍</span>{t(locale, 'detail.venue')}
+				<MapPin class="size-4" aria-hidden="true" />{t(locale, 'detail.venue')}
 			</h2>
 			{#if event.venue}
 				<p class="font-semibold">{event.venue.name}</p>
@@ -114,7 +123,7 @@
 
 		<section class={infoCardClass}>
 			<h2 class={sectionHeadingClass}>
-				<span aria-hidden="true">🎤</span>{t(locale, 'detail.organizers')}
+				<Mic class="size-4" aria-hidden="true" />{t(locale, 'detail.organizers')}
 			</h2>
 			{#if event.organizers.length > 0}
 				<ul class="space-y-1 text-sm">
@@ -133,7 +142,7 @@
 
 	<section class={infoCardClass}>
 		<h2 class={sectionHeadingClass}>
-			<span aria-hidden="true">🗓️</span>{t(locale, 'detail.schedule')}
+			<CalendarDays class="size-4" aria-hidden="true" />{t(locale, 'detail.schedule')}
 		</h2>
 		<ul class="-mx-4 divide-y divide-slate-200/70 sm:-mx-0 dark:divide-white/10">
 			{#each sortedSchedules as schedule, index (index)}
@@ -148,7 +157,7 @@
 	{#if event.tags.length > 0}
 		<section>
 			<h2 class={sectionHeadingClass}>
-				<span aria-hidden="true">🏷️</span>{t(locale, 'detail.tags')}
+				<Tag class="size-4" aria-hidden="true" />{t(locale, 'detail.tags')}
 			</h2>
 			<div class="flex flex-wrap gap-2">
 				{#each event.tags as slug (slug)}
@@ -164,7 +173,7 @@
 
 	<section>
 		<h2 class={sectionHeadingClass}>
-			<span aria-hidden="true">🔗</span>{t(locale, 'detail.links')}
+			<Link class="size-4" aria-hidden="true" />{t(locale, 'detail.links')}
 		</h2>
 		<div class="flex flex-wrap gap-2">
 			{#if event.urls.length > 0}
