@@ -1,3 +1,6 @@
+# packages가 없으면 pnpm 10.4 이하(Cloudflare 빌드 환경에서 쓰일 수 있음)는 설치가 실패한다. 지우지 않는다.
+packages:
+  - .
 allowBuilds:
   workerd: true
   esbuild: true
