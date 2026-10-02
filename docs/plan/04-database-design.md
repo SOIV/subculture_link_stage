@@ -161,11 +161,43 @@ CREATE TABLE event_schedules (
   timezone TEXT NOT NULL,
   is_all_day BOOLEAN DEFAULT FALSE,
   status TEXT NOT NULL,
+  audience TEXT, -- 티켓 판매 일정의 대상: DOMESTIC | OVERSEAS (NULL이면 전체)
   source_document_id UUID,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 ```
+
+`audience`는 같은 종류의 티켓 일정을 국내/해외 판매처별로 나누어 적을 때 쓴다. 일정의 짧은 구별 이름(예: "프리리저브")은 `entity_localizations`(`entity_type='EVENT_SCHEDULE'`)의 `title`로 둔다.
+
+#### event_ticket_channels / event_ticket_types
+
+같은 행사를 여러 예매처(국내·해외)에서 판매하고 권종별 가격이 다른 경우를 담는다. 이름과 메모의 다국어는 `entity_localizations`의 `TICKET_CHANNEL`·`TICKET_TYPE`(`title`=이름, `description`=메모)으로 둔다.
+
+```sql
+CREATE TABLE event_ticket_channels (
+  id UUID PRIMARY KEY,
+  event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+  canonical_name TEXT NOT NULL,
+  url TEXT,
+  audience TEXT NOT NULL DEFAULT 'DOMESTIC', -- DOMESTIC | OVERSEAS (개최국 기준)
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE event_ticket_types (
+  id UUID PRIMARY KEY,
+  event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+  canonical_name TEXT NOT NULL,
+  prices JSONB NOT NULL DEFAULT '{}', -- 통화 코드 → 금액, 예: {"KRW": 329000, "JPY": 35000}
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
+
+`audience`의 "해외"는 개최국 기준이라(일본 행사에서는 한국이 해외다) 두 값만 두고, 일본·글로벌 같은 세부 시장은 예매처 메모에 적는다. 가격은 통화별로 입력하며 합산·환산하지 않는다.
 
 #### entity_localizations
 
@@ -319,7 +351,7 @@ is_active
 | AnimeJapan | 전시 > 산업 전시, 공연 > 합동 라이브 | 유료 |
 | WONDERLIVET | 공연 > 합동 라이브 | 유료 (일자별 티켓 — 1일권/2일권/3일권, 별도 선착순 없음) |
 
-> **미확정 메모**: 티켓 방식 중 "선착순"/"추첨" 세부 구분은 행사마다, 회차마다 다르므로 이 표에서는 무료/유료 대분류만 확정하고 세부값은 실제 일정(Event Schedule) 등록 시점에 개별 확인한다. 확인된 것: AGF·일러스타 페스는 둘 다 일산 킨텍스 개최로 수용 인원만큼 전체 입장권 수량이 한정된 선착순 구조(추첨 아님), WONDERLIVET은 선착순·추첨 없이 일자별(1일권/2일권/3일권) 고정가 판매 구조. 지스타는 서울이 아닌 부산 벡스코 개최라 AGF·일러스타 페스와는 규모가 달라 수량 제한이 없는 것으로 추정(미확인). TGS는 정보 없음(미확인). 일자별 티켓처럼 태그로 담기 어려운 세부 구조는 Event Schedule 단위 설계에서 반영한다.
+> **미확정 메모**: (일자별 권종·가격과 국내/해외 예매처는 위 `event_ticket_types`·`event_ticket_channels`로 반영했다.) 티켓 방식 중 "선착순"/"추첨" 세부 구분은 행사마다, 회차마다 다르므로 이 표에서는 무료/유료 대분류만 확정하고 세부값은 실제 일정(Event Schedule) 등록 시점에 개별 확인한다. 확인된 것: AGF·일러스타 페스는 둘 다 일산 킨텍스 개최로 수용 인원만큼 전체 입장권 수량이 한정된 선착순 구조(추첨 아님), WONDERLIVET은 선착순·추첨 없이 일자별(1일권/2일권/3일권) 고정가 판매 구조. 지스타는 서울이 아닌 부산 벡스코 개최라 AGF·일러스타 페스와는 규모가 달라 수량 제한이 없는 것으로 추정(미확인). TGS는 정보 없음(미확인). 일자별 티켓처럼 태그로 담기 어려운 세부 구조는 Event Schedule 단위 설계에서 반영한다.
 
 ## 4.5 ERD
 

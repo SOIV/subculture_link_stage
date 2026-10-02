@@ -61,6 +61,8 @@ EMAIL 채널 제외로 생겼던 "일반 웹 사용자의 개인화 알림 공�
 
 언어(`locale`: `ko`·`ja`·`en`, 기본 `ko`)는 행사 제목·요약·설명뿐 아니라 응답 안의 장소 이름(`venue.name`)과 주최 이름(`organizers[].name`)에도 적용한다. 그 언어의 번역(`entity_localizations`)이 없으면 기준 이름(`canonicalName`)으로 대신한다. 장소 주소(`venue.address`)도 요청 언어의 번역 주소가 있으면 그것을 주고, 없으면 `ko`는 기준 주소(`venues.address`, 현지 표기)를, 그 밖의 언어는 영어 주소를 거쳐 기준 주소를 준다(기준 주소가 한국어인 장소를 일본어 화면에서 한국어로 보여주지 않기 위해서다). 구독(ICS)의 장소 이름과 "자동 번역 포함" 안내 문구도 같은 `locale`을 따른다.
 
+티켓 판매 정보는 다음과 같이 준다. 행사 상세(`/events/:slug`)에는 `ticket`이 들어 있어 권종·가격(`types[]`: `name`, `prices`(통화 코드 → 금액, 예: `{"KRW":329000,"JPY":35000}`), `note`)과 예매처(`channels[]`: `name`, `url`, `audience`, `note`)를 표시 순서대로 준다. 일정(`schedules[]`, `/v1/schedules`도 동일)에는 같은 종류의 일정을 구별하는 짧은 이름 `title`과 판매 대상 `audience`(`DOMESTIC`·`OVERSEAS`, `null`이면 전체)가 붙는다. 이름·메모는 `locale`의 번역을 쓰고 없으면 기준 이름이다. 구독(ICS)의 일정 제목에도 일정 이름이 붙는다. `OVERSEAS`는 개최국 기준이다(일본 행사에서는 한국이 해외다).
+
 아래는 설계 기준 예시다. 행사 상세의 설계상 `{eventId}` 표기와 달리 현재 구현은 `:slug`로 조회한다. `locale` 등 나머지 파라미터와 응답 필드의 실제 지원 범위는 구현 및 향후 OpenAPI 문서에서 확인해야 한다.
 
 ```http

@@ -68,9 +68,32 @@ CREATE TABLE event_schedules (
   is_all_day          BOOLEAN DEFAULT FALSE,
   status              TEXT NOT NULL DEFAULT 'SCHEDULED'
                         CHECK (status IN ('SCHEDULED','CONFIRMED','CANCELLED','POSTPONED','COMPLETED')),
+  audience            TEXT CHECK (audience IS NULL OR audience IN ('DOMESTIC','OVERSEAS')), -- 티켓 판매 일정의 대상(NULL=전체)
   source_document_id  UUID, -- FK는 §10에서 지연 부여
   created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 예매처와 권종·가격. 이름·메모의 다국어는 entity_localizations(TICKET_CHANNEL/TICKET_TYPE)로 둔다.
+CREATE TABLE event_ticket_channels (
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_id        UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+  canonical_name  TEXT NOT NULL,
+  url             TEXT,
+  audience        TEXT NOT NULL DEFAULT 'DOMESTIC' CHECK (audience IN ('DOMESTIC','OVERSEAS')),
+  sort_order      INTEGER NOT NULL DEFAULT 0,
+  created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE event_ticket_types (
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_id        UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+  canonical_name  TEXT NOT NULL,
+  prices          JSONB NOT NULL DEFAULT '{}', -- 통화 코드 → 금액, 예: {"KRW": 329000, "JPY": 35000}
+  sort_order      INTEGER NOT NULL DEFAULT 0,
+  created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE event_status_history (
@@ -427,7 +450,8 @@ CREATE TABLE review_decisions (
 CREATE TABLE entity_localizations (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   entity_type         TEXT NOT NULL CHECK (entity_type IN (
-                        'EVENT','EVENT_SERIES','EVENT_SCHEDULE','VENUE','ORGANIZER','FRANCHISE','PARTICIPANT','TAG'
+                        'EVENT','EVENT_SERIES','EVENT_SCHEDULE','VENUE','ORGANIZER','FRANCHISE','PARTICIPANT','TAG',
+                        'TICKET_CHANNEL','TICKET_TYPE'
                       )),
   entity_id           UUID NOT NULL,
   locale              TEXT NOT NULL,
