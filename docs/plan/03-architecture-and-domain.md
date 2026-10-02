@@ -72,7 +72,7 @@ scls-scheduler
 ```text
 Subculture_Link_Stage   (공식 공개 Repository — 현재 이 저장소)
 ├─ docs/               (프로젝트·개발/설계 문서, ERD·참고 DDL, Roadmap, Legacy)
-├─ apps/onstage         (Subculture Onstage — SvelteKit, 착수, 배포 전)
+├─ apps/onstage         (Subculture Onstage — SvelteKit, 착수, 임시 도메인으로 초기 배포)
 └─ [예정] OpenAPI/API 개발자 문서 (경로·배포 방식 미정)
 
 scls-platform          (비공개, 단일 Monorepo — pnpm workspaces 등)

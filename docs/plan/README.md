@@ -6,7 +6,7 @@
 
 > [!NOTE]
 > 본 문서는 SCLS의 설계 및 개발 방향을 기록하며 구현 진행에 따라 갱신하는 living document입니다.
-> 현재 Private `scls-platform`에서 Phase 1 Core MVP 구현을 진행 중이며, API·Backstage 일부 기능과 공개 GET API·ICS 피드가 구현되었고 Backstage·API는 임시 도메인으로 초기 배포해 테스트 중입니다. Subculture Onstage는 이 공개 Repository의 `apps/onstage`에서 착수해 메인 페이지·행사 목록·상세를 구현했으며, 정식 도메인 미연결로 아직 배포 전입니다.
+> 현재 Private `scls-platform`에서 Phase 1 Core MVP 구현을 진행 중이며, API·Backstage 일부 기능과 공개 GET API·ICS 피드가 구현되었고 Backstage·API는 임시 도메인으로 초기 배포해 테스트 중입니다. Subculture Onstage는 이 공개 Repository의 `apps/onstage`에서 착수해 메인 페이지·행사 목록·상세를 구현했고 Cloudflare Workers에 임시 도메인으로 초기 배포해 테스트 중입니다(정식 도메인은 미정).
 > 일부 항목은 계획/참고 설계로, 실제 내부·운영 구현과 차이가 있을 수 있습니다. 현재 구현 범위는 [로드맵](11-roadmap-and-success.md)을 기준으로 확인합니다.
 > [ERD](database/erd.md)와 [schema.sql](database/schema.sql)은 설계 및 참고용 DDL이며, Private Repository의 실제 ORM schema/migration과 항상 1:1로 동일함을 보장하지 않습니다.
 

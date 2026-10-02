@@ -4,7 +4,7 @@
 
 > 한국·일본·글로벌 온·오프라인의 서브컬처 및 게임 관련 공식 행사 정보를 수집·검수·번역하고, 작품/IP·행사 시리즈·개별 행사·일정·장소·주최사·참가/출연 주체·태그의 관계를 구조화하여 Web/API/ICS 및 외부 서비스에서 재사용할 수 있도록 제공하는 다국어 관계형 행사 데이터 플랫폼
 
-현재 SCLS는 **초기 개발 단계(Phase 1 Core MVP 진행 중)** 입니다. 프로젝트의 기획·설계 문서와 Subculture Onstage 소스는 이 공식 공개 Repository(`Subculture_Link_Stage`)에서 관리합니다. SCLS API, Subculture Backstage 및 내부 서비스는 별도 비공개 Repository인 `scls-platform`에서 개발 중이며, API·Backstage 일부 기능과 Localizations(다국어 콘텐츠) CRUD가 구현되어 있고 Backstage(Cloudflare Workers)와 API(Fly.io 도쿄)는 임시 도메인으로 초기 배포해 테스트 중입니다. Onstage는 이 저장소의 `apps/onstage`(SvelteKit)에서 개발 중이며 메인 페이지, 행사 목록(검색·필터), 행사 상세를 구현했고, 정식 도메인 미연결로 아직 배포 전입니다. 개발 계획과 구현 현황은 [docs/plan/](docs/plan/README.md)에 정리되어 있습니다.
+현재 SCLS는 **초기 개발 단계(Phase 1 Core MVP 진행 중)** 입니다. 프로젝트의 기획·설계 문서와 Subculture Onstage 소스는 이 공식 공개 Repository(`Subculture_Link_Stage`)에서 관리합니다. SCLS API, Subculture Backstage 및 내부 서비스는 별도 비공개 Repository인 `scls-platform`에서 개발 중이며, API·Backstage 일부 기능과 Localizations(다국어 콘텐츠) CRUD가 구현되어 있고 Backstage(Cloudflare Workers)와 API(Fly.io 도쿄)는 임시 도메인으로 초기 배포해 테스트 중입니다. Onstage는 이 저장소의 `apps/onstage`(SvelteKit)에서 개발 중이며 메인 페이지, 행사 목록(검색·필터), 행사 상세를 구현했고, Cloudflare Workers에 임시 도메인으로 초기 배포해 테스트 중입니다(정식 도메인은 미정). 개발 계획과 구현 현황은 [docs/plan/](docs/plan/README.md)에 정리되어 있습니다.
 
 ## 왜 만드는가
 
@@ -45,7 +45,7 @@
 |---|---|
 | Backend | Node.js + TypeScript + Fastify (초기 구현) |
 | Backstage | React + Vite + TanStack Router/Query + Tailwind v4, ko/en/ja UI (`i18next`) (초기 구현) |
-| Onstage | Svelte/SvelteKit (착수, 배포 전 — `apps/onstage`) |
+| Onstage | Svelte/SvelteKit (착수, 임시 도메인으로 초기 배포 — `apps/onstage`) |
 | DB | PostgreSQL (Supabase) |
 | ORM | Prisma (Phase 1 schema/migration 적용) |
 | Queue | Redis + BullMQ (예정) |
@@ -53,7 +53,7 @@
 | Search | 공개 검색 API 초기 구현; PostgreSQL FTS → pgvector 확장 계획 (데이터 축적 후) |
 | ICS | 기본 피드 초기 구현; ical-generator는 라이브러리 후보 |
 | CDN/DNS | Cloudflare (운영 계획) |
-| 호스팅 | Onstage·Backstage: Cloudflare (Workers), API·Worker: Fly.io 도쿄 (Backstage·API는 임시 도메인으로 초기 배포) |
+| 호스팅 | Onstage·Backstage: Cloudflare (Workers), API·Worker: Fly.io 도쿄 (Onstage·Backstage·API는 임시 도메인으로 초기 배포) |
 
 자세한 인프라·운영 계획은 [docs/plan/10-infra-ops-security.md](docs/plan/10-infra-ops-security.md) 참고.
 
@@ -105,7 +105,7 @@
 - [x] 테스트 행사 20개 이상 등록 (22개 — [11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md) 참고)
 - [x] Backstage·API 초기 배포 (Backstage: Cloudflare Workers, API: Fly.io 도쿄 — 임시 도메인으로 테스트 중)
 - [ ] 정식 도메인 확정 및 연결
-- [ ] Subculture Onstage — 착수. `apps/onstage`(SvelteKit)에 메인 페이지, 행사 목록·필터·검색·상세, ko/ja/en, ICS 구독 링크 구현. 정식 도메인 미연결로 배포 전
+- [ ] Subculture Onstage — 착수. `apps/onstage`(SvelteKit)에 메인 페이지, 행사 목록·필터·검색·상세, ko/ja/en, ICS 구독 링크 구현. Cloudflare Workers에 임시 도메인으로 초기 배포해 테스트 중(정식 도메인은 미정)
 
 전체 로드맵과 체크리스트는 [docs/plan/11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md) 참고.
 

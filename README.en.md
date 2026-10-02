@@ -4,7 +4,7 @@
 
 > A multilingual relational event data platform for official subculture and gaming events in Korea, Japan, and worldwide, both online and in person. SCLS collects, reviews, and translates information, structuring the relationships between works/IP, event series, individual events, schedules, venues, organizers, participants/performers, and tags for reuse through the Web, API, ICS, and external services.
 
-SCLS is in **early development, with Phase 1 Core MVP underway**. This official public repository (`Subculture_Link_Stage`) maintains the project’s planning and design documents and the Subculture Onstage source. SCLS API, Subculture Backstage, and internal services are being developed in the separate private repository `scls-platform`, where some API and Backstage features and Localizations (multilingual content) CRUD are implemented; Backstage (Cloudflare Workers) and the API (Fly.io, Tokyo) have had an initial deployment on temporary domains and are being tested. Onstage is under development in this repository’s `apps/onstage` (SvelteKit), with the home page, event list (search and filters), and event details implemented; it is not yet deployed because no official domain is connected. The development plan and implementation status are maintained in Korean at [docs/plan/](docs/plan/README.md).
+SCLS is in **early development, with Phase 1 Core MVP underway**. This official public repository (`Subculture_Link_Stage`) maintains the project’s planning and design documents and the Subculture Onstage source. SCLS API, Subculture Backstage, and internal services are being developed in the separate private repository `scls-platform`, where some API and Backstage features and Localizations (multilingual content) CRUD are implemented; Backstage (Cloudflare Workers) and the API (Fly.io, Tokyo) have had an initial deployment on temporary domains and are being tested. Onstage is under development in this repository’s `apps/onstage` (SvelteKit), with the home page, event list (search and filters), and event details implemented; it has had an initial deployment on Cloudflare Workers under a temporary domain and is being tested (the official domain is not yet decided). The development plan and implementation status are maintained in Korean at [docs/plan/](docs/plan/README.md).
 
 ## Why we're building this
 
@@ -45,7 +45,7 @@ See [docs/plan/03-architecture-and-domain.md](docs/plan/03-architecture-and-doma
 |---|---|
 | Backend | Node.js + TypeScript + Fastify (initial implementation) |
 | Backstage | React + Vite + TanStack Router/Query + Tailwind v4, ko/en/ja UI (`i18next`) (initial implementation) |
-| Onstage | Svelte/SvelteKit (started, not yet deployed — `apps/onstage`) |
+| Onstage | Svelte/SvelteKit (started, initially deployed on a temporary domain — `apps/onstage`) |
 | DB | PostgreSQL (Supabase) |
 | ORM | Prisma (Phase 1 schema/migration applied) |
 | Queue | Redis + BullMQ (planned) |
@@ -53,7 +53,7 @@ See [docs/plan/03-architecture-and-domain.md](docs/plan/03-architecture-and-doma
 | Search | Initial public search API implemented; PostgreSQL FTS → pgvector expansion planned as data accumulates |
 | ICS | Initial basic feeds implemented; ical-generator is a candidate library |
 | CDN/DNS | Cloudflare (operations plan) |
-| Hosting | Onstage and Backstage: Cloudflare (Workers); API/Worker: Fly.io Tokyo (Backstage and API initially deployed on temporary domains) |
+| Hosting | Onstage and Backstage: Cloudflare (Workers); API/Worker: Fly.io Tokyo (Onstage, Backstage, and API initially deployed on temporary domains) |
 
 See [docs/plan/10-infra-ops-security.md](docs/plan/10-infra-ops-security.md) (Korean) for infrastructure and operations details.
 
@@ -105,7 +105,7 @@ Earlier single-document versions (v1–v3) are archived in [docs/legacy/](docs/l
 - [x] At least 20 test events registered (22 — see [11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md))
 - [x] Initial deployment of Backstage and the API (Backstage: Cloudflare Workers, API: Fly.io Tokyo — being tested on temporary domains)
 - [ ] Official domain finalized and connected
-- [ ] Subculture Onstage — started. Home page, event list with filters and search, event details, ko/ja/en, and ICS subscription links implemented in `apps/onstage` (SvelteKit); not yet deployed because no official domain is connected
+- [ ] Subculture Onstage — started. Home page, event list with filters and search, event details, ko/ja/en, and ICS subscription links implemented in `apps/onstage` (SvelteKit); initially deployed on Cloudflare Workers under a temporary domain and being tested (the official domain is not yet decided)
 
 See [docs/plan/11-roadmap-and-success.md](docs/plan/11-roadmap-and-success.md) (Korean) for the full roadmap and checklist.
 
