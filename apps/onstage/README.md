@@ -48,12 +48,12 @@ Cloudflare(`adapter-cloudflare`, Workers)로 배포한다([docs/plan/10-infra-op
 
 Cloudflare 대시보드의 Git 연결(Workers Builds)로 푸시할 때마다 자동 빌드·배포하며, 설정값은 다음과 같다.
 
-| 칸 | 값 |
-|---|---|
-| 루트 디렉터리 | `apps/onstage` |
-| 빌드 명령 | `pnpm exec vite build` (`pnpm build`는 첫 단계 `wrangler types --check`가 로컬 `.env`가 있어야 통과해 Cloudflare에서 실패한다) |
-| 빌드 변수 | `PUBLIC_API_BASE_URL` = 공개 API 주소(`…/v1`). 빌드 때 코드에 박히므로 *런타임* 변수가 아니라 **빌드** 변수에 넣어야 한다 |
-| Worker 이름 | `wrangler.jsonc`의 `name`과 Cloudflare 프로젝트 이름이 같아야 한다 |
-| 배포 명령 | 기본값 |
+| 칸            | 값                                                                                                                             |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| 루트 디렉터리 | `apps/onstage`                                                                                                                 |
+| 빌드 명령     | `pnpm exec vite build` (`pnpm build`는 첫 단계 `wrangler types --check`가 로컬 `.env`가 있어야 통과해 Cloudflare에서 실패한다) |
+| 빌드 변수     | `PUBLIC_API_BASE_URL` = 공개 API 주소(`…/v1`). 빌드 때 코드에 박히므로 _런타임_ 변수가 아니라 **빌드** 변수에 넣어야 한다      |
+| Worker 이름   | `wrangler.jsonc`의 `name`과 Cloudflare 프로젝트 이름이 같아야 한다                                                             |
+| 배포 명령     | 기본값                                                                                                                         |
 
 시크릿이나 API 쪽 허용 주소 등록은 필요 없다(공개 GET만 쓴다). `pnpm-workspace.yaml`에는 `packages`가 있어야 한다. 없으면 오래된 pnpm에서 `pnpm install`이 실패한다.

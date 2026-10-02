@@ -42,6 +42,28 @@ function localeTag(locale: Locale) {
 	return locale === 'ko' ? 'ko-KR' : locale === 'ja' ? 'ja-JP' : 'en-US';
 }
 
+// Intl의 짧은 타임존 이름은 en-US에서 "GMT+9"로만 나와 KST·JST를 알 수 없어, 취급하는 지역은 약칭을 직접 둔다.
+const TIMEZONE_ABBREVIATION: Record<string, string> = {
+	'Asia/Seoul': 'KST',
+	'Asia/Tokyo': 'JST',
+	UTC: 'UTC'
+};
+
+/** 시각 옆에 붙이는 타임존 표기. 약칭이 없는 지역은 "GMT+9"처럼 UTC 오프셋으로, 알 수 없는 문자열은 그대로 보여준다. */
+export function timeZoneLabel(timeZone: string, at: Date): string {
+	const abbreviation = TIMEZONE_ABBREVIATION[timeZone];
+	if (abbreviation) return abbreviation;
+	try {
+		const parts = new Intl.DateTimeFormat('en-US', {
+			timeZone,
+			timeZoneName: 'shortOffset'
+		}).formatToParts(at);
+		return parts.find((part) => part.type === 'timeZoneName')?.value ?? timeZone;
+	} catch {
+		return timeZone;
+	}
+}
+
 function dateFormatter(locale: Locale, timeZone: string, withTime: boolean) {
 	return new Intl.DateTimeFormat(localeTag(locale), {
 		timeZone,
@@ -65,25 +87,27 @@ function timeFormatter(locale: Locale, timeZone: string) {
  * 사람이 읽는 기간 문자열. 종일 일정은 날짜만, 시각이 있으면 시간까지 보여준다. 종일 일정의
  * endsAt은 "마지막 날 다음 날 00:00"(배타적 종료) 관례이므로(apps/api의 seed-events.ts와 동일)
  * 표시 전에 하루를 뺀다. EventScheduleItem도 같은 4개 필드 모양이라 그대로 넘길 수 있다.
+ * 시각이 들어가는 일정은 끝에 타임존(KST 등)을 한 번 붙인다.
  */
 export function formatRange(locale: Locale, range: TimeRange): string {
 	if (!range.startsAt) return t(locale, 'card.dateUnknown');
 
 	const start = new Date(range.startsAt);
+	const zone = range.isAllDay ? '' : ` (${timeZoneLabel(range.timezone, start)})`;
 	const longFormatter = dateFormatter(locale, range.timezone, !range.isAllDay);
-	if (!range.endsAt) return longFormatter.format(start);
+	if (!range.endsAt) return longFormatter.format(start) + zone;
 
 	const rawEnd = new Date(range.endsAt);
 	const end = range.isAllDay ? new Date(rawEnd.getTime() - 24 * 60 * 60 * 1000) : rawEnd;
-	if (end.getTime() <= start.getTime()) return longFormatter.format(start);
+	if (end.getTime() <= start.getTime()) return longFormatter.format(start) + zone;
 
 	// 자정 기준 UTC 비교라 타임존 경계의 극히 드문 사례에서는 실제 표시 날짜와 하루 어긋날 수
 	// 있지만, "같은 날이면 시각만 붙인다"는 표시 단순화가 목적이라 문제되지 않는다.
 	const sameDay = start.toDateString() === end.toDateString();
 	if (sameDay && !range.isAllDay) {
-		return `${longFormatter.format(start)} ~ ${timeFormatter(locale, range.timezone).format(end)}`;
+		return `${longFormatter.format(start)} ~ ${timeFormatter(locale, range.timezone).format(end)}${zone}`;
 	}
-	return `${longFormatter.format(start)} ~ ${longFormatter.format(end)}`;
+	return `${longFormatter.format(start)} ~ ${longFormatter.format(end)}${zone}`;
 }
 
 export function formatSchedule(locale: Locale, schedule: EventScheduleItem): string {
@@ -117,20 +141,22 @@ export function formatCardPeriod(locale: Locale, range: TimeRange, now: Date): s
 	return formatter.formatRange(start, end);
 }
 
-/** 카드·목록의 한 줄 일정 표기용 짧은 날짜(연도 없이 월·일·요일, 종일이 아니면 시각까지). */
+/** 카드·목록의 한 줄 일정 표기용 짧은 날짜(연도 없이 월·일·요일, 종일이 아니면 시각과 타임존까지). */
 export function formatShortDate(
 	locale: Locale,
 	iso: string,
 	timeZone: string,
 	withTime: boolean
 ): string {
-	return new Intl.DateTimeFormat(localeTag(locale), {
+	const at = new Date(iso);
+	const text = new Intl.DateTimeFormat(localeTag(locale), {
 		timeZone,
 		month: 'long',
 		day: 'numeric',
 		weekday: 'short',
 		...(withTime ? { hour: '2-digit', minute: '2-digit' } : {})
-	}).format(new Date(iso));
+	}).format(at);
+	return withTime ? `${text} (${timeZoneLabel(timeZone, at)})` : text;
 }
 
 export function statusLabel(locale: Locale, status: string): string {
