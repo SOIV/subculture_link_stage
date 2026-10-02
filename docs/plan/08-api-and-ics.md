@@ -186,6 +186,7 @@ Phase 6 (운영 확장)
 
 - 스펙 우선(Spec-first) vs 코드 우선(Code-first, 라우트 주석에서 자동 생성) 방식 중 어느 쪽으로 OpenAPI 스펙을 유지보수할지는 Phase 2 착수 시점에 결정한다.
 - API 문서는 이 공식 공개 Repository에서 관리할 예정이다. Subculture Onstage 내 developer/API docs route로 둘지 별도 docs deployment로 둘지와 서브도메인 구성은 미정이다.
+- 문서 사이트 도구는 미정이다. Fumadocs(OpenAPI 공식 패키지 제공)를 우선 검토하고 Starlight를 대안으로 두며, 확정은 Phase 2 OpenAPI 작업 착수 시점에 한다.
 
 ## 8.6 ICS 및 캘린더 설계
 
