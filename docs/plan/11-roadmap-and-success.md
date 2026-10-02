@@ -38,7 +38,7 @@
   - [x] 언어 및 배경 모드 — 헤더 오른쪽 "설정" 메뉴 하나에 언어(한국어/日本語/English)와 화면 모드(시스템/라이트/다크)를 모았다(`lib/components/SettingsMenu.svelte`). 언어를 바꿔도 현재 경로와 검색 조건은 유지된다
   - [x] 행사별 보여주는 내용물 관련 — 카드를 "요약 + 다음 일정" 방식으로 바꿨다(`lib/components/EventCard.svelte`, `lib/schedule.ts`, `lib/tags.ts`). 기간·제목·장소·분류 칩(최대 4개)만 싣고, 그 행사에서 지금 시점 기준 가장 가까운 일정 1개(D-day, 진행 중이면 "진행 중")와 "일정 N개 더 보기"를 붙여 일정 종류가 행사마다 달라도 카드 크기가 일정하다. "확정" 표시는 빼고 연기·취소 등만 표시한다. 같은 종류 일정이 여러 개인 행사는 DB·API에 구분 이름이 없어 같은 이름으로 나온다(후속)
   - [x] 한국 국기 관련 — 직접 그린 그림(태극기 4괘 누락)과 Windows에서 글자로 깨지는 이모지를 flag-icons(MIT)의 표준 국기 SVG로 교체했다(한국·일본, `lib/components/CountryBadge.svelte`). 국가 선택칸의 이모지는 뺐다
-  - [ ] 그 외 — 1차 정리 완료: 이모지를 통일된 선 아이콘(`@lucide/svelte`)으로 교체, 헤더 로고 아래 태그라인 중복 삭제, 목록 페이지 상단 정리, 한국어 줄바꿈을 단어 단위로, 언어 전환 시 `<html lang>` 갱신. 이후 화면을 쓰면서 발견되는 수정은 이어서 반영한다
+  - [ ] 그 외 — 1차 정리 완료: 이모지를 통일된 선 아이콘(`@lucide/svelte`)으로 교체, 헤더 로고 아래 태그라인 중복 삭제, 목록 페이지 상단 정리, 한국어 줄바꿈을 단어 단위로, 언어 전환 시 `<html lang>` 갱신, 일정 시각 옆에 타임존(KST·JST) 표기, 장소·주최 이름과 장소 주소가 화면 언어를 따르도록 공개 API 수정(`locale`; 번역 주소는 `entity_localizations.address` 칸을 새로 두고 Backstage 번역 패널에서 입력 — [08-api-and-ics.md §8.2](08-api-and-ics.md#82-공개-api-예시)). 이후 화면을 쓰면서 발견되는 수정은 이어서 반영한다
   - [x] 필터 검색 관련 기능 — 태그를 행사 형식 / 참가 방식 / 티켓 방식 드롭다운 3개로 나눠 각각 하나씩 골라 검색한다(`lib/components/FilterBar.svelte`, `events/+page.ts`). 같은 그룹 안의 태그는 "또는", 그룹 사이는 "그리고"로 처리하고 상위 태그를 고르면 하위 태그가 붙은 행사도 포함한다 — 공개 API `tags`와 ICS `custom.ics`가 같은 규칙을 쓰도록 `scls-platform`의 `apps/api/src/lib/event-filter.ts`로 조건 조립을 통합했다([08-api-and-ics.md §8.2](08-api-and-ics.md#82-공개-api-예시))
 
 ### Phase 2 — 수집 및 검수

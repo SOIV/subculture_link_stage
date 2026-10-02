@@ -178,6 +178,7 @@ CREATE TABLE entity_localizations (
   title TEXT,
   summary TEXT,
   description TEXT,
+  address TEXT, -- VENUE 전용: 그 언어로 표기한 주소
   translation_source TEXT NOT NULL,
   translation_status TEXT NOT NULL,
   source_locale TEXT,
@@ -187,6 +188,8 @@ CREATE TABLE entity_localizations (
   UNIQUE(entity_type, entity_id, locale)
 );
 ```
+
+`address`는 장소(`entity_type='VENUE'`)의 번역 주소다. `venues.address`는 현지 표기의 기준 주소이고, 공개 API는 요청 언어의 `address`가 있으면 그것을, 없으면 `ko`는 기준 주소를 그 밖의 언어는 영어 주소를 거쳐 기준 주소를 쓴다([08-api-and-ics.md §8.2](08-api-and-ics.md#82-공개-api-예시)).
 
 `entity_type + entity_id` 구조는 현지화처럼 여러 도메인에 동일 형식으로 붙는 데이터에 제한적으로 사용한다. 핵심 관계 데이터에는 대상별 연결 테이블을 사용한다.
 

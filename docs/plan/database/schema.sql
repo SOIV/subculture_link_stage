@@ -434,6 +434,7 @@ CREATE TABLE entity_localizations (
   title               TEXT,
   summary             TEXT,
   description         TEXT,
+  address             TEXT,  -- VENUE 전용: 그 언어로 표기한 주소(없으면 venues.address를 쓴다)
   translation_source  TEXT NOT NULL CHECK (translation_source IN ('OFFICIAL','MACHINE','MACHINE_REVIEWED','HUMAN','COMMUNITY')),
   translation_status  TEXT NOT NULL CHECK (translation_status IN ('PENDING','GENERATED','REVIEW_REQUIRED','VERIFIED','OUTDATED','FAILED')),
   source_locale       TEXT,
