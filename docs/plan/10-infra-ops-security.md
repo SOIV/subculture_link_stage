@@ -99,7 +99,7 @@ Queue
 > 2. Cloudflare DNS에 API 호스트의 `A`·`AAAA`(또는 `CNAME`) 레코드를 Fly 앱 주소로 추가하고 프록시(주황 구름)를 켠다. 앞단 Cloudflare 구성([호스트 표](#1012-배포-구조-예시))과 캐시 규칙 적용을 위한 것이다.
 > 3. Cloudflare SSL/TLS 모드를 Full (strict)로, Always Use HTTPS를 켠다. 이후 Fly가 인증서를 자동 발급하며 `fly certs check`로 진행을 확인한다. 발급이 실패하면 Cloudflare Origin Certificate 가져오기를 검토한다.
 > 4. Backstage 프록시는 기존 Fly 주소를 계속 쓰므로 바꾸지 않는다(`/admin/*`는 `api.*`로 받지 않는다). Backstage 허용 Origin 목록도 API 도메인과 무관하다.
-> 5. 브라우저에서 `api.*`를 직접 호출하는 클라이언트(Onstage·위젯)가 붙기 전에 CORS 허용 목록([§10.3.3](#1033-위젯-임베드-격리-정책))을 구현해야 한다. 또 앞단 Cloudflare 때문에 API가 보는 접속 IP가 Cloudflare 주소가 되므로, 공개 API의 요청 제한을 도입할 때 방문자 IP 헤더를 신뢰하는 설정을 함께 해야 한다. 둘 다 아직 구현 전이다.
+> 5. 브라우저에서 `api.*`를 직접 호출하는 클라이언트(Onstage·위젯)가 붙기 전에 CORS를 정해야 한다([§10.3.3](#1033-위젯-임베드-격리-정책)). **현재 구현**: 공개 `/v1`의 GET·HEAD·OPTIONS는 모든 오리진(`*`)을 허용하며(`scls-platform`의 `apps/api/src/server.ts`), Onstage가 이 설정으로 임시 도메인에서 동작한다. `/admin`은 별도 Origin 허용 목록을 쓰므로 영향이 없다. §10.3.3의 "자체 호스트만 허용하는 allow-list" 기본안과 다르게 처음부터 넓게 열어 둔 상태다. 또 앞단 Cloudflare 때문에 API가 보는 접속 IP가 Cloudflare 주소가 되므로, 공개 API의 요청 제한을 도입할 때 방문자 IP 헤더를 신뢰하는 설정을 함께 해야 한다. 공개 `/v1`의 요청 제한은 아직 구현 전이다(로그인에만 적용 중).
 
 > **미결 사항 — 작업 대기열(Queue)**: Worker가 필요해지는 Phase 2 착수 때 정한다. 후보는 Redis(BullMQ)를 Fly에 볼륨과 함께 직접 띄우는 방식, 관리형 Redis(Upstash 고정 플랜 등), Supabase Postgres 기반 대기열(pg-boss 등)로 Redis 없이 가는 방식이다. Phase 1에는 필요하지 않다.
 
@@ -217,7 +217,7 @@ iFrame 위젯([08-api-and-ics.md §8.1.1](08-api-and-ics.md#811-노출-채널-�
 
 - **라우트 격리**: 위젯 렌더링 페이지는 별도 서브도메인(`widget.*`, [§10.1.2](#1012-배포-구조-예시))의 정적 셸로 분리하고, 위젯이 소비하는 API 네임스페이스도 메인 사이트 라우트와 분리한다. iframe 허용을 위한 예외 설정은 이 격리된 호스트 안에서만 적용하고, 메인 플랫폼(Onstage·Backstage·`api.*`)에는 손대지 않는다.
 - **CSP `frame-ancestors` / X-Frame-Options**: 메인 플랫폼(공개 웹, 관리자 대시보드)은 기본적으로 프레임 삽입을 차단한다(클릭재킹 방지). 위젯 호스트(`widget.*`)만 예외로 모든 origin에서의 프레임 삽입을 허용한다 — 위젯이 보여주는 데이터는 인증 없이 공개된 읽기 전용 정보(§8.5.1 Phase 3)라 열어줘도 노출되는 것이 없다. 헤더를 호스트 단위로 걸 수 있어 경로 단위 예외보다 단순하다.
-- **CORS**: 위젯 셸이 API와 다른 origin(`widget.*` → `api.*`)이므로 위젯의 API 호출은 cross-origin이다. 기본은 SCLS 자체 호스트(위젯, Onstage)만 허용하는 allow-list로 두고, 인증이 필요한 경로(`/admin/*` 등)에는 위젯 origin을 허용하지 않는다. 제3자 사이트의 JS가 iframe 없이 API를 직접 fetch하는 것까지 지원할지는 아직 결정하지 않았으며, 지원하기로 하면 인증 없는 공개 읽기 전용 GET에 한해 credentials 없이 `Access-Control-Allow-Origin: *`로 넓힌다.
+- **CORS**: 위젯 셸이 API와 다른 origin(`widget.*` → `api.*`)이므로 위젯의 API 호출은 cross-origin이다. 기본은 SCLS 자체 호스트(위젯, Onstage)만 허용하는 allow-list로 두고, 인증이 필요한 경로(`/admin/*` 등)에는 위젯 origin을 허용하지 않는다. 제3자 사이트의 JS가 iframe 없이 API를 직접 fetch하는 것까지 지원할지는 아직 결정하지 않았으며, 지원하기로 하면 인증 없는 공개 읽기 전용 GET에 한해 credentials 없이 `Access-Control-Allow-Origin: *`로 넓힌다. (현황 2026-10-02: 공개 `/v1` GET·HEAD·OPTIONS는 이미 `*`로 열려 있다 — Discord 봇·개인 앱 등 브라우저 직접 호출을 전제로 한 구현이다. 위 allow-list 기본안으로 되돌릴지, 이 상태를 정식 결정으로 확정할지는 위젯 착수 전에 정한다.)
 - **계정 필수 여부**: 위젯 API도 일반 공개 API와 동일하게 **계정/로그인 없이 기본 Rate Limit 안에서 사용 가능**하다(§8.5.1 Phase 3과 동일 정책 상속). 계정(API Key)은 상향 Rate Limit·사용량 통계 등 심화 기능을 위한 선택 사항이며(§8.5.1 Phase 6), 위젯 이용 자체의 전제 조건이 아니다.
 
 ## 10.4 운영 및 모니터링
