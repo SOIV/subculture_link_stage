@@ -6,6 +6,7 @@
 		eventPeriod,
 		formatCardPeriod,
 		formatShortDate,
+		scheduleQualifier,
 		scheduleTypeLabel,
 		statusLabel
 	} from '$lib/format';
@@ -148,6 +149,11 @@
 								<p class="mt-0.5 font-semibold text-slate-800 dark:text-slate-100">
 									{scheduleTypeLabel(locale, next.schedule.type)}
 								</p>
+								{#if scheduleQualifier(locale, next.schedule)}
+									<p class="text-xs font-semibold text-violet-600 dark:text-violet-300">
+										{scheduleQualifier(locale, next.schedule)}
+									</p>
+								{/if}
 								<p class="text-slate-500 dark:text-slate-400">
 									{formatShortDate(
 										locale,

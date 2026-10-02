@@ -5,8 +5,17 @@
 	import MapPin from '@lucide/svelte/icons/map-pin';
 	import Mic from '@lucide/svelte/icons/mic';
 	import Tag from '@lucide/svelte/icons/tag';
+	import Ticket from '@lucide/svelte/icons/ticket';
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
-	import { formatSchedule, scheduleTypeLabel, statusLabel, urlTypeLabel } from '$lib/format';
+	import {
+		audienceLabel,
+		formatPrices,
+		formatSchedule,
+		scheduleQualifier,
+		scheduleTypeLabel,
+		statusLabel,
+		urlTypeLabel
+	} from '$lib/format';
 	import { localeHref, t } from '$lib/i18n';
 	import { accentColor } from '$lib/theme';
 	import CountryBadge from '$lib/components/CountryBadge.svelte';
@@ -19,10 +28,27 @@
 	let needsReview = $derived(event.translation?.status === 'REVIEW_REQUIRED');
 	// 시리즈 단위로 같은 색이 나오게 한다(목록 카드와 동일한 기준) — 단독 행사는 자기 slug로 대신한다.
 	let accent = $derived(accentColor(event.eventSeries?.slug ?? event.slug));
-	// API가 정렬을 보장하지 않으므로(§public-events.ts) 화면에서 시간순으로 정렬한다.
+	// API가 정렬을 보장하지 않으므로(§public-events.ts) 화면에서 시간순으로 정렬한다. 같은 시각이면 국내 →
+	// 해외 → 대상 없음(전체) 순이다(같은 시각에 열리는 판매처별 일정이 있을 때 순서가 흔들리지 않게).
+	const audienceRank = { DOMESTIC: 0, OVERSEAS: 1 } as const;
 	let sortedSchedules = $derived(
-		[...event.schedules].sort((a, b) => (a.startsAt ?? '').localeCompare(b.startsAt ?? ''))
+		[...event.schedules].sort(
+			(a, b) =>
+				(a.startsAt ?? '').localeCompare(b.startsAt ?? '') ||
+				(a.audience ? audienceRank[a.audience] : 2) - (b.audience ? audienceRank[b.audience] : 2)
+		)
 	);
+	// 예매처는 국내 → 해외 순으로 묶어 보여준다. 대상이 늘면 이 배열에 추가한다.
+	const audienceOrder = ['DOMESTIC', 'OVERSEAS'] as const;
+	let channelGroups = $derived(
+		audienceOrder
+			.map((audience) => ({
+				audience,
+				channels: event.ticket.channels.filter((channel) => channel.audience === audience)
+			}))
+			.filter((group) => group.channels.length > 0)
+	);
+	let hasTicketInfo = $derived(event.ticket.types.length > 0 || event.ticket.channels.length > 0);
 	let mapHref = $derived.by(() => {
 		const venue = event.venue;
 		if (!venue) return null;
@@ -146,13 +172,82 @@
 		</h2>
 		<ul class="-mx-4 divide-y divide-slate-200/70 sm:-mx-0 dark:divide-white/10">
 			{#each sortedSchedules as schedule, index (index)}
+				{@const qualifier = scheduleQualifier(locale, schedule)}
 				<li class="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 text-sm sm:px-0">
-					<span class="font-semibold">{scheduleTypeLabel(locale, schedule.type)}</span>
+					<span class="min-w-0">
+						<span class="block font-semibold">{scheduleTypeLabel(locale, schedule.type)}</span>
+						{#if qualifier}
+							<span class="block text-xs font-semibold text-violet-600 dark:text-violet-300"
+								>{qualifier}</span
+							>
+						{/if}
+					</span>
 					<span class="text-slate-500 dark:text-slate-400">{formatSchedule(locale, schedule)}</span>
 				</li>
 			{/each}
 		</ul>
 	</section>
+
+	{#if hasTicketInfo}
+		<section class={infoCardClass}>
+			<h2 class={sectionHeadingClass}>
+				<Ticket class="size-4" aria-hidden="true" />{t(locale, 'detail.ticket')}
+			</h2>
+
+			{#if event.ticket.types.length > 0}
+				<h3 class="mb-1 text-xs font-bold text-slate-400 dark:text-slate-500">
+					{t(locale, 'ticket.types')}
+				</h3>
+				<ul class="divide-y divide-slate-200/70 dark:divide-white/10">
+					{#each event.ticket.types as ticketType (ticketType.id)}
+						<li
+							class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 py-2.5 text-sm"
+						>
+							<span class="min-w-0">
+								<span class="block font-semibold">{ticketType.name}</span>
+								{#if ticketType.note}
+									<span class="block text-xs text-slate-500 dark:text-slate-400"
+										>{ticketType.note}</span
+									>
+								{/if}
+							</span>
+							<span class="font-semibold tabular-nums">
+								{formatPrices(locale, ticketType.prices) ?? t(locale, 'ticket.priceTbd')}
+							</span>
+						</li>
+					{/each}
+				</ul>
+			{/if}
+
+			{#each channelGroups as group (group.audience)}
+				<h3 class="mt-4 mb-2 text-xs font-bold text-slate-400 dark:text-slate-500">
+					{t(locale, 'ticket.channels')} · {audienceLabel(locale, group.audience)}
+				</h3>
+				<ul class="flex flex-wrap gap-x-3 gap-y-2">
+					{#each group.channels as channel (channel.id)}
+						<li class="text-sm">
+							{#if channel.url}
+								<a href={channel.url} target="_blank" rel="noreferrer" class={linkButtonClass}>
+									{channel.name}
+								</a>
+							{:else}
+								<span
+									class="inline-block rounded-full border border-slate-300 px-4 py-2 text-sm font-bold text-slate-700 dark:border-slate-600 dark:text-slate-200"
+								>
+									{channel.name}
+								</span>
+							{/if}
+							{#if channel.note}
+								<span class="mt-0.5 block px-1 text-xs text-slate-500 dark:text-slate-400"
+									>{channel.note}</span
+								>
+							{/if}
+						</li>
+					{/each}
+				</ul>
+			{/each}
+		</section>
+	{/if}
 
 	{#if event.tags.length > 0}
 		<section>

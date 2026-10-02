@@ -29,8 +29,15 @@ export type EventScheduleType =
 
 export type EventUrlType = 'OFFICIAL_SITE' | 'TICKET' | 'STREAMING' | 'SNS' | 'PRESS' | 'OTHER';
 
+/** 티켓 판매 대상. "해외"는 개최국 기준이다. */
+export type TicketAudience = 'DOMESTIC' | 'OVERSEAS';
+
 export type EventScheduleItem = {
 	type: EventScheduleType;
+	/** 같은 종류의 일정을 구별하는 짧은 이름(예: "프리리저브"). 없으면 null. */
+	title: string | null;
+	/** 티켓 판매 일정의 대상. null이면 전체. */
+	audience: TicketAudience | null;
 	startsAt: string | null;
 	endsAt: string | null;
 	timezone: string;
@@ -72,13 +79,30 @@ export type EventSummary = {
 	officialUrl: string;
 };
 
-// venue만 상세 형태(주소·좌표 포함)로 넓히고 나머지는 목록과 동일하다(scls-platform의
+export type TicketType = {
+	id: string;
+	name: string;
+	/** 통화 코드 → 금액(예: { KRW: 329000, JPY: 35000 }). 가격을 모르면 비어 있다. */
+	prices: Record<string, number>;
+	note: string | null;
+};
+
+export type TicketChannel = {
+	id: string;
+	name: string;
+	url: string | null;
+	audience: TicketAudience;
+	note: string | null;
+};
+
+// venue만 상세 형태(주소·좌표 포함)로 넓히고, 상세에서만 권종·예매처(ticket)를 준다(scls-platform의
 // toPublicEventDetail과 대응).
 export type EventDetail = Omit<EventSummary, 'venue'> & {
 	venue: EventVenueDetail | null;
 	description: string | null;
 	organizers: { id: string; slug: string; name: string; role: string }[];
 	urls: { type: EventUrlType; url: string; label: string | null; isPrimary: boolean }[];
+	ticket: { types: TicketType[]; channels: TicketChannel[] };
 };
 
 export type EventSeriesSummary = {

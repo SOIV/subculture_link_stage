@@ -167,6 +167,60 @@ export function scheduleTypeLabel(locale: Locale, type: string): string {
 	return t(locale, `schedule.${type}`);
 }
 
+/** 티켓 판매 대상(국내/해외) 문구. 대상이 정해지지 않은(전체) 일정은 null이라 호출하는 쪽이 칩을 그리지 않는다. */
+export function audienceLabel(locale: Locale, audience: string | null): string | null {
+	return audience ? t(locale, `ticket.audience.${audience}`) : null;
+}
+
+/**
+ * 일정 줄 아래에 붙이는 보조 문구: "해외 · 프리리저브 (티켓피아)"처럼 대상과 이름을 이어 붙인다.
+ * 둘 다 없으면 null이다. 같은 종류의 일정(국내·해외 티켓 판매 등)을 구별하는 용도다.
+ */
+export function scheduleQualifier(
+	locale: Locale,
+	schedule: { audience: string | null; title: string | null }
+): string | null {
+	const parts = [audienceLabel(locale, schedule.audience), schedule.title].filter(Boolean);
+	return parts.length > 0 ? parts.join(' · ') : null;
+}
+
+// 화면에 늘어놓는 통화 순서. 한국·일본 행사가 대상이라 원·엔을 먼저 두고, 나머지는 코드 순이다.
+const CURRENCY_ORDER = ['KRW', 'JPY'];
+
+// 한국어는 통화 기호보다 "329,000원"처럼 단위를 뒤에 붙이는 쓰임이 자연스럽다(Intl은 엔을 "JP¥"로 보여준다).
+const KO_CURRENCY_UNIT: Record<string, string> = { KRW: '원', JPY: '엔' };
+
+/**
+ * { KRW: 329000, JPY: 35000 }을 화면 언어에 맞춰 보여준다(한국어 "329,000원 / 35,000엔",
+ * 그 밖은 "₩329,000 / ¥35,000"). 비어 있으면 null.
+ */
+export function formatPrices(locale: Locale, prices: Record<string, number>): string | null {
+	const entries = Object.entries(prices).sort(([a], [b]) => {
+		const rank = (code: string) => {
+			const index = CURRENCY_ORDER.indexOf(code);
+			return index === -1 ? CURRENCY_ORDER.length : index;
+		};
+		return rank(a) - rank(b) || a.localeCompare(b);
+	});
+	if (entries.length === 0) return null;
+	return entries
+		.map(([currency, amount]) => {
+			const koUnit = locale === 'ko' ? KO_CURRENCY_UNIT[currency] : undefined;
+			if (koUnit) return `${amount.toLocaleString('ko-KR')}${koUnit}`;
+			try {
+				return new Intl.NumberFormat(localeTag(locale), {
+					style: 'currency',
+					currency,
+					maximumFractionDigits: 0
+				}).format(amount);
+			} catch {
+				// 알 수 없는 통화 코드면 숫자와 코드를 그대로 보여준다.
+				return `${amount.toLocaleString(localeTag(locale))} ${currency}`;
+			}
+		})
+		.join(' / ');
+}
+
 export function urlTypeLabel(locale: Locale, type: string): string {
 	return t(locale, `url.${type}`);
 }
