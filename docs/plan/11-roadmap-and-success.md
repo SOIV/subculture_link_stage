@@ -129,7 +129,7 @@
 - [x] 프로젝트명 확정: Subculture Link Stage (SCLS)
 - [x] 계획 문서를 카테고리별 파일로 분리 ([docs/plan/](README.md))
 - [x] OpenAPI 공개 시점 확정 (Phase 2 개발 착수 / Phase 3 전체 공개)
-- [x] 운영 형태 확정 (무료 + 부분 유료화, 유료화 전에는 후원 기반)
+- [x] 운영 형태 방향 정리 (무료 운영·후원 기반. 부분 유료화는 확정하지 않았고 제외되어 무료·비영리로 갈 수도 있음, Onstage 광고 패널은 검토 중)
 - [x] 공개 범위 확정 (프로젝트·개발/설계·ERD·참고 DDL·Roadmap·Legacy 문서 공개, 향후 OpenAPI/API 문서·Onstage 소스 공개, API/Backstage/Worker/Scheduler 및 내부 운영 구현 비공개)
 - [x] 개발·운영 참여 방식 확정 (메인 개발자 문의 기반)
 - [ ] 초기 데이터 분류 코드 잔여 항목 확정 (기본 schedule/translation/tag 코드는 §11.1 Phase 0에서 정리, 티켓 방식 등 세부 분류는 구현과 병행)

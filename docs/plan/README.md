@@ -34,7 +34,7 @@
 
 ## 이번 분리 작업에서 추가/보강된 내용
 
-- **운영 형태 및 공개 정책** ([01-overview-and-principles.md §1.6](01-overview-and-principles.md#16-운영-형태-및-공개-정책)) — 시장 차별점(해외 포함 통합 정보와 통합 ICS 피드를 제공하는 서비스는 제한적), 무료+부분유료화(F2P·유료화 상품은 후반 설계, 그 전까지는 후원 기반), 프로젝트·설계 문서 공개 / 서비스 구현 소스 중 Onstage 공개 예정 / API·Backstage·Worker·Scheduler 및 운영 구현 비공개, 문의 채널(`biz@soiv-studio.xyz`)을 통한 개발·운영 참여 방식을 명시.
+- **운영 형태 및 공개 정책** ([01-overview-and-principles.md §1.6](01-overview-and-principles.md#16-운영-형태-및-공개-정책)) — 시장 차별점(해외 포함 통합 정보와 통합 ICS 피드를 제공하는 서비스는 제한적), 무료 운영 기본(부분 유료화(F2P)는 확정이 아니며 제외될 수 있음, 후원 기반, Onstage 광고 패널 검토 중), 프로젝트·설계 문서 공개 / 서비스 구현 소스 중 Onstage 공개 예정 / API·Backstage·Worker·Scheduler 및 운영 구현 비공개, 문의 채널(`biz@soiv-studio.xyz`)을 통한 개발·운영 참여 방식을 명시.
 - **OpenAPI 공개 전략** ([08-api-and-ics.md](08-api-and-ics.md)) — 원래 후기 확장(Phase 6)이었던 공개 API 문서화를 Phase 2(개발 착수)/Phase 3(전체 공개)로 앞당김. 이미 개인 개발자들이 흩어져서 앱을 만들어 쓰고 있는 상황이라, 공개 API가 초기 사용자 확보 포인트가 될 수 있다는 판단에 따른 것. OpenAPI 스펙 공개는 소스코드 오픈소스화와는 다르다는 점도 함께 명시.
 - **SNS 수집 ToS 리스크** ([05-storage-and-collection.md](05-storage-and-collection.md)) — X/Instagram 자동 수집의 API 접근성·약관 제약을 리스크로 명시.
 - **관리자 인증 방식 결정 이력** ([07-admin-dashboard.md](07-admin-dashboard.md)) — 최초 분리 시에는 세션/JWT/외부 Auth 중 미정이었다. 이후 3단계 인증·권한 구조를 확정하고 루트 관리자 DB 세션 + HttpOnly 쿠키를 구현했다 ( [07-admin-dashboard.md §7.6](07-admin-dashboard.md#76-인증-및-권한-구조) 참고)

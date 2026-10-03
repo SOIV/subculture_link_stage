@@ -69,7 +69,7 @@ SCLSは現在、**初期開発段階（Phase 1 Core MVPを開発中）**です�
 
 ## 運営形態
 
-無料＋部分有料化（F2P）モデルで運営し、有料化商品が登場するまでは寄付（ドネーション）ベースで運営費を賄います。詳細は [docs/plan/01-overview-and-principles.md §1.6.2](docs/plan/01-overview-and-principles.md#162-운영-형태)（韓国語）を参照してください。
+無料での運営を基本とし、部分有料化も検討していますが確定ではありません（見送って無料・非営利で運営する可能性もあります）。運営費は寄付（ドネーション）で賄い、Onstageに広告パネルを設置する方法を検討中です。詳細は [docs/plan/01-overview-and-principles.md §1.6.2](docs/plan/01-overview-and-principles.md#162-운영-형태)（韓国語）を参照してください。
 
 ## 開発計画ドキュメント
 

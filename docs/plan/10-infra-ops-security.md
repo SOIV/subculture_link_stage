@@ -60,7 +60,7 @@ Queue
 
 서버 프로세스는 `api`(와 Worker/Scheduler)뿐이며, 나머지 세 호스트는 Cloudflare의 정적/엣지 배포라 추가 서버 비용이 없다.
 
-> **결정 (2026-09-19) — 프론트엔드 호스팅: Cloudflare (Vercel 제외)**: Backstage(정적 SPA), Onstage(SvelteKit), 위젯 셸을 모두 Cloudflare에 올린다. 이유는 ① DNS·CDN·WAF·R2를 이미 Cloudflare로 쓰므로 벤더가 늘지 않고, ② Vercel Hobby는 비상업용으로 제한되는 것으로 알고 있어 부분 유료화(F2P)가 확정된 SCLS는 처음부터 유료 플랜이 필요할 수 있기 때문이다(약관은 착수 시점에 재확인). 조건과 주의: Cloudflare는 Pages에서 Workers(Static Assets)로 권장 방식이 옮겨가는 중이라 Onstage 착수 시점에 공식 문서로 어느 쪽을 쓸지 확인한다(Backstage는 `/admin/*` 프록시를 같은 Worker에 두기 위해 Workers Static Assets로 배포했다. Onstage도 Workers로 정해 2026-10-02 Git 연결(Workers Builds)로 초기 배포했다). Onstage는 `adapter-cloudflare`로 Node와 다른 Workers 런타임에서 동작하므로 공개 API `fetch` 위주로 유지하고 Node 전용 라이브러리 의존을 지양한다. 이 조건이 깨지면 재검토한다.
+> **결정 (2026-09-19) — 프론트엔드 호스팅: Cloudflare (Vercel 제외)**: Backstage(정적 SPA), Onstage(SvelteKit), 위젯 셸을 모두 Cloudflare에 올린다. 이유는 ① DNS·CDN·WAF·R2를 이미 Cloudflare로 쓰므로 벤더가 늘지 않고, ② Vercel Hobby는 비상업용으로 제한되는 것으로 알고 있어 부분 유료화나 광고 수익이 생길 수 있는 SCLS는 처음부터 유료 플랜이 필요할 수 있기 때문이다(약관은 착수 시점에 재확인). 조건과 주의: Cloudflare는 Pages에서 Workers(Static Assets)로 권장 방식이 옮겨가는 중이라 Onstage 착수 시점에 공식 문서로 어느 쪽을 쓸지 확인한다(Backstage는 `/admin/*` 프록시를 같은 Worker에 두기 위해 Workers Static Assets로 배포했다. Onstage도 Workers로 정해 2026-10-02 Git 연결(Workers Builds)로 초기 배포했다). Onstage는 `adapter-cloudflare`로 Node와 다른 Workers 런타임에서 동작하므로 공개 API `fetch` 위주로 유지하고 Node 전용 라이브러리 의존을 지양한다. 이 조건이 깨지면 재검토한다.
 
 > **결정 (2026-09-19) — 위젯은 Onstage와 분리 배포**: 위젯 정적 셸은 Onstage와 별개로 `widget.*` 호스트에 배포한다. 런타임 경로는 `위젯 셸(정적, CDN 캐시) 로드 → 브라우저가 API/WS에 직접 접속`이며 Onstage를 경유하지 않는다(Onstage의 위젯 설정 화면은 임베드 코드를 만들어 줄 뿐). `api.*/widget/**`처럼 API 오리진 아래에 두지 않는 이유는, 위젯이 옵션을 받아 렌더링하므로 XSS 가능성이 0이 아니고 API와 same-origin이면 이후 쿠키 인증 엔드포인트가 생겼을 때 피해가 커지기 때문이다. 격리 정책은 [§10.3.3](#1033-위젯-임베드-격리-정책) 참고.
 
@@ -105,7 +105,7 @@ Queue
 
 ### 10.1.3 무료 운영 원칙 수정
 
-v2의 완전 무료 운영은 장기 목표와 맞지 않는다. 확정된 운영 형태는 무료 + 부분 유료화(F2P)이며, 유료화 수익의 사용처(개발·운영 유지비 우선, 잉여는 행사 관련 투자·참여 비용)는 [01-overview-and-principles.md §1.6.2](01-overview-and-principles.md#162-운영-형태) 참고.
+v2는 완전 무료 운영을 가정했다. 현재 운영 형태는 무료를 기본으로 하며, 부분 유료화(F2P)는 확정된 내용이 아니고 제외될 수도 있다. 운영 비용은 후원과 검토 중인 Onstage 광고 패널로 충당할 수 있다. 수익이 생길 경우의 사용처(개발·운영 유지비 우선, 잉여는 행사 관련 투자·참여 비용)는 [01-overview-and-principles.md §1.6.2](01-overview-and-principles.md#162-운영-형태) 참고.
 
 초기에는 무료 티어와 저비용 서비스를 활용하되 다음 비용을 고려한다.
 

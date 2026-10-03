@@ -69,7 +69,7 @@
 
 ## 운영 형태
 
-무료 + 부분 유료화(F2P) 모델로 운영하며, 유료화 상품이 나오기 전까지는 후원(도네이션) 기반으로 운영 비용을 충당합니다. 자세한 내용은 [docs/plan/01-overview-and-principles.md §1.6.2](docs/plan/01-overview-and-principles.md#162-운영-형태) 참고.
+무료 운영을 기본으로 하며, 부분 유료화도 생각하고 있으나 확정된 내용이 아닙니다(제외하고 무료·비영리로 운영할 수도 있습니다). 운영 비용은 후원(도네이션) 기반으로 충당하며, Onstage에 광고 패널을 두는 방안을 검토 중입니다. 자세한 내용은 [docs/plan/01-overview-and-principles.md §1.6.2](docs/plan/01-overview-and-principles.md#162-운영-형태) 참고.
 
 ## 개발 계획 문서
 

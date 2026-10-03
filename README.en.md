@@ -69,7 +69,7 @@ See [docs/plan/01-overview-and-principles.md §1.6.3](docs/plan/01-overview-and-
 
 ## Operating model
 
-SCLS operates on a free + freemium (F2P) model. Until a paid product is introduced, operating costs are covered through donations. See [docs/plan/01-overview-and-principles.md §1.6.2](docs/plan/01-overview-and-principles.md#162-운영-형태) (Korean) for details.
+SCLS is free to use. A partial paid (freemium) model is under consideration but not decided — it may be dropped and the service may stay free and non-profit. Operating costs are covered through donations, and an ad panel on Onstage is being considered. See [docs/plan/01-overview-and-principles.md §1.6.2](docs/plan/01-overview-and-principles.md#162-운영-형태) (Korean) for details.
 
 ## Development plan documents
 
