@@ -178,7 +178,7 @@ CREATE TABLE event_organizers (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   event_id      UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
   organizer_id  UUID NOT NULL REFERENCES organizers(id),
-  role          TEXT NOT NULL DEFAULT 'HOST' CHECK (role IN ('HOST','CO_HOST','SPONSOR','SUPERVISOR')),
+  role          TEXT NOT NULL DEFAULT 'HOST' CHECK (role IN ('HOST','CO_HOST','SPONSOR','MAIN_SPONSOR','SUPERVISOR')),
   UNIQUE (event_id, organizer_id, role)
 );
 

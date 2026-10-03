@@ -107,6 +107,7 @@ const ko = {
 	'role.HOST': '주최',
 	'role.CO_HOST': '공동 주최',
 	'role.SPONSOR': '후원',
+	'role.MAIN_SPONSOR': '메인 스폰서',
 	'role.SUPERVISOR': '주관',
 
 	'search.placeholder': '행사 이름 검색',
@@ -228,6 +229,7 @@ const ja: Record<keyof typeof ko, string> = {
 	'role.HOST': '主催',
 	'role.CO_HOST': '共同主催',
 	'role.SPONSOR': '後援',
+	'role.MAIN_SPONSOR': 'メインスポンサー',
 	'role.SUPERVISOR': '主管',
 
 	'search.placeholder': 'イベント名で検索',
@@ -351,6 +353,7 @@ const en: Record<keyof typeof ko, string> = {
 	'role.HOST': 'Host',
 	'role.CO_HOST': 'Co-host',
 	'role.SPONSOR': 'Sponsor',
+	'role.MAIN_SPONSOR': 'Main sponsor',
 	'role.SUPERVISOR': 'Supervisor',
 
 	'search.placeholder': 'Search events',
