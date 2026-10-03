@@ -7,6 +7,7 @@
 	import CountryBadge from '$lib/components/CountryBadge.svelte';
 	import EventCard from '$lib/components/EventCard.svelte';
 	import PromotedEvents from '$lib/components/PromotedEvents.svelte';
+	import SubscribeMenu from '$lib/components/SubscribeMenu.svelte';
 	import UpcomingSchedules from '$lib/components/UpcomingSchedules.svelte';
 	import { localeHref, t } from '$lib/i18n';
 	import { isUpcomingOrOngoing, upcomingActionSchedules } from '$lib/schedule';
@@ -173,21 +174,36 @@
 			{t(locale, 'home.subscribe.desc')}
 		</p>
 		<div class="mt-5 flex flex-wrap gap-2">
-			<a href={icsUrl('all', { locale }).toString()} class={subscribeButtonClass}>
+			<SubscribeMenu
+				{locale}
+				url={icsUrl('all', { locale }).toString()}
+				name="SCLS"
+				triggerClass={subscribeButtonClass}
+			>
 				<CalendarPlus class="size-4" aria-hidden="true" />
 				{t(locale, 'filter.all')}
-			</a>
+			</SubscribeMenu>
 			{#each countries as code (code)}
-				<a href={icsUrl(code, { locale }).toString()} class={subscribeButtonClass}>
+				<SubscribeMenu
+					{locale}
+					url={icsUrl(code, { locale }).toString()}
+					name="SCLS"
+					triggerClass={subscribeButtonClass}
+				>
 					<CalendarPlus class="size-4" aria-hidden="true" />
 					<CountryBadge {locale} countryCode={code} />
-				</a>
+				</SubscribeMenu>
 			{/each}
 			{#if hasOnline}
-				<a href={icsUrl('online', { locale }).toString()} class={subscribeButtonClass}>
+				<SubscribeMenu
+					{locale}
+					url={icsUrl('online', { locale }).toString()}
+					name="SCLS"
+					triggerClass={subscribeButtonClass}
+				>
 					<CalendarPlus class="size-4" aria-hidden="true" />
 					{t(locale, 'card.online')}
-				</a>
+				</SubscribeMenu>
 			{/if}
 		</div>
 	</section>

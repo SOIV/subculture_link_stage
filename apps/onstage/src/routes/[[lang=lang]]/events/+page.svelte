@@ -3,6 +3,7 @@
 	import { icsUrl } from '$lib/api';
 	import EventCard from '$lib/components/EventCard.svelte';
 	import FilterBar from '$lib/components/FilterBar.svelte';
+	import SubscribeMenu from '$lib/components/SubscribeMenu.svelte';
 	import { t, tv } from '$lib/i18n';
 	import { buildTagIndex } from '$lib/tags';
 	import type { PageProps } from './$types';
@@ -37,13 +38,15 @@
 
 	<div class="flex flex-wrap items-center justify-between gap-3">
 		<p class="text-sm text-slate-500 dark:text-slate-400" aria-live="polite">{countText}</p>
-		<a
-			href={subscribeHref}
-			class="inline-flex items-center gap-1.5 rounded-full border border-violet-300 px-4 py-2 text-sm font-bold text-violet-700 hover:bg-violet-50 dark:border-violet-700 dark:text-violet-300 dark:hover:bg-violet-950"
+		<SubscribeMenu
+			{locale}
+			url={subscribeHref}
+			name="SCLS"
+			triggerClass="inline-flex items-center gap-1.5 rounded-full border border-violet-300 px-4 py-2 text-sm font-bold text-violet-700 hover:bg-violet-50 dark:border-violet-700 dark:text-violet-300 dark:hover:bg-violet-950"
 		>
 			<CalendarPlus class="size-4" aria-hidden="true" />
 			{t(locale, 'subscribe.title')}
-		</a>
+		</SubscribeMenu>
 	</div>
 
 	{#if data.events.items.length === 0}

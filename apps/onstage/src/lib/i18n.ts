@@ -35,9 +35,13 @@ const ko = {
 
 	'subscribe.title': '캘린더 구독',
 	'subscribe.google': 'Google Calendar에 추가',
-	'subscribe.webcal': '캘린더 앱에서 구독',
-	'subscribe.copy': 'ICS 링크 복사',
+	'subscribe.webcal': 'Apple 캘린더 (iPhone·Mac)',
+	'subscribe.copy': '주소 복사 (다른 앱용)',
 	'subscribe.copied': '복사됨',
+	'subscribe.outlook': 'Outlook에 추가',
+	'subscribe.file': '파일 받기 (한 번만 추가)',
+	'subscribe.hint':
+		'구독하면 새 행사와 변경이 자동으로 반영돼요. 반영 간격은 앱마다 달라요(Google은 반나절~하루).',
 
 	'list.empty': '조건에 맞는 행사가 없습니다.',
 	'list.count': '개 행사',
@@ -157,9 +161,13 @@ const ja: Record<keyof typeof ko, string> = {
 
 	'subscribe.title': 'カレンダー購読',
 	'subscribe.google': 'Googleカレンダーに追加',
-	'subscribe.webcal': 'カレンダーアプリで購読',
-	'subscribe.copy': 'ICSリンクをコピー',
+	'subscribe.webcal': 'Appleカレンダー（iPhone・Mac）',
+	'subscribe.copy': 'アドレスをコピー（他のアプリ用）',
 	'subscribe.copied': 'コピーしました',
+	'subscribe.outlook': 'Outlookに追加',
+	'subscribe.file': 'ファイルを保存（1回だけ追加）',
+	'subscribe.hint':
+		'購読すると新しいイベントや変更が自動で反映されます。反映の間隔はアプリによって異なります（Googleは半日〜1日）。',
 
 	'list.empty': '条件に合うイベントがありません。',
 	'list.count': '件のイベント',
@@ -281,9 +289,13 @@ const en: Record<keyof typeof ko, string> = {
 
 	'subscribe.title': 'Subscribe',
 	'subscribe.google': 'Add to Google Calendar',
-	'subscribe.webcal': 'Subscribe in calendar app',
-	'subscribe.copy': 'Copy ICS link',
+	'subscribe.webcal': 'Apple Calendar (iPhone & Mac)',
+	'subscribe.copy': 'Copy link (for other apps)',
 	'subscribe.copied': 'Copied',
+	'subscribe.outlook': 'Add to Outlook',
+	'subscribe.file': 'Download file (adds once)',
+	'subscribe.hint':
+		'Subscribe to get new events and changes automatically. Update frequency depends on the app (Google: every 12–24 hours).',
 
 	'list.empty': 'No events match these filters.',
 	'list.count': ' events',
