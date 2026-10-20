@@ -202,7 +202,7 @@ EVENT_ORGANIZER      (행사 관리자 하위 계정)
 
 - 관리자 API 인증 필수
 - 관리자 API(`/admin/*`)는 Backstage 프록시를 거친 요청만 수락하고, 상태 변경 요청은 Origin을 검증한다 ([§10.1.2](#1012-배포-구조-예시) 결정 참고)
-- 공개 API Rate Limit 적용
+- 공개 API Rate Limit 적용 — 공개 `/v1`은 방문자 IP당 분당 600회(`PUBLIC_RATE_LIMIT_MAX`)이고, 운영(Fly.io)에서는 Fly 프록시가 넣는 `Fly-Client-IP`를 방문자 IP로 쓴다. 운영이 아닌 환경에서는 클라이언트가 보낼 수 있는 헤더라 믿지 않는다. 관리자 로그인 제한과는 별개다
 - 수집 Worker와 API의 DB 권한 분리
 - 오브젝트 스토리지 비공개 Bucket 기본
 - 공개 이미지에만 서명 URL 또는 CDN 경로 제공
