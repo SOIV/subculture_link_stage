@@ -26,29 +26,16 @@
 
 상세 작업 내역은 [작업 로그](../devlog/README.md)에 별도로 기록한다. 로드맵은 현재 상태와 남은 작업을 관리하고, 작업 로그는 변경 내용·구현 근거·확인 결과를 보관한다.
 
-## 문서 이력
+## 문서 관리
 
-| 버전 | 형태 | 비고 |
-|---|---|---|
-| v1~v2 | 단일 문서 (`subculture_event_calendar_api_개발_계획서*.md`) | 프로젝트 개명 전, [docs/legacy/](../legacy/) 보관 |
-| v3 | 단일 문서 (`Subculture_Link_Stage_개발_계획서_v3.md`) | SCLS 명칭 확정 버전, [docs/legacy/](../legacy/) 보관 |
-| v4 (현재) | 주제별 분리 문서 (본 폴더) | 파일 분리 + 세부 보강, 초기 구현 진행 단계 (지속 갱신) |
+| 문서 | 관리할 내용 |
+|---|---|
+| [기획 문서](#목차) | 현재 설계·기능 범위·운영 절차 |
+| [로드맵](11-roadmap-and-success.md) | Phase별 현재 상태·남은 작업·성공 기준 |
+| [작업 로그](../devlog/README.md) | 구현·설계 결정·검토 과정과 당시 확인 결과 |
+| [Legacy](../legacy/) | v1~v3 단일 계획서 원본 |
 
-## 이번 분리 작업에서 추가/보강된 내용
-
-- **운영 형태 및 공개 정책** ([01-overview-and-principles.md §1.6](01-overview-and-principles.md#16-운영-형태-및-공개-정책)) — 시장 차별점(해외 포함 통합 정보와 통합 ICS 피드를 제공하는 서비스는 제한적), 무료 운영 기본(부분 유료화(F2P)는 확정이 아니며 제외될 수 있음, 후원 기반, Onstage 광고 패널 검토 중), 프로젝트·설계 문서 공개 / 서비스 구현 소스 중 Onstage 공개 예정 / API·Backstage·Worker·Scheduler 및 운영 구현 비공개, 문의 채널(`biz@soiv-studio.xyz`)을 통한 개발·운영 참여 방식을 명시.
-- **OpenAPI 공개 전략** ([08-api-and-ics.md](08-api-and-ics.md)) — 원래 후기 확장(Phase 6)이었던 공개 API 문서화를 Phase 2(개발 착수)/Phase 3(전체 공개)로 앞당김. 이미 개인 개발자들이 흩어져서 앱을 만들어 쓰고 있는 상황이라, 공개 API가 초기 사용자 확보 포인트가 될 수 있다는 판단에 따른 것. OpenAPI 스펙 공개는 소스코드 오픈소스화와는 다르다는 점도 함께 명시.
-- **SNS 수집 ToS 리스크** ([05-storage-and-collection.md](05-storage-and-collection.md)) — X/Instagram 자동 수집의 API 접근성·약관 제약을 리스크로 명시.
-- **관리자 인증 방식 결정 이력** ([07-admin-dashboard.md](07-admin-dashboard.md)) — 최초 분리 시에는 세션/JWT/외부 Auth 중 미정이었다. 이후 3단계 인증·권한 구조를 확정하고 루트 관리자 DB 세션 + HttpOnly 쿠키를 구현했다 ( [07-admin-dashboard.md §7.6](07-admin-dashboard.md#76-인증-및-권한-구조) 참고)
-- **비용 상한 미결 표시** ([10-infra-ops-security.md](10-infra-ops-security.md)) — 구체적 예산 트리거는 운영 데이터가 쌓인 뒤 정하기로 함.
-- **ERD 결정 이력** ([04-database-design.md](04-database-design.md)) — 최초 분리 시 미결이던 다이어그램화를 이후 완료하고 설계 기준을 정리했다 ( [database/erd.md](database/erd.md)·[database/schema.sql](database/schema.sql) 참고)
-
-## v4 분리 이후 추가로 확정된 사항
-
-- **Repository 구조 확정** ([03-architecture-and-domain.md §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정)) — 공식 공개 Repository `Subculture_Link_Stage`에 프로젝트·개발 문서, 아키텍처·데이터 모델, ERD·참고 DDL, Roadmap, Legacy, 향후 OpenAPI/API 문서와 Subculture Onstage 소스를 함께 두고, `scls-api`·`scls-backstage`·`scls-worker`·`scls-scheduler`는 `scls-platform` 비공개 Monorepo로 묶어 DB 스키마·도메인 타입을 공유 패키지로 직접 공유한다. AI 페어 프로그래밍(Claude Code/Codex) 환경에서 서비스 간 공유 타입을 사설 패키지로 나누어 관리하는 비용이 실이익보다 크다는 판단이 근거.
-- **ERD 확정** ([database/erd.md](database/erd.md), [database/schema.sql](database/schema.sql)) — 약 50개 테이블의 관계를 도메인별 6개 다이어그램으로 정리하고, 전체 컬럼·제약조건을 담은 참고용 DDL을 작성. 기존 문서에 "또는"으로 열려 있던 태그 현지화 방식, `change_proposals` 제출 주체 표현, 다형 참조 허용 범위 등도 함께 확정.
-
-- **프론트엔드 호스팅·위젯·실시간 경로 결정** ([10-infra-ops-security.md §10.1.2](10-infra-ops-security.md#1012-배포-구조-예시), [§10.3.3](10-infra-ops-security.md#1033-위젯-임베드-격리-정책)) — Onstage·Backstage·위젯 셸은 Cloudflare에 배포(Vercel 제외), 위젯은 Onstage와 분리해 별도 서브도메인의 정적 셸로 두고 API/WS에 직접 접속, 실시간(WS/SSE)은 별도 서버 없이 API 서버의 별도 경로로 제공하며, Backstage↔API는 `backstage.*`에서 `/admin/*`를 프록시해 동일 오리진을 유지하며, API는 프록시 경유 시크릿과 Origin 검증으로 직접 접근을 막는다. API/Worker는 Supabase가 도쿄 리전이라는 점을 근거로 Fly.io 도쿄로 결정해 초기 배포했고(머신 1대·GitHub Actions 자동 배포, 작업 대기열 Redis 여부는 Phase 2에서 결정), 행사 관리자 로그인·인증 방식(SSO 로그인 + 소셜 연동 자동 인증 후 루트 관리자 최종 확인, 추가 행사는 증명 자료 심사, 소셜·일반 로그인은 기존 수동 절차 유지)은 Phase 2 계정 도입 구현 전에 설계하기로 미결로 남겨 두었다([07-admin-dashboard.md §7.6](07-admin-dashboard.md#76-인증-및-권한-구조)).
+문서 분리·설계 보강 과정은 [Phase 0 기록](../devlog/phase-0-planning-and-design.md)에 보관한다. 새 작업 기록은 작업 로그의 월별 작성 방식을 따른다.
 
 ## 진행 방식 메모
 

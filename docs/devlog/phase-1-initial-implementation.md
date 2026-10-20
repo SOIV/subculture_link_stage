@@ -6,36 +6,80 @@
 > 기존 문서에 명시된 작업일(2026-09-30, 2026-10-02, 2026-10-03, 2026-10-20)은 본문에 보존했다. 나머지 작업일은 확인되지 않아 새로 붙이지 않았다.
 > 아래 상태와 남은 일은 이관 당시 기록이다. 최신 완료 여부와 후속 작업은 [로드맵](../plan/11-roadmap-and-success.md)에서 관리한다.
 
+## 찾아보기
+
+- [기록 당시 현황](#기록-당시-현황)
+- [기반 데이터·관리자 기능](#기반-데이터관리자-기능)
+- [공개 API·ICS·보호 로직](#공개-apiics보호-로직)
+- [배포·도메인·초기 데이터](#배포도메인초기-데이터)
+- [Onstage 구현·후속 항목](#onstage-구현후속-항목)
+- [공개 API의 초기 응답 메모](#공개-api의-초기-응답-메모)
+
 ## 기록 당시 현황
 
 현황 기준: 2026-10-02. 현재 Phase 1 Core MVP 개발을 Private `scls-platform`에서 진행 중이다. API·Backstage 초기 기능과 공개 GET API·ICS 피드, Localizations CRUD API/UI를 구현했고, Backstage(Cloudflare Workers)와 API(Fly.io 도쿄)를 임시 도메인으로 초기 배포해 테스트 중이다. §2.3.3 확정 9개 시리즈 기준 초기 행사 데이터 22건(장소 7·태그 16·다국어 이름 162건 포함)을 등록했다 — 공식 출처로 확인한 것은 13건, 기사 등 간접 출처로 확인한 것은 9건이며 공식 표기가 없는 언어의 제목 다수는 기계번역(검수 필요) 상태다. 정식 도메인 확정 등은 남아 있다. Subculture Onstage는 이 공식 공개 Repository의 `apps/onstage`에서 착수해 메인 페이지·행사 목록·상세를 구현했고, Cloudflare Workers에 임시 도메인으로 초기 배포해 테스트 중이다(2026-10-02, 정식 도메인은 미정).
 
-## 구현 상세 및 당시 후속 항목
+## 기반 데이터·관리자 기능
 
 - **완료** — PostgreSQL 및 Migration 구성 (Supabase 프로젝트 연결, `scls-platform` 비공개 저장소의 `packages/db`에 Phase 1 범위 Prisma 스키마 및 초기 migration 적용 완료)
+
 - **완료** — Event Series, Event, Event Schedule 구현 (Prisma 스키마·테이블은 위 migration에 포함됨. `/admin` 프리픽스 CRUD API 구현·인증 연결 완료(`scls-platform`의 `apps/api/src/routes/event-series.ts`, `events.ts`, `event-schedules.ts`), 관리자 UI도 3종 모두 CRUD 구현 완료(`scls-platform`의 `apps/backstage/src/routes/EventSeriesPage.tsx`, `EventsPage.tsx`, `EventSchedulesPanel.tsx`) — Event Schedule은 선택된 행사에 종속되는 패널 형태)
+
 - **완료** — Venue, Organizer, Tag 구현 (스키마 포함 — `/admin` CRUD API 구현·인증 연결 완료(`scls-platform`의 `apps/api/src/routes/venues.ts`, `organizers.ts`, `tag-groups.ts`, `tags.ts`), 관리자 UI도 구현 완료(`scls-platform`의 `apps/backstage/src/routes/VenuesPage.tsx`, `OrganizersPage.tsx`, `TagsPage.tsx` — Tag는 그룹 선택형 2단 구성))
+
 - **완료** — Localizations 구현 (스키마 포함, `/admin` CRUD API 구현·인증 연결 완료 — `scls-platform`의 `apps/api/src/routes/entity-localizations.ts`. EVENT/EVENT_SERIES/EVENT_SCHEDULE/VENUE/ORGANIZER/TAG 대상 `/admin/localizations/:entityType/:entityId` GET·POST, `/admin/localizations/:id` PATCH·DELETE 구현. 관리자 UI도 구현 완료 — `scls-platform`의 `apps/backstage/src/routes/LocalizationsPanel.tsx`를 EventSeries/Events/Venues/Organizers/Tags 각 관리 화면에 연결)
+
 - **완료** — 루트 관리자 로그인 구현 (DB 저장 세션 + 쿠키 방식 — [07-admin-dashboard.md §7.6.3](../plan/07-admin-dashboard.md#763-권한-부여-절차) 결정 사항 참고. `scls-platform`의 `apps/api/src/routes/auth.ts`)
+
 - **완료** — 행사 수동 등록·수정 UI (위 Event 관리자 UI로 충족 — `scls-platform`의 `apps/backstage/src/routes/EventsPage.tsx`. 행사에 붙는 태그·주최/후원·링크도 행사 목록의 "연결" 버튼으로 관리한다(2026-10-20, `EventLinksPanel.tsx`와 `apps/api`의 `event-tags.ts`·`event-organizers.ts`·`event-urls.ts`) — 이전에는 입력 스크립트로만 넣을 수 있어 새 행사가 Onstage 필터에 나오지 않았다. 태그는 고른 목록 전체로 바꾸는 방식이고, 주최는 같은 역할로 중복 연결할 수 없으며 역할을 바꾸려면 떼고 다시 붙인다)
+
+## 공개 API·ICS·보호 로직
+
 - **완료** — 공개 GET API ([08-api-and-ics.md §8.2](../plan/08-api-and-ics.md#82-공개-api-예시)의 현재 구현 범위로 `/v1` 프리픽스, `{success,data}` 응답 봉투로 구현 완료 — `scls-platform`의 `apps/api/src/routes/public-*.ts`. `events`/`events/:slug`/`event-series`/`schedules`/`venues`/`tags`/`search`/`health` 전부 구현, `events` 목록은 `country`/`tags`/`from`/`to` 필터 지원. `category`/`franchise` 필터는 대응 데이터 모델이 아직 없어(franchises는 Phase 1 범위 밖) 보류. title/summary는 `entity_localizations` 조회로 채워지며, 초기 행사 데이터 22건 등록 후 대부분 채워졌다 — 공식 표기가 없는 언어는 기계번역·검수 필요 상태로 남아 있다)
+
 - **완료** — ICS 전체 피드 ([08-api-and-ics.md §8.6](../plan/08-api-and-ics.md#86-ics-및-캘린더-설계) 기준 `/v1/calendars/all.ics`·`online.ics`·`custom.ics`(country/tags/from/to 필터)와 국가 코드 기반 피드(`kr.ics`/`jp.ics` 등, 하드코딩 없이 일반화) 구현 완료 — `scls-platform`의 `apps/api/src/routes/public-calendars.ts`. 한국·일본 `VTIMEZONE` 포함, 티켓 오픈 알림·`LOCATION`·읽기 쉬운 일정 제목 — [§8.6.5](../plan/08-api-and-ics.md#865-피드-품질), 2026-10-03 개선)
-- **완료** — Backstage·API 초기 배포 (Backstage는 Cloudflare Workers, API는 Fly.io 도쿄 — [10-infra-ops-security.md §10.1.2](../plan/10-infra-ops-security.md#1012-배포-구조-예시) 결정 기준. API는 GitHub Actions, Backstage는 Cloudflare의 Git 연동으로 push 시 자동 배포. 임시 도메인으로 테스트 중이며 정식 공개는 아님)
-- **미완료·진행/검토 중** — 정식 도메인 확정 및 연결 (Onstage는 기존에 쓰던 도메인에 임시로 연결해 둔 상태이고 정식 도메인은 미정 — Onstage·Backstage·API 호스트 — API 도메인 연결 절차는 [10-infra-ops-security.md §10.1.2](../plan/10-infra-ops-security.md#1012-배포-구조-예시) 참고. 도메인은 구매가 필요해, 정식 공개(릴리즈) 시점에 구매·연결하고 그때까지는 임시 도메인으로 개발·테스트한다 — 다른 작업의 선행 조건이 아니다. Onstage의 canonical·sitemap·robots는 접속한 주소를 그대로 따라가므로 도메인이 바뀌어도 코드를 고칠 필요가 없다)
-- **미완료·진행/검토 중** — 정식 공개(릴리즈) 때 Fly API 머신을 2대로 전환 (무중단 배포와 장애 대비. 두 머신 모두 도쿄, 요청 제한은 머신별 집계 오차를 감수하고 수집 Worker는 별도 프로세스 그룹으로 분리 — [10-infra-ops-security.md §10.1.2](../plan/10-infra-ops-security.md#1012-배포-구조-예시) 참고. Onstage·Backstage는 Cloudflare Workers라 자동으로 늘어나 해당 없음)
+
 - **완료** — 공개 API 보호와 핵심 로직 테스트 (2026-10-20. `scls-platform`의 `apps/api`. 공개 `/v1` 전체에 방문자 IP당 분당 600회 요청 제한을 걸고(`PUBLIC_RATE_LIMIT_MAX`로 조정, 초과하면 `429 RATE_LIMITED`), 성공 응답에 `Cache-Control`(JSON은 `max-age=60`, ICS는 `max-age=300`)을 붙였다 — `src/lib/public-hardening.ts`. 테스트는 vitest로 처음 도입해 ICS 생성·캘린더 일정 변환(알림·판매 기간)·행사 필터(태그 그룹 "또는"/"그리고", 상위 태그 포함)·요청 제한과 캐시 헤더를 검증한다. `pnpm test`로 실행. 한도는 Onstage 서버 렌더링과 캘린더 앱이 같은 IP로 여러 사용자를 대신해 읽는 점을 고려해 넉넉하게 잡았으며, 사용량이 늘면 조정한다)
+
+## 배포·도메인·초기 데이터
+
+- **완료** — Backstage·API 초기 배포 (Backstage는 Cloudflare Workers, API는 Fly.io 도쿄 — [10-infra-ops-security.md §10.1.2](../plan/10-infra-ops-security.md#1012-배포-구조-예시) 결정 기준. API는 GitHub Actions, Backstage는 Cloudflare의 Git 연동으로 push 시 자동 배포. 임시 도메인으로 테스트 중이며 정식 공개는 아님)
+
+- **미완료·진행/검토 중** — 정식 도메인 확정 및 연결 (Onstage는 기존에 쓰던 도메인에 임시로 연결해 둔 상태이고 정식 도메인은 미정 — Onstage·Backstage·API 호스트 — API 도메인 연결 절차는 [10-infra-ops-security.md §10.1.2](../plan/10-infra-ops-security.md#1012-배포-구조-예시) 참고. 도메인은 구매가 필요해, 정식 공개(릴리즈) 시점에 구매·연결하고 그때까지는 임시 도메인으로 개발·테스트한다 — 다른 작업의 선행 조건이 아니다. Onstage의 canonical·sitemap·robots는 접속한 주소를 그대로 따라가므로 도메인이 바뀌어도 코드를 고칠 필요가 없다)
+
+- **미완료·진행/검토 중** — 정식 공개(릴리즈) 때 Fly API 머신을 2대로 전환 (무중단 배포와 장애 대비. 두 머신 모두 도쿄, 요청 제한은 머신별 집계 오차를 감수하고 수집 Worker는 별도 프로세스 그룹으로 분리 — [10-infra-ops-security.md §10.1.2](../plan/10-infra-ops-security.md#1012-배포-구조-예시) 참고. Onstage·Backstage는 Cloudflare Workers라 자동으로 늘어나 해당 없음)
+
 - **완료** — 테스트 행사 20개 이상 등록 (22개 등록 완료 — §2.3.3 확정 9개 시리즈 기준, 공식 확인 13건·간접 확인 9건. 등록 스크립트는 Private `scls-platform`의 `apps/api/src/scripts/seed-events.ts`, 데이터는 같은 경로의 `seed-data/events-2026.ts`)
+
+## Onstage 구현·후속 항목
+
 - **미완료·진행/검토 중** — Subculture Onstage 행사 상세 웹페이지 — 착수. `apps/onstage`(SvelteKit, `adapter-cloudflare`)에 메인 페이지(`/`), 행사 목록·필터·검색(`/events`), 상세와 ICS 구독 링크, ko/ja/en(로케일 접두사 `/ja`, `/en`, 기본 `/`) 구현 완료. 실제 공개 API 데이터로 확인했고, Cloudflare Workers에 Git 연결(Workers Builds)로 임시 도메인에 초기 배포해 테스트 중이다(2026-10-02, 정식 공개는 정식 도메인 확정 뒤). 사용자 제보·수정 요청 등 이후 기능은 범위 밖([02-users-and-scope.md §2.2.1](../plan/02-users-and-scope.md#221-core-mvp-기능-phase-1)). 아래는 1차 디자인 패스 뒤에 적어 둔 수정 항목이다(2026-09-30 반영)
+
   - **완료** — Main HP 작업 — 메인 페이지가 없이 곧바로 행사 검색으로 넘어가던 구조를 바꿔 `/`를 메인 페이지로, 행사 목록은 `/events`로 분리했다(`apps/onstage`의 `routes/[[lang=lang]]/+page.svelte`, `events/+page.svelte`). 메인에는 소개 문구, 필터와 무관하게 검색어만 넘기는 단독 검색창, 국가·분류 바로가기, 곧 열리는 행사, 티켓·신청 임박 일정, 캘린더 구독 안내를 둔다. 행사 광고는 "광고" 표시가 붙는 추천 행사 자리(`lib/components/PromotedEvents.svelte`)만 마련했고, 광고 데이터가 없어 운영 화면에는 나오지 않는다(개발 모드에서만 점선 자리 표시) — 광고 등록·과금·표기 정책은 미정
+
   - **완료** — 검색 시스템 관련 — 행사 목록의 필터 박스 맨 위에 검색창을 넣어 검색과 필터를 함께 쓴다(`lib/components/FilterBar.svelte`). 별도 `/search` 페이지와 헤더의 "검색" 메뉴는 없앴다. 공개 API에 검색어 `q`(모든 언어의 제목·slug 부분 일치)를 추가했다 — `scls-platform`의 `apps/api/src/lib/event-filter.ts`, `routes/public-events.ts` ([08-api-and-ics.md §8.2](../plan/08-api-and-ics.md#82-공개-api-예시))
+
   - **완료** — 언어 및 배경 모드 — 헤더 오른쪽 "설정" 메뉴 하나에 언어(한국어/日本語/English)와 화면 모드(시스템/라이트/다크)를 모았다(`lib/components/SettingsMenu.svelte`). 언어를 바꿔도 현재 경로와 검색 조건은 유지된다
+
   - **완료** — 행사별 보여주는 내용물 관련 — 카드를 "요약 + 다음 일정" 방식으로 바꿨다(`lib/components/EventCard.svelte`, `lib/schedule.ts`, `lib/tags.ts`). 기간·제목·장소·분류 칩(최대 4개)만 싣고, 그 행사에서 지금 시점 기준 가장 가까운 일정 1개(D-day, 진행 중이면 "진행 중")와 "일정 N개 더 보기"를 붙여 일정 종류가 행사마다 달라도 카드 크기가 일정하다. "확정" 표시는 빼고 연기·취소 등만 표시한다. 같은 종류 일정이 여러 개인 행사는 DB·API에 구분 이름이 없어 같은 이름으로 나온다(후속)
+
   - **완료** — 한국 국기 관련 — 직접 그린 그림(태극기 4괘 누락)과 Windows에서 글자로 깨지는 이모지를 flag-icons(MIT)의 표준 국기 SVG로 교체했다(한국·일본, `lib/components/CountryBadge.svelte`). 국가 선택칸의 이모지는 뺐다
+
   - **미완료·진행/검토 중** — 그 외 — 1차 정리 완료: 이모지를 통일된 선 아이콘(`@lucide/svelte`)으로 교체, 헤더 로고 아래 태그라인 중복 삭제, 목록 페이지 상단 정리, 한국어 줄바꿈을 단어 단위로, 언어 전환 시 `<html lang>` 갱신, 일정 시각 옆에 타임존(KST·JST) 표기, 장소·주최 이름과 장소 주소가 화면 언어를 따르도록 공개 API 수정(`locale`; 번역 주소는 `entity_localizations.address` 칸을 새로 두고 Backstage 번역 패널에서 입력 — [08-api-and-ics.md §8.2](../plan/08-api-and-ics.md#82-공개-api-예시)). 이후 화면을 쓰면서 발견되는 수정은 이어서 반영한다
+
   - **완료** — 검색엔진·링크 미리보기 기반 (2026-10-20) — 페이지 제목·설명·Open Graph 태그를 레이아웃 한 곳에서 그리고(`lib/seo.ts`, 각 페이지 load가 `seo`를 돌려준다), 행사 상세에는 schema.org `Event` 구조화 데이터(JSON-LD)를 넣었다. 검색어·필터를 건 목록은 `noindex`로 둔다. `/sitemap.xml`(행사 전체, 언어별 주소와 `hreflang` 연결)과 `/robots.txt`(`Sitemap` 줄 포함)는 접속한 주소로 만든다. 로케일 루트 주소를 `/ja/`가 아니라 `/ja`로 바로잡았다(`/ja/`는 308로 넘어간다). 미리보기 이미지(`og:image`)는 디자인이 정해진 뒤에 넣는다
+
   - **미완료·진행/검토 중** — 티켓 판매 구조(예매처·권종 가격·티켓 일정의 이름과 대상) — WONDERLIVET처럼 국내·해외 예매처가 나뉘고 권종별 가격이 있는 행사를 담기 위해 모든 행사에 공통으로 둔다. 1단계 구현: DB(`event_ticket_channels`·`event_ticket_types`, `event_schedules.audience`, 다국어 대상 `TICKET_CHANNEL`·`TICKET_TYPE`), 공개 API(`ticket`, 일정의 `title`·`audience`), Onstage 상세의 "티켓" 구역과 일정의 국내/해외 표시, 입력 스크립트(`scls-platform`의 `seed:tickets`)와 확인된 초기 데이터(WONDERLIVET·AGF·지스타·코믹월드 337). 일러스타 페스 14·코믹월드 338·코믹마켓 109·AnimeJapan 2027은 확인된 티켓 정보가 없어 비어 있다. WONDERLIVET은 나무위키 기준으로 주최(LIVET·원더로크)·메인 스폰서(멜론, 역할 `MAIN_SPONSOR` 추가)·공식/SNS 링크·예매처 링크도 입력했다(`seed:event-info`). Backstage 입력 화면도 구현했다(2026-10-20, `scls-platform`) — 행사 목록의 "티켓" 버튼으로 예매처(이름·대상·예매 링크·정렬)와 권종(이름·통화별 가격·정렬)을 관리하고, 각 항목의 다국어 이름·메모는 같은 화면에서 입력한다. 일정 패널에는 대상(전체/국내/해외) 선택과 일정 이름 번역 입력을 더했다(`apps/api`의 `event-ticket-channels.ts`·`event-ticket-types.ts`, `apps/backstage`의 `EventTicketsPanel.tsx`). 남은 것: Onstage 리디자인이 끝난 뒤 화면에 띄울 정보를 필수·선택·불필요로 다시 따져 API와 수집·보관 방식을 점검하고, 그 결과로 구조 전체를 확장한다([04-database-design.md](../plan/04-database-design.md))
+
   - **완료** — 필터 검색 관련 기능 — 태그를 행사 형식 / 참가 방식 / 티켓 방식 드롭다운 3개로 나눠 각각 하나씩 골라 검색한다(`lib/components/FilterBar.svelte`, `events/+page.ts`). 같은 그룹 안의 태그는 "또는", 그룹 사이는 "그리고"로 처리하고 상위 태그를 고르면 하위 태그가 붙은 행사도 포함한다 — 공개 API `tags`와 ICS `custom.ics`가 같은 규칙을 쓰도록 `scls-platform`의 `apps/api/src/lib/event-filter.ts`로 조건 조립을 통합했다([08-api-and-ics.md §8.2](../plan/08-api-and-ics.md#82-공개-api-예시))
+
   - **미완료·진행/검토 중** — 행사장 부스 찾기 연결(검토 중, 착수 시점 미정) — 행사별 해시태그(SNS 검색 링크)와 공식 배치도·공식 서클 목록·비공식 지도 링크를 상세 페이지에 붙인다. 서클 DB·성인 확인은 하지 않는다. 방향과 근거는 [02-users-and-scope.md §2.2.4](../plan/02-users-and-scope.md#224-후기-확장-기능) 메모 참고
+
+## 공개 API의 초기 응답 메모
+
+기존 API 응답 예시 문서에 남아 있던 초기 구현 상태다. 현재는 Localizations CRUD가 구현되어 있어 아래 미완료 설명을 최신 상태로 사용하지 않는다. 현재 응답 범위는 [API 문서 §8.2](../plan/08-api-and-ics.md#82-공개-api-예시)를 따른다.
+
+다국어·번역 필드를 포함한 목표 응답 형식의 예시다. 현재 title/summary는 `entity_localizations`에서 조회하지만 Localizations CRUD API/UI가 미완료여서 대부분 null이며, 아래 예시 전체가 현재 응답 계약이라는 의미는 아니다.
 
 ---
 

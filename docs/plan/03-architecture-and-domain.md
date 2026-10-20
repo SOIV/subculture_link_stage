@@ -86,14 +86,14 @@ scls-platform          (비공개, 단일 Monorepo — pnpm workspaces 등)
    └─ config            (공통 설정)
 ```
 
-**결정 이유**
+**구현 기준**
 
-- 공개 범위와 비공개 핵심 구현을 Repository 경계로 분리한다([01-overview-and-principles.md §1.6.3](01-overview-and-principles.md#163-소스-공개-및-참여-정책)). 공개 Repository에는 문서와 향후 Onstage를 함께 두고, API/Backstage/Worker/Scheduler 및 내부 운영 구현은 Private `scls-platform`에 유지한다. Onstage는 공개 REST API만 소비하므로 Private 내부 DB 스키마·패키지와 직접 결합하지 않는다. `scls-onstage`는 서비스 컴포넌트 식별자이며 별도 공개 Repository 이름을 의미하지 않는다.
-- `api`/`backstage`/`worker`/`scheduler` 네 서비스는 `events`/`event_schedules`/`change_proposals`/`entity_localizations` 등 핵심 도메인 모델을 그대로 공유한다([§3.5](#35-데이터-계층), [04-database-design.md](04-database-design.md)). 이를 4개의 개별 저장소로 나누면 공유 타입을 사설 패키지로 배포·버전관리해야 하는데, 1인 + AI 페어 프로그래밍(Claude Code, Codex 등) 체제에서는 이 비용이 실이익보다 크다.
-- AI 코딩 에이전트는 하나의 워킹 디렉터리 컨텍스트 안에서 여러 서비스에 걸친 변경(예: DB 스키마 변경 → api/worker/backstage 동시 반영)을 한 번에 처리할 때 가장 효율적이다. 4개로 쪼개진 저장소를 오가며 각각에서 세션을 새로 여는 구조는 이런 작업에서 불필요한 마찰을 만든다.
-- 따라서 공개 범위 경계(문서·향후 Onstage vs 비공개 핵심 구현)에서만 저장소를 나누고, 비공개 영역은 하나의 Monorepo로 묶어 공유 패키지(`packages/db`, `packages/domain`)를 통해 타입을 직접 공유한다.
+- Onstage는 공개 REST API만 소비하고 Private DB 스키마·패키지에 직접 결합하지 않는다. `scls-onstage`는 서비스 식별자이며 별도 공개 Repository 이름이 아니다.
+- 비공개 API·Backstage·Worker·Scheduler는 `packages/db`·`packages/domain`으로 스키마·도메인 타입을 공유한다.
+- Backstage는 React + Vite + TanStack Router/Query + Tailwind v4를 사용하는 SPA다. 개발에서는 Vite가 `/admin`을 API로 프록시하고, 프로덕션도 Backstage 호스트의 `/admin/*` 프록시를 쓴다 ([§10.1.2](10-infra-ops-security.md#1012-배포-구조-예시)).
+- Onstage는 이 공개 Repository의 `apps/onstage`에서 Svelte/SvelteKit으로 개발한다.
 
-> **결정 (2026-09-03)**: 프론트엔드 프레임워크는 두 앱을 다르게 가져간다. `apps/backstage`는 React + Vite + TanStack Router/Query + Tailwind v4로 구현한다 — CRUD/폼 위주의 내부 관리자 도구라 관리자 UI 생태계와 AI 코딩 어시스트 학습량이 풍부한 React가 유리하다. 이 공개 Repository의 `apps/onstage`에서 개발하는 Subculture Onstage는 Svelte/SvelteKit을 사용한다 — 공개 웹이라 SEO·초기 로딩이 중요하고, 특히 iframe 위젯(embed/overlay/ambient, [08-api-and-ics.md §8.1.1](08-api-and-ics.md#811-노출-채널-계층-구조))은 번들 크기에 민감해 Svelte의 작은 런타임이 이점이 크다. Backstage는 기존 Fastify `/admin` API를 그대로 소비하는 순수 SPA이며, 개발 환경에서는 CORS 설정 대신 Vite dev server 프록시(`/admin` → API)로 동일 오리진처럼 동작시키며, 프로덕션에서도 `backstage.*` 호스트가 `/admin/*`를 API로 프록시해 같은 구조를 유지한다([10-infra-ops-security.md §10.1.2](10-infra-ops-security.md#1012-배포-구조-예시)).
+저장소 분리 이유와 2026-09-03 프레임워크 선택 과정은 [설계 기록](../devlog/phase-0-planning-and-design.md)에 보관한다.
 
 ## 3.3 Event Series와 Event 구분
 

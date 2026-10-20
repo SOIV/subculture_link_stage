@@ -333,7 +333,7 @@ description
 is_active
 ```
 
-태그 표시명은 `entity_localizations`(entity_type='TAG')로 다국어 제공한다 — 전용 `tag_localizations` 신설 여부는 ERD 작업([§4.5](#45-erd))에서 확정했다.
+태그 표시명은 `entity_localizations`(entity_type='TAG')로 다국어 제공한다. 별도 `tag_localizations`는 두지 않는다.
 
 ### 4.4.1 초기 시드 매핑 (확정 9개 행사 기준)
 
@@ -351,11 +351,11 @@ is_active
 | AnimeJapan | 전시 > 산업 전시, 공연 > 합동 라이브 | 유료 |
 | WONDERLIVET | 공연 > 합동 라이브 | 유료 (일자별 티켓 — 1일권/2일권/3일권, 별도 선착순 없음) |
 
-> **미확정 메모**: (일자별 권종·가격과 국내/해외 예매처는 위 `event_ticket_types`·`event_ticket_channels`로 반영했다.) 티켓 방식 중 "선착순"/"추첨" 세부 구분은 행사마다, 회차마다 다르므로 이 표에서는 무료/유료 대분류만 확정하고 세부값은 실제 일정(Event Schedule) 등록 시점에 개별 확인한다. 확인된 것: AGF·일러스타 페스는 둘 다 일산 킨텍스 개최로 수용 인원만큼 전체 입장권 수량이 한정된 선착순 구조(추첨 아님), WONDERLIVET은 선착순·추첨 없이 일자별(1일권/2일권/3일권) 고정가 판매 구조. 지스타는 서울이 아닌 부산 벡스코 개최라 AGF·일러스타 페스와는 규모가 달라 수량 제한이 없는 것으로 추정(미확인). TGS는 정보 없음(미확인). 일자별 티켓처럼 태그로 담기 어려운 세부 구조는 Event Schedule 단위 설계에서 반영한다.
+티켓 방식은 회차별로 달라질 수 있어 무료·유료 대분류 외의 선착순·추첨 여부는 일정 등록 시 개별 확인한다. 권종·가격과 국내·해외 예매처는 `event_ticket_types`·`event_ticket_channels`로 관리한다. 당시 행사별 확인·미확인 내역은 [초기 분류 기록](../devlog/phase-0-planning-and-design.md)에 보관한다.
 
 ## 4.5 ERD
 
-전체 테이블 간 관계를 다이어그램으로 정리한 ERD는 [database/erd.md](database/erd.md)에 있다. 도메인별로 6개 다이어그램(행사/일정, 조직·장소·작품·인물·태그, 수집·분석, 검수·변경, 다국어·번역, 인증·사용자·알림·스토리지)으로 나누어 정리했으며, 본 파일 §4.2~4.4에서 "또는"으로 열려 있던 세부 사항(태그 현지화 방식, change_proposals 제출 주체 표현, 다형 참조 허용 범위 등)을 확정한 내용도 포함한다.
+전체 테이블 관계는 [ERD](database/erd.md)의 도메인별 6개 다이어그램으로 제공한다. 현재 관계·참조 원칙은 [ERD 설계 기준](database/erd.md#확정하며-정리한-사항)을, 확정 과정은 [Phase 0 기록](../devlog/phase-0-planning-and-design.md)을 참고한다.
 
 설계상 컬럼 단위 정의와 제약조건은 [database/schema.sql](database/schema.sql)에 정리한다. 현재 Private `scls-platform`에는 Phase 1 범위의 Prisma 스키마와 초기 migration이 적용되어 있다. 이 SQL은 논리적 데이터 모델의 설계 기준으로 활용하며, 실제 적용 스키마와 migration은 Private Repository에서 관리한다.
 

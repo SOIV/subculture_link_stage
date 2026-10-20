@@ -11,14 +11,16 @@
 
 ### Phase 0 — 기획 및 기반 설계
 
+설계 확정 과정과 기획 체크리스트의 상세 기록은 [Phase 0 작업 로그](../devlog/phase-0-planning-and-design.md)에 보관한다.
+
 - [x] 프로젝트명 확정: Subculture Link Stage (SCLS)
-- [x] Repository 구조 및 분리 방식 확정 ([03-architecture-and-domain.md §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))
-- [x] PostgreSQL ERD 작성 ([database/erd.md](database/erd.md), [database/schema.sql](database/schema.sql))
-- [x] 일정 분류 코드 정의 (`schedule_type` 15종 — [database/schema.sql](database/schema.sql) §1)
-- [x] 번역 상태 및 검수 상태 정의 (`translation_source`/`translation_status` — [06-i18n-translation-glossary.md §6.1.3](06-i18n-translation-glossary.md#613-번역-출처-및-상태))
-- [x] 태그 분류 코드 확정 (트리 구조는 [04-database-design.md §4.4](04-database-design.md#44-태그-구조), 확정 9개 행사 기준 초기 시드 매핑은 [§4.4.1](04-database-design.md#441-초기-시드-매핑-확정-9개-행사-기준) — 티켓 방식 세부 구분 등 잔여 항목은 Phase 1 구현과 병행)
-- [x] 초기 대상 행사 시리즈 9개 선정 ([02-users-and-scope.md §2.3.3](02-users-and-scope.md#233-초기-대상-행사-시리즈-확정) — 실제 DB 등록 콘텐츠 작업은 Phase 1 구현과 병행)
-- [ ] 초기 수집 출처 및 이용 조건 확인 (X/Instagram 등 SNS API 접근 가능 여부 포함 — Phase 2에서 필요, Phase 1 착수를 막지 않음)
+- [x] 공식 공개 Repository + 비공개 Monorepo 구조 확정 ([§3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))
+- [x] PostgreSQL ERD·참고 DDL 작성 ([ERD](database/erd.md), [DDL](database/schema.sql))
+- [x] 일정 분류 코드 15종 정의 ([DDL §1](database/schema.sql))
+- [x] 번역 출처·검수 상태 정의 ([§6.1.3](06-i18n-translation-glossary.md#613-번역-출처-및-상태))
+- [x] 태그 트리·초기 시드 매핑 확정 — 티켓 방식 세부값은 Phase 1과 병행 ([§4.4](04-database-design.md#44-태그-구조))
+- [x] 초기 대상 행사 시리즈 9개 선정 ([§2.3.3](02-users-and-scope.md#233-초기-대상-행사-시리즈-확정))
+- [ ] 초기 수집 출처·이용 조건 확인 — SNS API 접근 포함, Phase 2 착수 전 확인
 
 ### Phase 1 — Core MVP
 
@@ -50,8 +52,8 @@
 
 ### Phase 2 — 수집 및 검수
 
-- [ ] 행사 관리자 로그인·인증 방식 설계 (SSO 로그인 + 소셜 연동 자동 인증으로 메인 계정에 묶인 행사 시리즈 연결 + 루트 관리자 최종 확인, 그 외 행사는 증명 자료 심사, 소셜·일반 로그인은 기존 수동 절차 유지. 공식 SNS 계정 목록과 시리즈 단위 권한 범위 등 스키마 신설·변경 포함, 계정 도입 구현 전에 확정 — [07-admin-dashboard.md §7.6.3](07-admin-dashboard.md#763-권한-부여-절차) 미결 사항 참고)
-- [ ] 행사 관리자 계정 도입 (대표·하위 3단계 권한 부여 절차 구현 — [07-admin-dashboard.md §7.6.3](07-admin-dashboard.md#763-권한-부여-절차), Change Proposal 파이프라인을 통해 제안 제출)
+- [ ] 행사 관리자 로그인·인증 설계 — SSO·소셜 연동·증명 자료 심사와 권한 범위 확정 ([§7.6.3](07-admin-dashboard.md#763-권한-부여-절차))
+- [ ] 행사 관리자 계정 도입 — 대표·하위 권한 부여와 Change Proposal 제안 제출 ([§7.6.3](07-admin-dashboard.md#763-권한-부여-절차))
 - [ ] Sources 및 Source Rules 구현
 - [ ] 공식 웹사이트 1~2개 Collector 구현
 - [ ] Collected Documents 및 Storage Object 구현
@@ -93,9 +95,9 @@
 
 ### Phase 6 — 운영 확장
 
-- [ ] API Key 발급 체계 및 개발자 콘솔 (기본 공개 조회는 Phase 3에 이미 개방됨 — 여기서는 상향 Rate Limit, Webhook 구독 등 심화 기능 대상)
-- [ ] 사용자 개인 구독 및 개인 ICS (캘린더 표시 방식 사용자 지정 포함: 판매·접수 기간을 막대 / 시작만 / 시작+마감, 국내·해외, 알림 시점 — 계정별 설정으로 저장하고 구독 주소는 그대로 설정만 수정. [08-api-and-ics.md §8.6.5](08-api-and-ics.md#865-피드-품질))
-- [ ] 내 행사 기록(관심·갈 예정·다녀옴)과 연간 리캡 (Phase 4 로그인 직후가 아니라 등록 행사와 사이트 사용량이 어느 정도 확인된 뒤 착수 — 방향은 [02-users-and-scope.md §2.2.4](02-users-and-scope.md#224-후기-확장-기능) 메모 참고)
+- [ ] API Key·개발자 콘솔 — 상향 Rate Limit·Webhook 등 심화 기능 ([§8.5](08-api-and-ics.md#85-openapi-공개-전략))
+- [ ] 개인 구독·개인 ICS — 표시 방식·대상·알림을 계정별 저장, 구독 주소 유지 ([§8.6.5](08-api-and-ics.md#865-피드-품질))
+- [ ] 내 행사 기록·연간 리캡 — 등록 행사·사용량 확인 후 착수 ([§2.2.4](02-users-and-scope.md#224-후기-확장-기능))
 - [ ] Webhook 또는 변경 Feed
 - [ ] 외부 수집 소스 확대
 - [ ] 비용·용량 모니터링 자동화
@@ -126,27 +128,29 @@
 
 ### 기획
 
-- [x] 전체 플랫폼 및 서비스 명칭 확정: SCLS / Subculture Onstage / Subculture Backstage / SCLS API
+결정 과정과 구현 근거는 [Phase 0 작업 로그](../devlog/phase-0-planning-and-design.md)를 참고한다.
+
+- [x] 플랫폼·서비스 명칭 확정: SCLS / Onstage / Backstage / SCLS API
 - [x] 행사와 일정 분리
 - [x] 수집·분석·검수 계층 구분
 - [x] 다국어 번역 구조 정의
-- [x] 번역 수정 요청 및 용어집 제안 방향 정의
+- [x] 번역 수정 요청·용어집 제안 방향 정의
 - [x] PostgreSQL + Object Storage 방향 확정
 - [x] 프로젝트명 확정: Subculture Link Stage (SCLS)
-- [x] 계획 문서를 카테고리별 파일로 분리 ([docs/plan/](README.md))
-- [x] OpenAPI 공개 시점 확정 (Phase 2 개발 착수 / Phase 3 전체 공개)
-- [x] 운영 형태 방향 정리 (무료 운영·후원 기반. 부분 유료화는 확정하지 않았고 제외되어 무료·비영리로 갈 수도 있음, Onstage 광고 패널은 검토 중)
-- [x] 공개 범위 확정 (프로젝트·개발/설계·ERD·참고 DDL·Roadmap·Legacy 문서 공개, 향후 OpenAPI/API 문서·Onstage 소스 공개, API/Backstage/Worker/Scheduler 및 내부 운영 구현 비공개)
-- [x] 개발·운영 참여 방식 확정 (메인 개발자 문의 기반)
-- [ ] 초기 데이터 분류 코드 잔여 항목 확정 (기본 schedule/translation/tag 코드는 §11.1 Phase 0에서 정리, 티켓 방식 등 세부 분류는 구현과 병행)
-- [x] 관리자 인증 방식 확정 (루트 관리자 / 행사 관리자 대표 / 행사 관리자 하위 계정 3단계 구조 — [07-admin-dashboard.md §7.6](07-admin-dashboard.md#76-인증-및-권한-구조))
-- [x] Repository 구조 확정 (2-Repo: 현재 `Subculture_Link_Stage` 공식 공개 Repository에 문서와 향후 Onstage를 함께 관리 + `scls-platform` 비공개 Monorepo — [03-architecture-and-domain.md §3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))
-- [x] ERD 확정 (도메인별 6개 다이어그램 + 전체 DDL — [database/erd.md](database/erd.md), [database/schema.sql](database/schema.sql))
-- [x] DB 제공자 확정 (Supabase, Neon은 상시 커넥션 시 과금 급증 리스크로 제외 — [10-infra-ops-security.md §10.1.1](10-infra-ops-security.md#1011-권장-기술-스택))
-- [x] 행사 관리자 권한 부여 세부 절차 확정 (신원 확인은 행사 공식 SNS 계정 DM, 대표는 최초 신원 확인된 요청자로 고정 — [07-admin-dashboard.md §7.6.3](07-admin-dashboard.md#763-권한-부여-절차))
-- [x] 행사 관리자 계정 도입 Phase 배치 (Change Proposal 파이프라인이 구축되는 Phase 2로 확정 — [02-users-and-scope.md §2.1.3](02-users-and-scope.md#213-행사-측-담당자-행사-관리자) 참고)
-- [x] Backstage 관리자 UI 다국어 지원 범위 확정 (ko/en/ja 3개 언어, `i18next` 기반 — 행사 콘텐츠 다국어(`entity_localizations`)와는 별개 개념. 결정 및 구현 완료 — [07-admin-dashboard.md §7.7](07-admin-dashboard.md#77-관리자-ui-다국어-지원))
-- [ ] 비용 상한 및 트리거 확정
+- [x] 계획 문서 주제별 분리 ([목차](README.md))
+- [x] OpenAPI 공개 단계 확정 — Phase 2 착수 / Phase 3 공개 ([§8.5](08-api-and-ics.md#85-openapi-공개-전략))
+- [x] 운영 형태 방향 정리 — 무료·후원 기본, 유료화·광고는 검토 중 ([§1.6.2](01-overview-and-principles.md#162-운영-형태))
+- [x] 프로젝트·설계·Onstage 공개 및 내부 구현 비공개 범위 확정 ([§1.6.3](01-overview-and-principles.md#163-소스-공개-및-참여-정책))
+- [x] 개발·운영 참여 방식 확정 — 메인 개발자 문의
+- [ ] 초기 분류 코드 잔여 항목 확정 — 티켓 방식 등 세부 분류
+- [x] 관리자 인증 3단계 구조 확정 ([§7.6](07-admin-dashboard.md#76-인증-및-권한-구조))
+- [x] 공개 Repository + 비공개 Monorepo 구조 확정 ([§3.2.1](03-architecture-and-domain.md#321-repository-구조-확정))
+- [x] 도메인별 ERD·전체 참고 DDL 확정 ([ERD](database/erd.md), [DDL](database/schema.sql))
+- [x] 초기 DB 제공자 Supabase 확정 ([§10.1.1](10-infra-ops-security.md#1011-권장-기술-스택))
+- [x] 행사 관리자 권한 부여 기본 절차 확정 ([§7.6.3](07-admin-dashboard.md#763-권한-부여-절차))
+- [x] 행사 관리자 계정 도입을 Phase 2에 배치 ([§2.1.3](02-users-and-scope.md#213-행사-측-담당자-행사-관리자))
+- [x] Backstage UI ko/en/ja 지원 — 행사 콘텐츠 번역과 별도 ([§7.7](07-admin-dashboard.md#77-관리자-ui-다국어-지원))
+- [ ] 비용 상한·트리거 확정
 
 ### 구현
 
