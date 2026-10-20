@@ -418,7 +418,9 @@ export function tv(
 
 /** 로케일이 붙지 않은 절대 경로(예: '/events/agf-2026')를 그 로케일의 실제 경로로 바꾼다. */
 export function localeHref(locale: Locale, path: string): string {
-	return locale === DEFAULT_LOCALE ? path : `/${locale}${path}`;
+	if (locale === DEFAULT_LOCALE) return path;
+	// 루트는 `/ja/`가 아니라 `/ja`다 — 슬래시가 붙은 주소는 308로 `/ja`로 넘어가므로 canonical·sitemap에 쓰면 안 된다.
+	return path === '/' ? `/${locale}` : `/${locale}${path}`;
 }
 
 /** 현재 경로에서 로케일 접두사를 떼어낸 "로케일 없는" 경로를 돌려준다. */

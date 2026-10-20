@@ -3,11 +3,20 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import { DEFAULT_LOCALE, LOCALES, localeHref, stripLocale, t } from '$lib/i18n';
+	import { OG_LOCALE } from '$lib/seo';
 	import type { LayoutProps } from './$types';
 
 	let { data, children }: LayoutProps = $props();
 	let locale = $derived(data.locale);
 	let basePath = $derived(stripLocale(page.url.pathname));
+
+	// 제목·설명은 각 페이지의 load가 돌려주는 seo를 따르고, 없으면 사이트 기본값이다.
+	let seo = $derived(page.data.seo ?? {});
+	let siteName = $derived(t(locale, 'site.name'));
+	let title = $derived(seo.title ? `${seo.title} · ${siteName}` : siteName);
+	let description = $derived(seo.description ?? t(locale, 'site.tagline'));
+	// 정식 도메인이 정해지기 전에도 접속한 주소를 그대로 따라가므로 도메인을 바꿔도 손댈 곳이 없다.
+	let canonical = $derived(page.url.origin + localeHref(locale, basePath));
 
 	const HREFLANG: Record<(typeof LOCALES)[number], string> = { ko: 'ko-KR', ja: 'ja-JP', en: 'en' };
 
@@ -19,9 +28,20 @@
 </script>
 
 <svelte:head>
-	<title>{t(locale, 'site.name')}</title>
-	<meta name="description" content={t(locale, 'site.tagline')} />
-	<link rel="canonical" href={page.url.origin + localeHref(locale, basePath)} />
+	<title>{title}</title>
+	<meta name="description" content={description} />
+	{#if seo.noindex}<meta name="robots" content="noindex,follow" />{/if}
+	<link rel="canonical" href={canonical} />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content={siteName} />
+	<meta property="og:title" content={seo.title ?? siteName} />
+	<meta property="og:description" content={description} />
+	<meta property="og:url" content={canonical} />
+	<meta property="og:locale" content={OG_LOCALE[locale]} />
+	{#each LOCALES.filter((target) => target !== locale) as target (target)}
+		<meta property="og:locale:alternate" content={OG_LOCALE[target]} />
+	{/each}
+	<meta name="twitter:card" content="summary" />
 	{#each LOCALES as target (target)}
 		<link
 			rel="alternate"

@@ -1,5 +1,7 @@
 import { listEvents, listTagGroups } from '$lib/api';
 import type { ListFilters } from '$lib/filters';
+import { t } from '$lib/i18n';
+import type { PageSeo } from '$lib/seo';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch, parent, url }) => {
@@ -35,5 +37,11 @@ export const load: PageLoad = async ({ fetch, parent, url }) => {
 		tags: Object.values(groups).join(',') || undefined
 	});
 
-	return { events, tagGroups, filters };
+	// 검색어·필터를 건 결과 페이지는 조합이 무한히 많아 색인에 넣지 않는다(조건 없는 목록만 색인).
+	const isFiltered = Boolean(
+		filters.q || filters.country || filters.from || filters.to || Object.keys(groups).length > 0
+	);
+	const seo: PageSeo = { title: t(locale, 'nav.events'), noindex: isFiltered };
+
+	return { events, tagGroups, filters, seo };
 };

@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { getEvent, listEventSeries, listTagGroups } from '$lib/api';
+import { metaDescription, type PageSeo } from '$lib/seo';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch, parent, params }) => {
@@ -20,5 +21,10 @@ export const load: PageLoad = async ({ fetch, parent, params }) => {
 	}
 	const seriesTitles = new Map(series.items.map((item) => [item.slug, item.title ?? item.slug]));
 
-	return { event, tagNames, seriesTitles };
+	const seo: PageSeo = {
+		title: event.title ?? event.slug,
+		description: event.summary ? metaDescription(event.summary) : undefined
+	};
+
+	return { event, tagNames, seriesTitles, seo };
 };

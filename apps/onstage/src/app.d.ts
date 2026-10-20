@@ -11,7 +11,9 @@ declare global {
 
 		// interface Error {}
 		// interface Locals {}
-		// interface PageData {}
+		interface PageData {
+			seo?: import('$lib/seo').PageSeo;
+		}
 		// interface PageState {}
 	}
 }

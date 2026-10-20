@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 	import CalendarDays from '@lucide/svelte/icons/calendar-days';
 	import Link from '@lucide/svelte/icons/link';
@@ -17,6 +18,7 @@
 		urlTypeLabel
 	} from '$lib/format';
 	import { localeHref, t } from '$lib/i18n';
+	import { eventJsonLd, jsonLdScript } from '$lib/seo';
 	import { accentColor } from '$lib/theme';
 	import CountryBadge from '$lib/components/CountryBadge.svelte';
 	import type { PageProps } from './$types';
@@ -24,6 +26,10 @@
 	let { data }: PageProps = $props();
 	let locale = $derived(data.locale);
 	let event = $derived(data.event);
+	let jsonLd = $derived.by(() => {
+		const data = eventJsonLd(event, page.url.origin + localeHref(locale, `/events/${event.slug}`));
+		return data ? jsonLdScript(data) : null;
+	});
 	// 공식 표기가 없는 언어라 이 화면이 직접 옮긴 제목/설명 — 번역 검수 전이라는 표시.
 	let needsReview = $derived(event.translation?.status === 'REVIEW_REQUIRED');
 	// 시리즈 단위로 같은 색이 나오게 한다(목록 카드와 동일한 기준) — 단독 행사는 자기 slug로 대신한다.
@@ -69,8 +75,11 @@
 </script>
 
 <svelte:head>
-	<title>{event.title ?? event.slug} · {t(locale, 'site.name')}</title>
-	{#if event.summary}<meta name="description" content={event.summary} />{/if}
+	{#if jsonLd}
+		<!-- jsonLdScript가 `<`를 이스케이프하므로 데이터가 </script>로 빠져나갈 수 없다. -->
+		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+		{@html jsonLd}
+	{/if}
 </svelte:head>
 
 <article class="space-y-8">
