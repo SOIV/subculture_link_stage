@@ -82,11 +82,15 @@ source_type
 source_url
 account_identifier
 collection_method
-check_interval
+check_interval_minutes
 priority
 is_active
 terms_note
+last_checked_at
+last_success_at
 ```
+
+`last_checked_at`·`last_success_at`은 수집기가 기록하는 값이다. 관리자가 입력하는 값은 아니다.
 
 `source_type` 예시:
 
@@ -101,6 +105,16 @@ TICKET_PLATFORM
 STREAMING_PLATFORM
 MANUAL
 ```
+
+`collection_method`는 `HTML_SCRAPE`·`RSS`·`API`·`MANUAL` 중 하나다.
+
+> **구현 현황 (2026-10-21)**: Private `scls-platform`에 `sources` 표와 Backstage 관리 화면·`/admin/sources` API를 구현했다([07. 관리자 대시보드 §7.3](07-admin-dashboard.md#73-수집-소스-관리), [작업 로그](../devlog/2026-10.md)). 설계와 맞춘 점과 구현에서 정한 점은 다음과 같다.
+>
+> - `source_url`은 http(s) 주소만 받는다. 수집기가 가져갈 주소이기 때문이다.
+> - `terms_note`가 비어 있는 출처는 목록에서 "미기재"로 표시한다. 수집해도 되는지 근거를 아직 적지 않은 출처를 알아보기 위해서다.
+> - `priority`는 큰 값을 목록 위에 보여 준다. 설계 문서에 방향이 정해져 있지 않아 구현에서 정한 것이며, 수집기가 이 값을 쓰기 시작할 때 방향을 확정한다.
+> - `event_series_id`는 DDL처럼 삭제 동작을 따로 두지 않아(RESTRICT) 출처가 연결된 시리즈는 지울 수 없다.
+> - 출처는 번역(`entity_localizations`) 대상이 아니다.
 
 > **리스크 메모 — SNS 수집 가능성**: X(Twitter)와 Instagram은 공식 API 접근이 유료화·제한되어 있고 약관상 자동 수집이 제한되는 경우가 많다. `sources.terms_note` 필드가 있는 이유가 이것이며, [11-roadmap-and-success.md](11-roadmap-and-success.md)의 Phase 0에 있는 "초기 수집 출처 및 이용 조건 확인"이 이 리스크를 미리 검증하기 위한 항목이다. X/Instagram 자동 수집이 막힐 경우 공식 홈페이지·RSS·수동 제보 위주로 Phase 2~3 범위를 조정해야 한다.
 

@@ -3,7 +3,7 @@
 # 11. 개발 단계, 성공 기준, 구현 체크리스트
 
 > [!NOTE]
-> 현재 Phase 1 Core MVP 진행 중이다. Private `scls-platform`에서 API·Backstage 기본 기능을, 이 공개 Repository의 `apps/onstage`에서 메인·행사 목록·상세를 구현해 임시 도메인으로 배포·테스트 중이다. 정식 도메인은 미정이다.
+> 현재 Phase 1 Core MVP 진행 중이다. Private `scls-platform`에서 API·Backstage 기본 기능을, 이 공개 Repository의 `apps/onstage`에서 메인·행사 목록·상세를 구현해 임시 도메인으로 배포·테스트 중이다. 정식 도메인은 미정이다. Phase 2는 수집 출처(Sources) 관리부터 착수했다.
 > 이 문서는 **현재 상태·남은 작업·성공 기준**을 관리한다. 상세 변경 내용과 구현 근거는 [작업 로그](../devlog/README.md)에 기록한다.
 > `[x]`는 해당 기획·설계 또는 개별 구현 항목의 완료를 뜻하며, 세부 기능 완료만으로 Phase 전체 완료나 운영 배포를 뜻하지 않는다.
 
@@ -54,7 +54,10 @@
 
 - [ ] 행사 관리자 로그인·인증 설계 — SSO·소셜 연동·증명 자료 심사와 권한 범위 확정 ([§7.6.3](07-admin-dashboard.md#763-권한-부여-절차))
 - [ ] 행사 관리자 계정 도입 — 대표·하위 권한 부여와 Change Proposal 제안 제출 ([§7.6.3](07-admin-dashboard.md#763-권한-부여-절차))
-- [ ] Sources 및 Source Rules 구현
+- [ ] Sources 및 Source Rules 구현 — Sources부터 착수. 구현 기록은 [작업 로그 2026-10](../devlog/2026-10.md)
+  - [x] Sources 표·`/admin/sources` API·Backstage 수집 출처 화면 — 2026-10-21 구현. 목록 필터, 생성·수정·삭제, 활성 토글, 이용 조건 메모(`terms_note`) 입력 ([§5.2.1](05-storage-and-collection.md#521-행사별-수집-프로필), [§7.3](07-admin-dashboard.md#73-수집-소스-관리))
+  - [ ] Sources migration 적용·초기 9개 시리즈 출처 입력 — migration 파일과 입력 데이터(32건, 전부 비활성)·스크립트(`seed:sources`)는 준비했으나 DB에는 아직 적용하지 않았다
+  - [ ] Source Rules — 미착수
 - [ ] 공식 웹사이트 1~2개 Collector 구현
 - [ ] Collected Documents 및 Storage Object 구현
 - [ ] 해시 중복 검사
