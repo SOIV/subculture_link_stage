@@ -65,7 +65,7 @@
 - [ ] 관리자 승인·거절 UI
 - [ ] 원문 스냅샷 및 변경 비교
 - [ ] **OpenAPI 3.x 스펙 작성 착수** (비공개, 내부 검증용) — [08-api-and-ics.md §OpenAPI 공개 전략](08-api-and-ics.md#85-openapi-공개-전략)
-- [ ] **API Docs 페이지 개발 착수** (비공개)
+- [ ] **API Docs 페이지 개발 착수** (비공개) — 문서 사이트 도구는 Fumadocs 우선, 차선책 Starlight + Scalar ([§8.5.3](08-api-and-ics.md#853-문서-사이트-도구-확정)). 구현은 미착수
 
 ### Phase 3 — 다국어 번역
 

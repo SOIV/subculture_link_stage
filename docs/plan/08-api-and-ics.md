@@ -166,7 +166,7 @@ Phase 1 (Core MVP)
 
 Phase 2 (수집 및 검수)
 - Phase 1 구현 라우트 및 추가 라우트를 기준으로 OpenAPI 3.x 스펙 작성 착수
-- API Docs 페이지(예: Swagger UI/Redoc 기반) 개발 착수
+- API Docs 페이지 개발 착수 (문서 사이트 도구는 Fumadocs 우선 — [§8.5.3](#853-문서-사이트-도구-확정))
 - 이 시점에는 비공개 상태로 관리자만 접근 (내부 정합성 확인용)
 
 Phase 3 (다국어 번역)
@@ -187,8 +187,19 @@ Phase 6 (운영 확장)
 ### 8.5.2 미결 사항
 
 - 스펙 우선(Spec-first) vs 코드 우선(Code-first, 라우트 주석에서 자동 생성) 방식 중 어느 쪽으로 OpenAPI 스펙을 유지보수할지는 Phase 2 착수 시점에 결정한다.
-- API 문서는 이 공식 공개 Repository에서 관리할 예정이다. Subculture Onstage 내 developer/API docs route로 둘지 별도 docs deployment로 둘지와 서브도메인 구성은 미정이다.
-- 문서 사이트 도구는 미정이다. Fumadocs(OpenAPI 공식 패키지 제공)를 우선 검토하고 Starlight를 대안으로 두며, 확정은 Phase 2 OpenAPI 작업 착수 시점에 한다.
+- API 문서는 이 공식 공개 Repository에서 관리할 예정이다. 문서 사이트 도구는 Fumadocs 우선, Starlight 차선으로 정했고([§8.5.3](#853-문서-사이트-도구-확정)), Fumadocs 사이트는 Onstage(SvelteKit)와 별개의 Next.js 앱이라 Onstage 내부 route가 아니라 별도 docs deployment(정적 산출물)로 간다. 서브도메인 등 배포 구성은 미정이다.
+- API 레퍼런스는 Fumadocs의 `fumadocs-openapi`로 만든다. 언어별 OpenAPI 문서를 두는 방향이며, 그 관리 방식(3개 파일과 구조 검사, 또는 OpenAPI Overlay)은 Phase 2 OpenAPI 작업 착수 시점에 정한다.
+- 문서 버전 관리는 공개 계약이 `/v1` 하나인 동안 필요하지 않다. `/v2`가 현실화될 때 정한다.
+
+### 8.5.3 문서 사이트 도구 (확정)
+
+API Docs를 포함한 개발자 문서 사이트는 **Fumadocs** 로 만든다(Next.js 정적 export + 공식 `fumadocs-openapi`, Cloudflare 정적 배포). 차선책은 **Starlight + Scalar** 이며, 아래 전환 신호가 확인되면 전환을 검토한다. 이전에는 Starlight를 확정하고 Fumadocs를 차선으로 두었으나 2026-10-24에 순서를 바꿨다.
+
+- 두 구성 모두 한·일·영 가이드, 로케일별 OpenAPI 레퍼런스, 실제 요청 플레이그라운드, 정적 호스팅을 PoC에서 통과했다. Fumadocs를 우선한 이유는 API 개발자 문서가 주력인 조건에서 레퍼런스와 가이드가 같은 검색·사이드바·언어 전환을 쓰고 외부 CDN이 없다는 점이다. 격차는 근소하다(중요 조건 충족도 환산 약 51 대 49).
+- 착수 시 보완할 것: 미번역 안내 구현, 한국어 조사 변형 검색 보완, 한·일 UI 번역 사전 210개 작성·검수, 정적 export 제약(루트 리다이렉트 등) 처리, 버전 고정.
+- 전환 신호: 우선순위가 가이드 중심으로 바뀔 때, 한국어 조사 검색을 Fumadocs에서 보완하기 어려울 때, 업그레이드·빌드 부담이 1인 운영에 과할 때. 차선은 `starlight-openapi`가 아니라 Scalar를 쓴다.
+- 도구가 바뀌어도 API 계약(§8.2)과 OpenAPI 스펙은 영향을 받지 않는다. 문서 본문과 도구 전용 컴포넌트·플러그인만 옮기면 된다.
+- 근거와 비중 분석, 보완 항목 전체는 [결정 변경 기록](../devlog/docs-tool-decision-fumadocs-first-2026-10-24.md)에 있다.
 
 ## 8.6 ICS 및 캘린더 설계
 

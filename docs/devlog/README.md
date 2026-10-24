@@ -17,12 +17,16 @@
 | [인증·관리자 UI·인프라 결정](auth-and-infrastructure-history.md) | 세션·신원 확인·UI 언어·DB·호스팅 선택, 초기 배포·운영 결정 |
 | [캘린더 구독·피드 개선](calendar-and-subscription-history.md) | 구독 메뉴·시간대·제목·알림 개선, 과거 목표표와 개인화 유예 결정 |
 | [향후 기능·인증 검토](future-feature-discussions.md) | Phase 2 인증·연간 리캡·부스 찾기의 미확정 논의. 구현 완료 기록과 구분 |
+| [Docs 프레임워크 독립 평가 — Codex (2026-10-24)](docs-framework-evaluation-codex-2026-10-24.md) | API 중심·한/일/영 다국어 요구에 따른 Fumadocs·Starlight 조합 비교. 재검토 제안이며 기존 확정 변경·구현 기록이 아님 |
+| [Docs 사이트 도구 재평가 (Claude)](docs-site-tool-evaluation-claude.md) | Starlight·Fumadocs 요구사항 기준 비교, 추천, 최소 검증(PoC) 범위. 확정이 아닌 검토 중 기록 |
+| [Docs 사이트 도구 PoC 실행 결과](docs-tool-poc-results-2026-10-24.md) | Starlight+Scalar와 Fumadocs(Next 정적 export)를 실제 설치·빌드·정적 서빙해 확인한 관찰 값과 재현 방법. 확정이 아닌 검증 기록 |
+| [Docs 사이트 도구 결정: Fumadocs 우선·Starlight 차선](docs-tool-decision-fumadocs-first-2026-10-24.md) | 결정 변경 기록, 중요 조건 비중 분석(약 49 대 51), 착수 시 보완 항목, 차선 전환 신호. 구현은 미착수 |
 
 ## 월별 기록
 
 | 기록 | 범위·성격 |
 |---|---|
-| [2026-10](2026-10.md) | 수집 출처(Sources) 관리 구현(Phase 2), 초기 9개 시리즈 공식 출처·SNS API 이용 조건 조사(Phase 2 사전 확인, 검토 중) |
+| [2026-10](2026-10.md) | API Docs 사이트 도구 결정(Starlight 확정 후 Fumadocs 우선으로 변경, Phase 2 사전 결정), 수집 출처(Sources) 관리 구현(Phase 2), 초기 9개 시리즈 공식 출처·SNS API 이용 조건 조사(Phase 2 사전 확인, 검토 중) |
 
 기존 기록은 2026-10-20에 이관했다. 이관일을 작업일로 간주하지 않으며, 원문에 명시된 날짜만 유지했다.
 

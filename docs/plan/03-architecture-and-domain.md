@@ -73,7 +73,7 @@ scls-scheduler
 Subculture_Link_Stage   (공식 공개 Repository — 현재 이 저장소)
 ├─ docs/               (프로젝트·개발/설계 문서, ERD·참고 DDL, Roadmap, Legacy)
 ├─ apps/onstage         (Subculture Onstage — SvelteKit, 착수, 임시 도메인으로 초기 배포)
-└─ [예정] OpenAPI/API 개발자 문서 (경로·배포 방식 미정)
+└─ [예정] OpenAPI/API 개발자 문서 (Fumadocs 우선, Starlight 차선 — [08 §8.5.3](08-api-and-ics.md#853-문서-사이트-도구-확정), 경로·배포 구성은 미정)
 
 scls-platform          (비공개, 단일 Monorepo — pnpm workspaces 등)
 ├─ apps/api            (scls-api)
