@@ -1,0 +1,23 @@
+---
+title: Event API quick start
+description: Read event and ticket information. Use an ICS feed to subscribe to a calendar.
+---
+
+Read event and ticket information. Use an ICS feed to subscribe to a calendar.
+
+Find events in Korea and Japan, inspect tickets, and subscribe to event schedules.
+
+## GET /v1/events
+
+`country`, `tags`, `from`, `to`, `q`, `locale`
+
+```js
+const response = await fetch('http://127.0.0.1:4310/v1/events?country=JP&locale=ja');
+const result = await response.json();
+```
+
+[API reference](/en/api/)
+
+[relative-url-probe](subscription/)
+
+[relative-file-probe](./subscription.mdx)

@@ -1,0 +1,407 @@
+{
+  "methodology": "Distinct untranslated English labels observed in rendered non-code text, including scrollable content; accessible-only labels are counted separately. Guide, API page, playground, and site search are sampled, with tooltip probes when available. Unused OAuth and other UI are not covered.",
+  "uiPackage": "fumadocs-ui",
+  "uiKeys": 59,
+  "uiUniqueKeys": 59,
+  "openapiKeys": 151,
+  "openapiUniqueKeys": 149,
+  "overlap": [
+    "Copied Text(code block)(aria-label)",
+    "Copy Text(code block)(aria-label)"
+  ],
+  "unionKeys": 206,
+  "locales": {
+    "ko": {
+      "translatedKeys": 89,
+      "translatedUiKeys": 31,
+      "translatedOpenapiKeys": 60,
+      "missingKeys": 117,
+      "missingKeyList": [
+        "Ask AI(AI chat button)",
+        "Back to Home(404 page)",
+        "Close Banner(banner)(aria-label)",
+        "Copied Anchor Link(heading anchor)(aria-label)",
+        "Copied Link(accordion)(aria-label)",
+        "Copied Markdown(page actions)",
+        "Copy Link(accordion)(aria-label)",
+        "Edit on GitHub(edit page)",
+        "Image Viewer(image zoom)(aria-label)",
+        "Last updated on(page footer)",
+        "Layout Tab(layout tab trigger)",
+        "Next Image(image zoom)(aria-label)",
+        "No Headings(table of contents)",
+        "Open in ChatGPT(page actions)",
+        "Open in Claude(page actions)",
+        "Open in Cursor(page actions)",
+        "Open in GitHub(page actions)",
+        "Open in Scira AI(page actions)",
+        "Page Not Found(404 page)",
+        "Parameters(type table)",
+        "Previous Image(image zoom)(aria-label)",
+        "Prop(type table)",
+        "Read {url}, I want to ask questions about it.(page actions)",
+        "Returns(type table)",
+        "Search failed(search dialog)",
+        "Search failed, showing results for {query}(search dialog)",
+        "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.(404 page)",
+        "Toggle Menu(mobile menu)(aria-label)",
+        "1 item(playground)",
+        "Accepted(playground status info)",
+        "Add Item(playground)",
+        "Add(playground)",
+        "Back(playground)",
+        "Bad Gateway(playground status info)",
+        "Breadcrumb(playground)",
+        "Check the server URL. If the API does not allow cross-origin requests from this site, a proxy is needed.(playground result display)",
+        "Choose a file(playground)",
+        "Conflict(playground status info)",
+        "Copied Link(schema UI)(aria-label)",
+        "Copy Link(schema UI)(aria-label)",
+        "Created(playground status info)",
+        "Deprecated(schema UI)",
+        "Enter Property Name(playground)",
+        "Error(playground status info)",
+        "Field Info(playground)",
+        "Forbidden(playground status info)",
+        "Format(schema UI)",
+        "Found(playground status info)",
+        "Internal Server Error(playground status info)",
+        "Items(schema UI)",
+        "Length(schema UI)",
+        "Match(schema UI)",
+        "Method Not Allowed(playground status info)",
+        "Moved Permanently(playground status info)",
+        "Multiple Of(schema UI)",
+        "No property matching(schema UI)",
+        "Not Modified(playground status info)",
+        "Property Name(playground)",
+        "Range(schema UI)",
+        "Redirect(playground status info)",
+        "Remove Item(playground)(aria-label)",
+        "Remove(playground)",
+        "Service Unavailable(playground status info)",
+        "Show Path(schema UI)(aria-label)",
+        "Show Property(playground)",
+        "Switch Field(playground)",
+        "Unauthorized(playground status info)",
+        "Unprocessable Content(playground status info)",
+        "Use the {name} type in TypeScript.(TypeScript definitions)",
+        "Value in(schema UI)",
+        "{count} items(playground)",
+        "Add this to the allowed redirect URIs of your OAuth application.(OAuth dialog)",
+        "Authenticate using username and password.(OAuth dialog)",
+        "Authenticate with 3rd party services(OAuth dialog)",
+        "Authenticate with device.(OAuth dialog)",
+        "Authorization code(OAuth dialog)",
+        "Authorize(OAuth dialog)",
+        "Authorize(playground)",
+        "Basic <token>(security scheme)",
+        "Bearer <token>(security scheme)",
+        "Binary response body, {length} bytes(playground result display)",
+        "Callbacks(operation page)",
+        "Cancel(OAuth dialog)",
+        "Client Credentials(OAuth dialog)",
+        "Client certificate(security scheme)",
+        "Cookie Parameters(operation page)",
+        "Cookies(playground)",
+        "Deprecated(operation page)",
+        "Deprecated(playground)",
+        "Deprecated(security scheme)",
+        "Device Authorization(OAuth dialog)",
+        "Empty(operation page)",
+        "Enter this code on the verification page.(OAuth dialog)",
+        "Example {key}(operation page)",
+        "Failed to fetch token(playground)",
+        "Failed to load the OpenID Connect configuration(OAuth dialog)",
+        "Fetching token...(playground)",
+        "Implicit(OAuth dialog)",
+        "Include the client ID and secret in the token request body.(OAuth dialog)",
+        "Intended for the server-to-server authentication.(OAuth dialog)",
+        "Loading the OpenID Connect configuration...(OAuth dialog)",
+        "Open verification page(OAuth dialog)",
+        "OpenID Connect(security scheme)",
+        "Requires a client certificate installed in your browser.(playground)",
+        "Resource Owner Password Flow(OAuth dialog)",
+        "Retrieve the access token directly.(OAuth dialog)",
+        "Scope(security scheme)",
+        "Scopes(OAuth dialog)",
+        "Send as Basic Auth header(OAuth dialog)",
+        "Send client credentials in body(OAuth dialog)",
+        "Send the client ID and secret in the Authorization header.(OAuth dialog)",
+        "Test(scalar API client)",
+        "The client ID of your OAuth application.(OAuth dialog)",
+        "The client secret of your OAuth application.(OAuth dialog)",
+        "Waiting for authorization...(OAuth dialog)",
+        "You will be redirected to authorize, then back to this page.(OAuth dialog)",
+        "You will get a code to enter on the verification page.(OAuth dialog)"
+      ],
+      "visibleEnglishLabelCount": 3,
+      "visibleEnglishLabels": [
+        "Copy Link",
+        "Length",
+        "Value in"
+      ],
+      "accessibleEnglishLabelCount": 1,
+      "accessibleEnglishLabels": [
+        "Field Info"
+      ],
+      "views": {
+        "guide": {
+          "visible": {},
+          "accessibility": {}
+        },
+        "api": {
+          "visible": {
+            "Length": [
+              "Length"
+            ],
+            "Value in": [
+              "Value in"
+            ]
+          },
+          "accessibility": {}
+        },
+        "apiCopyTooltip": {
+          "visible": {
+            "Copy Link": [
+              "Copy Link"
+            ],
+            "Length": [
+              "Length"
+            ],
+            "Value in": [
+              "Value in"
+            ]
+          },
+          "accessibility": {}
+        },
+        "playground": {
+          "visible": {},
+          "accessibility": {}
+        },
+        "playgroundInfoTooltip": {
+          "visible": {
+            "Length": [
+              "Length"
+            ],
+            "Value in": [
+              "Value in"
+            ]
+          },
+          "accessibility": {
+            "Field Info": [
+              {
+                "attribute": "aria-label",
+                "text": "Field Info"
+              },
+              {
+                "attribute": "aria-label",
+                "text": "Field Info"
+              }
+            ]
+          }
+        },
+        "search": {
+          "visible": {},
+          "accessibility": {}
+        }
+      }
+    },
+    "ja": {
+      "translatedKeys": 89,
+      "translatedUiKeys": 31,
+      "translatedOpenapiKeys": 60,
+      "missingKeys": 117,
+      "missingKeyList": [
+        "Ask AI(AI chat button)",
+        "Back to Home(404 page)",
+        "Close Banner(banner)(aria-label)",
+        "Copied Anchor Link(heading anchor)(aria-label)",
+        "Copied Link(accordion)(aria-label)",
+        "Copied Markdown(page actions)",
+        "Copy Link(accordion)(aria-label)",
+        "Edit on GitHub(edit page)",
+        "Image Viewer(image zoom)(aria-label)",
+        "Last updated on(page footer)",
+        "Layout Tab(layout tab trigger)",
+        "Next Image(image zoom)(aria-label)",
+        "No Headings(table of contents)",
+        "Open in ChatGPT(page actions)",
+        "Open in Claude(page actions)",
+        "Open in Cursor(page actions)",
+        "Open in GitHub(page actions)",
+        "Open in Scira AI(page actions)",
+        "Page Not Found(404 page)",
+        "Parameters(type table)",
+        "Previous Image(image zoom)(aria-label)",
+        "Prop(type table)",
+        "Read {url}, I want to ask questions about it.(page actions)",
+        "Returns(type table)",
+        "Search failed(search dialog)",
+        "Search failed, showing results for {query}(search dialog)",
+        "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.(404 page)",
+        "Toggle Menu(mobile menu)(aria-label)",
+        "1 item(playground)",
+        "Accepted(playground status info)",
+        "Add Item(playground)",
+        "Add(playground)",
+        "Back(playground)",
+        "Bad Gateway(playground status info)",
+        "Breadcrumb(playground)",
+        "Check the server URL. If the API does not allow cross-origin requests from this site, a proxy is needed.(playground result display)",
+        "Choose a file(playground)",
+        "Conflict(playground status info)",
+        "Copied Link(schema UI)(aria-label)",
+        "Copy Link(schema UI)(aria-label)",
+        "Created(playground status info)",
+        "Deprecated(schema UI)",
+        "Enter Property Name(playground)",
+        "Error(playground status info)",
+        "Field Info(playground)",
+        "Forbidden(playground status info)",
+        "Format(schema UI)",
+        "Found(playground status info)",
+        "Internal Server Error(playground status info)",
+        "Items(schema UI)",
+        "Length(schema UI)",
+        "Match(schema UI)",
+        "Method Not Allowed(playground status info)",
+        "Moved Permanently(playground status info)",
+        "Multiple Of(schema UI)",
+        "No property matching(schema UI)",
+        "Not Modified(playground status info)",
+        "Property Name(playground)",
+        "Range(schema UI)",
+        "Redirect(playground status info)",
+        "Remove Item(playground)(aria-label)",
+        "Remove(playground)",
+        "Service Unavailable(playground status info)",
+        "Show Path(schema UI)(aria-label)",
+        "Show Property(playground)",
+        "Switch Field(playground)",
+        "Unauthorized(playground status info)",
+        "Unprocessable Content(playground status info)",
+        "Use the {name} type in TypeScript.(TypeScript definitions)",
+        "Value in(schema UI)",
+        "{count} items(playground)",
+        "Add this to the allowed redirect URIs of your OAuth application.(OAuth dialog)",
+        "Authenticate using username and password.(OAuth dialog)",
+        "Authenticate with 3rd party services(OAuth dialog)",
+        "Authenticate with device.(OAuth dialog)",
+        "Authorization code(OAuth dialog)",
+        "Authorize(OAuth dialog)",
+        "Authorize(playground)",
+        "Basic <token>(security scheme)",
+        "Bearer <token>(security scheme)",
+        "Binary response body, {length} bytes(playground result display)",
+        "Callbacks(operation page)",
+        "Cancel(OAuth dialog)",
+        "Client Credentials(OAuth dialog)",
+        "Client certificate(security scheme)",
+        "Cookie Parameters(operation page)",
+        "Cookies(playground)",
+        "Deprecated(operation page)",
+        "Deprecated(playground)",
+        "Deprecated(security scheme)",
+        "Device Authorization(OAuth dialog)",
+        "Empty(operation page)",
+        "Enter this code on the verification page.(OAuth dialog)",
+        "Example {key}(operation page)",
+        "Failed to fetch token(playground)",
+        "Failed to load the OpenID Connect configuration(OAuth dialog)",
+        "Fetching token...(playground)",
+        "Implicit(OAuth dialog)",
+        "Include the client ID and secret in the token request body.(OAuth dialog)",
+        "Intended for the server-to-server authentication.(OAuth dialog)",
+        "Loading the OpenID Connect configuration...(OAuth dialog)",
+        "Open verification page(OAuth dialog)",
+        "OpenID Connect(security scheme)",
+        "Requires a client certificate installed in your browser.(playground)",
+        "Resource Owner Password Flow(OAuth dialog)",
+        "Retrieve the access token directly.(OAuth dialog)",
+        "Scope(security scheme)",
+        "Scopes(OAuth dialog)",
+        "Send as Basic Auth header(OAuth dialog)",
+        "Send client credentials in body(OAuth dialog)",
+        "Send the client ID and secret in the Authorization header.(OAuth dialog)",
+        "Test(scalar API client)",
+        "The client ID of your OAuth application.(OAuth dialog)",
+        "The client secret of your OAuth application.(OAuth dialog)",
+        "Waiting for authorization...(OAuth dialog)",
+        "You will be redirected to authorize, then back to this page.(OAuth dialog)",
+        "You will get a code to enter on the verification page.(OAuth dialog)"
+      ],
+      "visibleEnglishLabelCount": 3,
+      "visibleEnglishLabels": [
+        "Copy Link",
+        "Length",
+        "Value in"
+      ],
+      "accessibleEnglishLabelCount": 1,
+      "accessibleEnglishLabels": [
+        "Field Info"
+      ],
+      "views": {
+        "guide": {
+          "visible": {},
+          "accessibility": {}
+        },
+        "api": {
+          "visible": {
+            "Length": [
+              "Length"
+            ],
+            "Value in": [
+              "Value in"
+            ]
+          },
+          "accessibility": {}
+        },
+        "apiCopyTooltip": {
+          "visible": {
+            "Copy Link": [
+              "Copy Link"
+            ],
+            "Length": [
+              "Length"
+            ],
+            "Value in": [
+              "Value in"
+            ]
+          },
+          "accessibility": {}
+        },
+        "playground": {
+          "visible": {},
+          "accessibility": {}
+        },
+        "playgroundInfoTooltip": {
+          "visible": {
+            "Length": [
+              "Length"
+            ],
+            "Value in": [
+              "Value in"
+            ]
+          },
+          "accessibility": {
+            "Field Info": [
+              {
+                "attribute": "aria-label",
+                "text": "Field Info"
+              },
+              {
+                "attribute": "aria-label",
+                "text": "Field Info"
+              }
+            ]
+          }
+        },
+        "search": {
+          "visible": {},
+          "accessibility": {}
+        }
+      }
+    }
+  }
+}

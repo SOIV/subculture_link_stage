@@ -1,0 +1,23 @@
+---
+title: イベント API クイックスタート
+description: イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。
+---
+
+イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。
+
+韓国と日本: イベント検索、チケット情報、カレンダー購読。
+
+## GET /v1/events
+
+`country`, `tags`, `from`, `to`, `q`, `locale`
+
+```js
+const response = await fetch('http://127.0.0.1:4310/v1/events?country=JP&locale=ja');
+const result = await response.json();
+```
+
+[API リファレンス](/ja/api/)
+
+[relative-url-probe](subscription/)
+
+[relative-file-probe](./subscription.mdx)

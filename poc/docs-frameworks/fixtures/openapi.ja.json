@@ -1,0 +1,368 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SCLS Docs PoC API",
+    "version": "1.0.0",
+    "description": "公開イベント情報を取得します。国とタグで絞り込めます。"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:4310/v1",
+      "description": "Local deterministic fixture (not production)"
+    }
+  ],
+  "tags": [
+    {
+      "name": "events",
+      "description": "イベント一覧を取得"
+    },
+    {
+      "name": "calendars",
+      "description": "カレンダーフィードを取得"
+    }
+  ],
+  "paths": {
+    "/events": {
+      "get": {
+        "operationId": "listEvents",
+        "summary": "イベント一覧を取得",
+        "description": "公開イベント情報を取得します。国とタグで絞り込めます。",
+        "tags": [
+          "events"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "API 応答コンテンツの言語です。文書の表示言語とは独立しています。",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ko",
+                "ja",
+                "en"
+              ],
+              "default": "ko"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "開催国コードです。例: JP または KR。",
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 2
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "イベント一覧の応答",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "const": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "count": {
+                          "type": "integer"
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "id",
+                              "slug",
+                              "locale",
+                              "title"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "slug": {
+                                "type": "string"
+                              },
+                              "locale": {
+                                "type": "string",
+                                "enum": [
+                                  "ko",
+                                  "ja",
+                                  "en"
+                                ]
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "countryCode": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "VALIDATION_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "success": false,
+                  "error": "VALIDATION_ERROR"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "success": false,
+                  "error": "RATE_LIMITED"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{slug}": {
+      "get": {
+        "operationId": "getEvent",
+        "summary": "イベント詳細を取得",
+        "description": "公開イベント情報を取得します。国とタグで絞り込めます。",
+        "tags": [
+          "events"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "poc-event"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "API 応答コンテンツの言語です。文書の表示言語とは独立しています。",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ko",
+                "ja",
+                "en"
+              ],
+              "default": "ko"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "イベント詳細を取得",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "const": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "id",
+                        "slug",
+                        "locale",
+                        "title"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        },
+                        "locale": {
+                          "type": "string",
+                          "enum": [
+                            "ko",
+                            "ja",
+                            "en"
+                          ]
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "countryCode": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "VALIDATION_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "success": false,
+                  "error": "VALIDATION_ERROR"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "EVENT_NOT_FOUND"
+          },
+          "429": {
+            "description": "RATE_LIMITED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "success": false,
+                  "error": "RATE_LIMITED"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calendars/custom.ics": {
+      "get": {
+        "operationId": "getCalendar",
+        "summary": "カレンダーフィードを取得",
+        "description": "購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。",
+        "tags": [
+          "calendars"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "API 応答コンテンツの言語です。文書の表示言語とは独立しています。",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ko",
+                "ja",
+                "en"
+              ],
+              "default": "ko"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "開催国コードです。例: JP または KR。",
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 2
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ICS calendar (RFC 5545)",
+            "content": {
+              "text/calendar": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nEND:VCALENDAR"
+              }
+            }
+          },
+          "400": {
+            "description": "VALIDATION_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "success": false,
+                  "error": "VALIDATION_ERROR"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "success": false,
+                  "error": "RATE_LIMITED"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "node": "v24.22.1",
+  "versions": {
+    "@astrojs/markdown-remark": "7.3.0",
+    "@astrojs/starlight": "0.42.7",
+    "@scalar/api-reference": "1.76.0",
+    "@scalar/astro": "0.4.31",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/mdx": "2.0.14",
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "astro": "7.4.2",
+    "fumadocs-core": "16.17.8",
+    "fumadocs-mdx": "15.4.10",
+    "fumadocs-openapi": "12.5.5",
+    "fumadocs-ui": "16.17.8",
+    "next": "16.4.3",
+    "playwright": "1.64.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "shiki": "4.5.0",
+    "tailwindcss": "4.3.3",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "zod": "4.6.7"
+  },
+  "localizedContractsStructurallyEqual": true,
+  "outputs": {
+    "starlight-scalar": {
+      "files": 95,
+      "htmlFiles": 31,
+      "bytes": 6421741
+    },
+    "fumadocs": {
+      "files": 521,
+      "htmlFiles": 30,
+      "bytes": 15400542
+    }
+  },
+  "scalarBundleBytes": 4858049,
+  "note": "Total uncompressed files on disk, including the locally hosted Scalar bundle; not initial transfer size or a speed benchmark."
+}

@@ -1,0 +1,957 @@
+{
+  "date": "2026-10-24",
+  "environment": {
+    "node": "v24.22.1",
+    "browser": "156.0.8078.4",
+    "platform": "linux"
+  },
+  "checks": [
+    {
+      "app": "starlight-scalar",
+      "name": "guide-ko",
+      "pass": true,
+      "milliseconds": 727,
+      "detail": {
+        "language": "ko",
+        "title": "행사 API 빠른 시작"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "openapi-ko",
+      "pass": true,
+      "milliseconds": 4376,
+      "detail": {
+        "description": "개최 국가 코드입니다. 예: JP 또는 KR.",
+        "htmlLanguage": "ko"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "guide-ja",
+      "pass": true,
+      "milliseconds": 464,
+      "detail": {
+        "language": "ja",
+        "title": "イベント API クイックスタート"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "openapi-ja",
+      "pass": true,
+      "milliseconds": 3736,
+      "detail": {
+        "description": "開催国コードです。例: JP または KR。",
+        "htmlLanguage": "ja"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "guide-en",
+      "pass": true,
+      "milliseconds": 551,
+      "detail": {
+        "language": "en",
+        "title": "Event API quick start"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "openapi-en",
+      "pass": true,
+      "milliseconds": 3606,
+      "detail": {
+        "description": "Country code where the event takes place, such as JP or KR.",
+        "htmlLanguage": "en"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "missing-translation",
+      "pass": true,
+      "milliseconds": 347,
+      "detail": {
+        "koreanOriginal": true,
+        "notice": true
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "native-guide-language-switch",
+      "pass": true,
+      "milliseconds": 737,
+      "detail": {
+        "url": "http://127.0.0.1:4321/ja/guide/"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "guide-to-api-navigation",
+      "pass": true,
+      "milliseconds": 2012,
+      "detail": {
+        "url": "http://127.0.0.1:4321/ja/api/",
+        "playgroundAfterNavigation": true
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "native-api-language-preserves-operation",
+      "pass": true,
+      "milliseconds": 1984,
+      "detail": {
+        "url": "http://127.0.0.1:4321/ja/api/#tag/events/GET/events/{slug}"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "json-response-and-errors",
+      "pass": true,
+      "milliseconds": 3508,
+      "detail": {
+        "statuses": [
+          200,
+          400,
+          429
+        ],
+        "documentLanguage": "ja",
+        "initialResponseLanguage": "ko",
+        "responseDisplayed": true
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "ics-response",
+      "pass": true,
+      "milliseconds": 3841,
+      "detail": {
+        "status": 200,
+        "type": "text/calendar; charset=utf-8",
+        "rawCalendarDisplayed": true
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "localized-search-ui",
+      "pass": true,
+      "milliseconds": 762,
+      "detail": {
+        "text": "Clear\n\n1 result for イベント\n\nイベント API クイックスタート\n\nイベント API クイックスタート\n\nイベント API クイックスタート. イベント一覧とチケット情報を取得"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "scalar-native-api-search",
+      "pass": true,
+      "milliseconds": 1452,
+      "detail": {
+        "results": [
+          " Operation:   イベント詳細を取得 , getHTTP Method: getパス:  /events/{slug}"
+        ],
+        "scope": "API reference only"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "guide-ko",
+      "pass": true,
+      "milliseconds": 479,
+      "detail": {
+        "language": "ko",
+        "title": "행사 API 빠른 시작"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "openapi-ko",
+      "pass": true,
+      "milliseconds": 1091,
+      "detail": {
+        "description": "개최 국가 코드입니다. 예: JP 또는 KR.",
+        "htmlLanguage": "ko"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "guide-ja",
+      "pass": true,
+      "milliseconds": 513,
+      "detail": {
+        "language": "ja",
+        "title": "イベント API クイックスタート"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "openapi-ja",
+      "pass": true,
+      "milliseconds": 765,
+      "detail": {
+        "description": "開催国コードです。例: JP または KR。",
+        "htmlLanguage": "ja"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "guide-en",
+      "pass": true,
+      "milliseconds": 354,
+      "detail": {
+        "language": "en",
+        "title": "Event API quick start"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "openapi-en",
+      "pass": true,
+      "milliseconds": 1533,
+      "detail": {
+        "description": "Country code where the event takes place, such as JP or KR.",
+        "htmlLanguage": "en"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "missing-translation",
+      "pass": true,
+      "milliseconds": 303,
+      "detail": {
+        "koreanOriginal": true,
+        "notice": true
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "native-guide-language-switch",
+      "pass": true,
+      "milliseconds": 773,
+      "detail": {
+        "url": "http://127.0.0.1:4322/ja/guide/"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "guide-to-api-navigation",
+      "pass": true,
+      "milliseconds": 774,
+      "detail": {
+        "url": "http://127.0.0.1:4322/ja/api/list-events/",
+        "playgroundAfterNavigation": true
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "native-api-language-preserves-operation",
+      "pass": true,
+      "milliseconds": 747,
+      "detail": {
+        "url": "http://127.0.0.1:4322/ja/api/get-event/"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "json-response-and-errors",
+      "pass": true,
+      "milliseconds": 1638,
+      "detail": {
+        "statuses": [
+          200,
+          400,
+          429
+        ],
+        "documentLanguage": "ja",
+        "initialResponseLanguage": "ko",
+        "responseDisplayed": true
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "ics-response",
+      "pass": true,
+      "milliseconds": 1016,
+      "detail": {
+        "status": 200,
+        "type": "text/calendar; charset=utf-8",
+        "rawCalendarDisplayed": true
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "localized-search-ui",
+      "pass": true,
+      "milliseconds": 982,
+      "detail": {
+        "text": "ESC\n\nSCLS Docs PoC\nAPI リファレンス\n\nイベント詳細を取得\n\n公開イベント情報を取得します。国とタグで絞り込めます。\n\nSCLS Docs PoC\nAPI リファレンス\n\nAPI リファレンス\n\nイベント一覧を取得\n\nイベント詳細を取得\n\nSCLS Docs PoC\nAPI リファレンス\n\nイベント一覧を取得\n\n公開イベント情報を取得します。国とタグで絞り込めます。\n\nSCLS Docs PoC\n\nイベント API クイックスタート\n\nイベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。\n\n韓国と日本のイベントを検索し、チケットを確認し、日程をカレンダーに購読します。"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "site-search-opens-generated-api-page",
+      "pass": true,
+      "milliseconds": 1124,
+      "detail": {
+        "url": "http://127.0.0.1:4322/ko/api/list-events/",
+        "scope": "guides and generated API pages"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "api-locale-independent-from-doc-language",
+      "pass": true,
+      "milliseconds": 1962,
+      "detail": {
+        "request": "http://127.0.0.1:4310/v1/events?locale=en",
+        "responseLocale": "en",
+        "documentLanguage": "ja"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "api-locale-independent-from-doc-language",
+      "pass": true,
+      "milliseconds": 1383,
+      "detail": {
+        "request": "http://127.0.0.1:4310/v1/events?locale=en",
+        "responseLocale": "en",
+        "documentLanguage": "ja"
+      }
+    }
+  ],
+  "searches": [
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "행사",
+      "hits": [
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "행사를",
+      "hits": [
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "티켓",
+      "hits": [
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "티켓을",
+      "hits": [
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "캘린더",
+      "hits": [
+        {
+          "url": "/ko/subscription/",
+          "title": "캘린더 구독 안내"
+        },
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "행사 목록 조회",
+      "hits": [
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "개최 국가",
+      "hits": []
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "イベント",
+      "hits": [
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "カレンダー",
+      "hits": [
+        {
+          "url": "/ja/subscription/",
+          "title": "カレンダー購読ガイド"
+        },
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "チケット",
+      "hits": [
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "イベント一覧を取得",
+      "hits": [
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "開催国",
+      "hits": []
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "en",
+      "query": "events",
+      "hits": [
+        {
+          "url": "/en/guide/",
+          "title": "Event API quick start"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "en",
+      "query": "locale",
+      "hits": [
+        {
+          "url": "/en/guide/",
+          "title": "Event API quick start"
+        },
+        {
+          "url": "/en/subscription/",
+          "title": "캘린더 구독 안내"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "행사",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스행사 상세 조회"
+        },
+        {
+          "url": null,
+          "title": "공개 행사 정보를 조회합니다. 나라와 태그로 필터링할 수 있습니다."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스API 레퍼런스"
+        },
+        {
+          "url": null,
+          "title": "행사 목록 조회"
+        },
+        {
+          "url": null,
+          "title": "행사 상세 조회"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스행사 목록 조회"
+        },
+        {
+          "url": null,
+          "title": "공개 행사 정보를 조회합니다. 나라와 태그로 필터링할 수 있습니다."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "url": null,
+          "title": "한국과 일본의 행사를 찾고, 티켓을 확인하고, 행사 일정을 캘린더에 구독합니다."
+        },
+        {
+          "url": null,
+          "title": "행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다."
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "행사를",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "url": null,
+          "title": "한국과 일본의 행사를 찾고, 티켓을 확인하고, 행사 일정을 캘린더에 구독합니다."
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "티켓",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "url": null,
+          "title": "행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다."
+        },
+        {
+          "url": null,
+          "title": "한국과 일본의 행사를 찾고, 티켓을 확인하고, 행사 일정을 캘린더에 구독합니다."
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "티켓을",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "url": null,
+          "title": "한국과 일본의 행사를 찾고, 티켓을 확인하고, 행사 일정을 캘린더에 구독합니다."
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "캘린더",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스캘린더 피드 조회"
+        },
+        {
+          "url": null,
+          "title": "캘린더 구독 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스API 레퍼런스"
+        },
+        {
+          "url": null,
+          "title": "캘린더 피드 조회"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoC캘린더 구독 안내"
+        },
+        {
+          "url": null,
+          "title": "캘린더 구독 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "url": null,
+          "title": "행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다."
+        },
+        {
+          "url": null,
+          "title": "한국과 일본의 행사를 찾고, 티켓을 확인하고, 행사 일정을 캘린더에 구독합니다."
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "행사 목록 조회",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스API 레퍼런스"
+        },
+        {
+          "url": null,
+          "title": "행사 목록 조회"
+        },
+        {
+          "url": null,
+          "title": "행사 상세 조회"
+        },
+        {
+          "url": null,
+          "title": "캘린더 피드 조회"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스행사 목록 조회"
+        },
+        {
+          "url": null,
+          "title": "공개 행사 정보를 조회합니다. 나라와 태그로 필터링할 수 있습니다."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스행사 상세 조회"
+        },
+        {
+          "url": null,
+          "title": "공개 행사 정보를 조회합니다. 나라와 태그로 필터링할 수 있습니다."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "url": null,
+          "title": "행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다."
+        },
+        {
+          "url": null,
+          "title": "한국과 일본의 행사를 찾고, 티켓을 확인하고, 행사 일정을 캘린더에 구독합니다."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스캘린더 피드 조회"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "개최 국가",
+      "hits": []
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "イベント",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスイベント詳細を取得"
+        },
+        {
+          "url": null,
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスAPI リファレンス"
+        },
+        {
+          "url": null,
+          "title": "イベント一覧を取得"
+        },
+        {
+          "url": null,
+          "title": "イベント詳細を取得"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスイベント一覧を取得"
+        },
+        {
+          "url": null,
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "url": null,
+          "title": "イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+        },
+        {
+          "url": null,
+          "title": "韓国と日本のイベントを検索し、チケットを確認し、日程をカレンダーに購読します。"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "カレンダー",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCカレンダー購読ガイド"
+        },
+        {
+          "url": null,
+          "title": "購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスカレンダーフィードを取得"
+        },
+        {
+          "url": null,
+          "title": "購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスAPI リファレンス"
+        },
+        {
+          "url": null,
+          "title": "カレンダーフィードを取得"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "url": null,
+          "title": "イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+        },
+        {
+          "url": null,
+          "title": "韓国と日本のイベントを検索し、チケットを確認し、日程をカレンダーに購読します。"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "チケット",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "url": null,
+          "title": "イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+        },
+        {
+          "url": null,
+          "title": "韓国と日本のイベントを検索し、チケットを確認し、日程をカレンダーに購読します。"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "イベント一覧を取得",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスAPI リファレンス"
+        },
+        {
+          "url": null,
+          "title": "イベント一覧を取得"
+        },
+        {
+          "url": null,
+          "title": "イベント詳細を取得"
+        },
+        {
+          "url": null,
+          "title": "カレンダーフィードを取得"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスイベント一覧を取得"
+        },
+        {
+          "url": null,
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスイベント詳細を取得"
+        },
+        {
+          "url": null,
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "url": null,
+          "title": "イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+        },
+        {
+          "url": null,
+          "title": "韓国と日本のイベントを検索し、チケットを確認し、日程をカレンダーに購読します。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスカレンダーフィードを取得"
+        },
+        {
+          "url": null,
+          "title": "購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCカレンダー購読ガイド"
+        },
+        {
+          "url": null,
+          "title": "購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "開催国",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスイベント詳細を取得"
+        },
+        {
+          "url": null,
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスイベント一覧を取得"
+        },
+        {
+          "url": null,
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "en",
+      "query": "events",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI referenceAPI reference"
+        },
+        {
+          "url": null,
+          "title": "List events"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI referenceList events"
+        },
+        {
+          "url": null,
+          "title": "Read public events. Filter by country and tags."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCEvent API quick start"
+        },
+        {
+          "url": null,
+          "title": "GET /v1/events"
+        },
+        {
+          "url": null,
+          "title": "Find events in Korea and Japan, inspect tickets, and subscribe to event schedules."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI referenceGet event details"
+        },
+        {
+          "url": null,
+          "title": "Read public events. Filter by country and tags."
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "en",
+      "query": "locale",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoC캘린더 구독 안내"
+        },
+        {
+          "url": null,
+          "title": "text/calendar · ICS · locale=ko"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCEvent API quick start"
+        },
+        {
+          "url": null,
+          "title": "country, tags, from, to, q, locale"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "lastRunCase": "api-locale-independent-from-doc-language",
+  "summary": {
+    "starlight-scalar": {
+      "passed": 15,
+      "total": 15
+    },
+    "fumadocs": {
+      "passed": 15,
+      "total": 15
+    }
+  }
+}

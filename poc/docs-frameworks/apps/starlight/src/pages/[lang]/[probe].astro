@@ -1,0 +1,39 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { ScalarComponent } from '@scalar/astro';
+import ko from '../../../../../fixtures/openapi.ko.json';
+import ja from '../../../../../fixtures/openapi.ja.json';
+import en from '../../../../../fixtures/openapi.en.json';
+
+const variants = [
+  { probe: 'scalar-modern-doc', template: 'doc', layout: undefined, mode: 'client' },
+  { probe: 'scalar-modern-splash', template: 'splash', layout: undefined, mode: 'client' },
+  { probe: 'scalar-classic-doc', template: 'doc', layout: 'classic', mode: 'client' },
+  { probe: 'scalar-classic-splash', template: 'splash', layout: 'classic', mode: 'client' },
+  { probe: 'scalar-classic-static-doc', template: 'doc', layout: 'classic', mode: 'static' },
+  { probe: 'scalar-classic-static-splash', template: 'splash', layout: 'classic', mode: 'static' },
+];
+export function getStaticPaths() {
+  const variants = ['scalar-modern-doc','scalar-modern-splash','scalar-classic-doc','scalar-classic-splash','scalar-classic-static-doc','scalar-classic-static-splash'];
+  return ['ko','ja','en'].flatMap(lang => variants.map(probe => ({ params: { lang, probe } })));
+}
+const { lang, probe } = Astro.params;
+const variant = variants.find(item => item.probe === probe)!;
+const schema = { ko, ja, en }[lang as 'ko' | 'ja' | 'en'];
+const common = {
+  ...(variant.layout ? { layout: variant.layout } : {}),
+  showSidebar: false,
+  hideDarkModeToggle: true,
+  withDefaultFonts: false,
+  showDeveloperTools: 'never',
+  telemetry: false,
+  cdn: '/vendor/scalar.js',
+};
+---
+<StarlightPage frontmatter={{ title: `Scalar search probe: ${probe}`, template: variant.template }}>
+  <div class="scalar-probe" data-probe={probe} data-settings={JSON.stringify({ ...common, mode: variant.mode, input: variant.mode === 'static' ? 'content' : 'url', template: variant.template })}>
+    {variant.mode === 'static'
+      ? <ScalarComponent configuration={{ ...common, content: schema }} />
+      : <ScalarComponent renderMode="client" configuration={{ ...common, url: `/openapi.${lang}.json` }} />}
+  </div>
+</StarlightPage>

@@ -1,0 +1,2748 @@
+{
+  "date": "2026-10-24",
+  "environment": {
+    "node": "v24.22.1",
+    "browser": "156.0.8078.4",
+    "platform": "linux"
+  },
+  "checks": [
+    {
+      "app": "starlight-scalar",
+      "name": "guide-ko",
+      "pass": true,
+      "milliseconds": 225,
+      "detail": {
+        "language": "ko",
+        "title": "행사 API 빠른 시작"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "openapi-ko",
+      "pass": true,
+      "milliseconds": 1600,
+      "detail": {
+        "description": "개최 국가 코드입니다. 예: JP 또는 KR.",
+        "htmlLanguage": "ko"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "guide-ja",
+      "pass": true,
+      "milliseconds": 181,
+      "detail": {
+        "language": "ja",
+        "title": "イベント API クイックスタート"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "openapi-ja",
+      "pass": true,
+      "milliseconds": 1481,
+      "detail": {
+        "description": "開催国コードです。例: JP または KR。",
+        "htmlLanguage": "ja"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "guide-en",
+      "pass": true,
+      "milliseconds": 152,
+      "detail": {
+        "language": "en",
+        "title": "Event API quick start"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "openapi-en",
+      "pass": true,
+      "milliseconds": 1429,
+      "detail": {
+        "description": "Country code where the event takes place, such as JP or KR.",
+        "htmlLanguage": "en"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "missing-translation",
+      "pass": true,
+      "milliseconds": 181,
+      "detail": {
+        "koreanOriginal": true,
+        "notice": true
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "native-guide-language-switch",
+      "pass": true,
+      "milliseconds": 316,
+      "detail": {
+        "url": "http://127.0.0.1:4321/ja/guide/"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "guide-to-api-navigation",
+      "pass": true,
+      "milliseconds": 2184,
+      "detail": {
+        "url": "http://127.0.0.1:4321/ja/api/",
+        "playgroundAfterNavigation": true
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "native-api-language-preserves-operation",
+      "pass": true,
+      "milliseconds": 1544,
+      "detail": {
+        "url": "http://127.0.0.1:4321/ja/api/#tag/events/GET/events/{slug}"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "json-response-and-errors",
+      "pass": true,
+      "milliseconds": 2793,
+      "detail": {
+        "statuses": [
+          200,
+          400,
+          429
+        ],
+        "documentLanguage": "ja",
+        "initialResponseLanguage": "ko",
+        "responseDisplayed": true
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "ics-response",
+      "pass": true,
+      "milliseconds": 1550,
+      "detail": {
+        "status": 200,
+        "type": "text/calendar; charset=utf-8",
+        "rawCalendarDisplayed": true
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "api-locale-independent-from-doc-language",
+      "pass": true,
+      "milliseconds": 1666,
+      "detail": {
+        "request": "http://127.0.0.1:4310/v1/events?locale=en",
+        "responseLocale": "en",
+        "documentLanguage": "ja"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "localized-search-ui",
+      "pass": true,
+      "milliseconds": 739,
+      "detail": {
+        "text": "Clear\n\n2 results for イベント\n\nイベント API クイックスタート\n\nイベント API クイックスタート\n\nイベント API クイックスタート. イベント一覧とチケット情報を取得\n\nSearch control ja\n\nSearch control ja\n\nSearch control ja. イベント. チケット. 購読. v1"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "scalar-native-api-search",
+      "pass": true,
+      "milliseconds": 1327,
+      "detail": {
+        "results": [
+          " Operation:   イベント詳細を取得 , getHTTP Method: getパス:  /events/{slug}"
+        ],
+        "scope": "API reference only"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "guide-ko",
+      "pass": true,
+      "milliseconds": 303,
+      "detail": {
+        "language": "ko",
+        "title": "행사 API 빠른 시작"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "openapi-ko",
+      "pass": true,
+      "milliseconds": 608,
+      "detail": {
+        "description": "개최 국가 코드입니다. 예: JP 또는 KR.",
+        "htmlLanguage": "ko"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "guide-ja",
+      "pass": true,
+      "milliseconds": 281,
+      "detail": {
+        "language": "ja",
+        "title": "イベント API クイックスタート"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "openapi-ja",
+      "pass": true,
+      "milliseconds": 563,
+      "detail": {
+        "description": "開催国コードです。例: JP または KR。",
+        "htmlLanguage": "ja"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "guide-en",
+      "pass": true,
+      "milliseconds": 277,
+      "detail": {
+        "language": "en",
+        "title": "Event API quick start"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "openapi-en",
+      "pass": true,
+      "milliseconds": 629,
+      "detail": {
+        "description": "Country code where the event takes place, such as JP or KR.",
+        "htmlLanguage": "en"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "missing-translation",
+      "pass": true,
+      "milliseconds": 263,
+      "detail": {
+        "koreanOriginal": true,
+        "notice": true
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "native-guide-language-switch",
+      "pass": true,
+      "milliseconds": 626,
+      "detail": {
+        "url": "http://127.0.0.1:4322/ja/guide/"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "guide-to-api-navigation",
+      "pass": true,
+      "milliseconds": 688,
+      "detail": {
+        "url": "http://127.0.0.1:4322/ja/api/list-events/",
+        "playgroundAfterNavigation": true
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "native-api-language-preserves-operation",
+      "pass": true,
+      "milliseconds": 656,
+      "detail": {
+        "url": "http://127.0.0.1:4322/ja/api/get-event/"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "json-response-and-errors",
+      "pass": true,
+      "milliseconds": 1439,
+      "detail": {
+        "statuses": [
+          200,
+          400,
+          429
+        ],
+        "documentLanguage": "ja",
+        "initialResponseLanguage": "ko",
+        "responseDisplayed": true
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "ics-response",
+      "pass": true,
+      "milliseconds": 1010,
+      "detail": {
+        "status": 200,
+        "type": "text/calendar; charset=utf-8",
+        "rawCalendarDisplayed": true
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "api-locale-independent-from-doc-language",
+      "pass": true,
+      "milliseconds": 1174,
+      "detail": {
+        "request": "http://127.0.0.1:4310/v1/events?locale=en",
+        "responseLocale": "en",
+        "documentLanguage": "ja"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "localized-search-ui",
+      "pass": true,
+      "milliseconds": 958,
+      "detail": {
+        "text": "ESC\n\nSCLS Docs PoC\n\nSearch control ja\n\nイベント\n\nSCLS Docs PoC\nAPI リファレンス\n\nイベント詳細を取得\n\n公開イベント情報を取得します。国とタグで絞り込めます。\n\nSCLS Docs PoC\nAPI リファレンス\n\nAPI リファレンス\n\nイベント一覧を取得\n\nイベント詳細を取得\n\nSCLS Docs PoC\nAPI リファレンス\n\nイベント一覧を取得\n\n公開イベント情報を取得します。国とタグで絞り込めます。\n\nSCLS Docs PoC\n\nイベント API クイックスタート\n\n韓国と日本: イベント検索、チケット情報、カレンダー購読。\n\nイベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "site-search-opens-generated-api-page",
+      "pass": true,
+      "milliseconds": 1083,
+      "detail": {
+        "url": "http://127.0.0.1:4322/ko/api/list-events/",
+        "scope": "guides and generated API pages"
+      }
+    }
+  ],
+  "searches": [
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "행사",
+      "hits": [
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작"
+        },
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "행사를",
+      "hits": [
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작"
+        },
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "티켓",
+      "hits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko"
+        },
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "티켓을",
+      "hits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko"
+        },
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "캘린더",
+      "hits": [
+        {
+          "url": "/ko/subscription/",
+          "title": "캘린더 구독 안내"
+        },
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "행사 목록 조회",
+      "hits": [
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "개최 국가",
+      "hits": []
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "イベント",
+      "hits": [
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート"
+        },
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "カレンダー",
+      "hits": [
+        {
+          "url": "/ja/subscription/",
+          "title": "カレンダー購読ガイド"
+        },
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "チケット",
+      "hits": [
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja"
+        },
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "イベント一覧を取得",
+      "hits": [
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "開催国",
+      "hits": []
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "en",
+      "query": "events",
+      "hits": [
+        {
+          "url": "/en/guide/",
+          "title": "Event API quick start"
+        },
+        {
+          "url": "/en/search-probe/",
+          "title": "Search control en"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "en",
+      "query": "locale",
+      "hits": [
+        {
+          "url": "/en/guide/",
+          "title": "Event API quick start"
+        },
+        {
+          "url": "/en/subscription/",
+          "title": "캘린더 구독 안내"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "행사",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCSearch control ko"
+        },
+        {
+          "url": null,
+          "title": "행사"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스행사 상세 조회"
+        },
+        {
+          "url": null,
+          "title": "공개 행사 정보를 조회합니다. 나라와 태그로 필터링할 수 있습니다."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스API 레퍼런스"
+        },
+        {
+          "url": null,
+          "title": "행사 목록 조회"
+        },
+        {
+          "url": null,
+          "title": "행사 상세 조회"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스행사 목록 조회"
+        },
+        {
+          "url": null,
+          "title": "공개 행사 정보를 조회합니다. 나라와 태그로 필터링할 수 있습니다."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "url": null,
+          "title": "한국·일본 행사 검색. 티켓 정보. 캘린더 구독."
+        },
+        {
+          "url": null,
+          "title": "행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다."
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "행사를",
+      "hits": []
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "티켓",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCSearch control ko"
+        },
+        {
+          "url": null,
+          "title": "티켓"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "url": null,
+          "title": "한국·일본 행사 검색. 티켓 정보. 캘린더 구독."
+        },
+        {
+          "url": null,
+          "title": "행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다."
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "티켓을",
+      "hits": []
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "캘린더",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스캘린더 피드 조회"
+        },
+        {
+          "url": null,
+          "title": "캘린더 구독 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스API 레퍼런스"
+        },
+        {
+          "url": null,
+          "title": "캘린더 피드 조회"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoC캘린더 구독 안내"
+        },
+        {
+          "url": null,
+          "title": "캘린더 구독 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "url": null,
+          "title": "한국·일본 행사 검색. 티켓 정보. 캘린더 구독."
+        },
+        {
+          "url": null,
+          "title": "행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다."
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "행사 목록 조회",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스API 레퍼런스"
+        },
+        {
+          "url": null,
+          "title": "행사 목록 조회"
+        },
+        {
+          "url": null,
+          "title": "행사 상세 조회"
+        },
+        {
+          "url": null,
+          "title": "캘린더 피드 조회"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스행사 목록 조회"
+        },
+        {
+          "url": null,
+          "title": "공개 행사 정보를 조회합니다. 나라와 태그로 필터링할 수 있습니다."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스행사 상세 조회"
+        },
+        {
+          "url": null,
+          "title": "공개 행사 정보를 조회합니다. 나라와 태그로 필터링할 수 있습니다."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "url": null,
+          "title": "행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다."
+        },
+        {
+          "url": null,
+          "title": "한국·일본 행사 검색. 티켓 정보. 캘린더 구독."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCSearch control ko"
+        },
+        {
+          "url": null,
+          "title": "행사"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI 레퍼런스캘린더 피드 조회"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "개최 국가",
+      "hits": []
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "イベント",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "url": null,
+          "title": "イベント"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスイベント詳細を取得"
+        },
+        {
+          "url": null,
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスAPI リファレンス"
+        },
+        {
+          "url": null,
+          "title": "イベント一覧を取得"
+        },
+        {
+          "url": null,
+          "title": "イベント詳細を取得"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスイベント一覧を取得"
+        },
+        {
+          "url": null,
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "url": null,
+          "title": "韓国と日本: イベント検索、チケット情報、カレンダー購読。"
+        },
+        {
+          "url": null,
+          "title": "イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "カレンダー",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCカレンダー購読ガイド"
+        },
+        {
+          "url": null,
+          "title": "購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスカレンダーフィードを取得"
+        },
+        {
+          "url": null,
+          "title": "購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスAPI リファレンス"
+        },
+        {
+          "url": null,
+          "title": "カレンダーフィードを取得"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "url": null,
+          "title": "韓国と日本: イベント検索、チケット情報、カレンダー購読。"
+        },
+        {
+          "url": null,
+          "title": "イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "チケット",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "url": null,
+          "title": "チケット"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "url": null,
+          "title": "韓国と日本: イベント検索、チケット情報、カレンダー購読。"
+        },
+        {
+          "url": null,
+          "title": "イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "イベント一覧を取得",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスAPI リファレンス"
+        },
+        {
+          "url": null,
+          "title": "イベント一覧を取得"
+        },
+        {
+          "url": null,
+          "title": "イベント詳細を取得"
+        },
+        {
+          "url": null,
+          "title": "カレンダーフィードを取得"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスイベント一覧を取得"
+        },
+        {
+          "url": null,
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスイベント詳細を取得"
+        },
+        {
+          "url": null,
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "url": null,
+          "title": "イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+        },
+        {
+          "url": null,
+          "title": "韓国と日本: イベント検索、チケット情報、カレンダー購読。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスカレンダーフィードを取得"
+        },
+        {
+          "url": null,
+          "title": "購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "url": null,
+          "title": "イベント"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCカレンダー購読ガイド"
+        },
+        {
+          "url": null,
+          "title": "購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "開催国",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスイベント詳細を取得"
+        },
+        {
+          "url": null,
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI リファレンスイベント一覧を取得"
+        },
+        {
+          "url": null,
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "en",
+      "query": "events",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI referenceAPI reference"
+        },
+        {
+          "url": null,
+          "title": "List events"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI referenceList events"
+        },
+        {
+          "url": null,
+          "title": "Read public events. Filter by country and tags."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCSearch control en"
+        },
+        {
+          "url": null,
+          "title": "/v1/events"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCEvent API quick start"
+        },
+        {
+          "url": null,
+          "title": "GET /v1/events"
+        },
+        {
+          "url": null,
+          "title": "Find events in Korea and Japan, inspect tickets, and subscribe to event schedules."
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCAPI referenceGet event details"
+        },
+        {
+          "url": null,
+          "title": "Read public events. Filter by country and tags."
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "en",
+      "query": "locale",
+      "hits": [
+        {
+          "url": null,
+          "title": "SCLS Docs PoC캘린더 구독 안내"
+        },
+        {
+          "url": null,
+          "title": "text/calendar · ICS · locale=ko"
+        },
+        {
+          "url": null,
+          "title": "SCLS Docs PoCEvent API quick start"
+        },
+        {
+          "url": null,
+          "title": "country, tags, from, to, q, locale"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "티켓",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. <mark>티켓.</mark> 구독. 행사. v1. /v1/events. retryAfterSeconds."
+        },
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작",
+          "excerpt": "행사 API 빠른 시작. 행사 목록과 <mark>티켓</mark> 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다. 한국·일본 행사 검색. <mark>티켓</mark> 정보. 캘린더 구독. GET /v1/events. country, tags, from, to, q, locale. const"
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. <mark>티켓.</mark> 구독. 행사. v1. /v1/events. retryAfterSeconds."
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "티켓을",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. <mark>티켓.</mark> 구독. 행사. v1. /v1/events. retryAfterSeconds."
+        },
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작",
+          "excerpt": "행사 API 빠른 시작. 행사 목록과 <mark>티켓</mark> 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다. 한국·일본 행사 검색. <mark>티켓</mark> 정보. 캘린더 구독. GET /v1/events. country, tags, from, to, q, locale. const"
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. <mark>티켓.</mark> 구독. 행사. v1. /v1/events. retryAfterSeconds."
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "티켓이",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. <mark>티켓.</mark> 구독. 행사. v1. /v1/events. retryAfterSeconds."
+        },
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작",
+          "excerpt": "행사 API 빠른 시작. 행사 목록과 <mark>티켓</mark> 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다. 한국·일본 행사 검색. <mark>티켓</mark> 정보. 캘린더 구독. GET /v1/events. country, tags, from, to, q, locale. const"
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. <mark>티켓.</mark> 구독. 행사. v1. /v1/events. retryAfterSeconds."
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "구독",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "url": "/ko/subscription/",
+          "title": "캘린더 구독 안내",
+          "excerpt": "캘린더 <mark>구독</mark> 안내. 캘린더 <mark>구독</mark> 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다. text/calendar · ICS · locale=ko."
+        },
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. 티켓. <mark>구독.</mark> 행사. v1. /v1/events. retryAfterSeconds."
+        },
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작",
+          "excerpt": "행사 API 빠른 시작. 행사 목록과 티켓 정보를 조회합니다. 캘린더 <mark>구독은</mark> ICS 피드를 사용합니다. 한국·일본 행사 검색. 티켓 정보. 캘린더 <mark>구독.</mark> GET /v1/events. country, tags, from, to, q, locale. const"
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. 티켓. <mark>구독.</mark> 행사. v1. /v1/events. retryAfterSeconds."
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "구독을",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "url": "/ko/subscription/",
+          "title": "캘린더 구독 안내",
+          "excerpt": "캘린더 <mark>구독</mark> 안내. 캘린더 <mark>구독</mark> 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다. text/calendar · ICS · locale=ko."
+        },
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. 티켓. <mark>구독.</mark> 행사. v1. /v1/events. retryAfterSeconds."
+        },
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작",
+          "excerpt": "행사 API 빠른 시작. 행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다. 한국·일본 행사 검색. 티켓 정보. 캘린더 <mark>구독.</mark> GET /v1/events. country, tags, from, to, q, locale. const"
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. 티켓. <mark>구독.</mark> 행사. v1. /v1/events. retryAfterSeconds."
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "구독이",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "url": "/ko/subscription/",
+          "title": "캘린더 구독 안내",
+          "excerpt": "캘린더 <mark>구독</mark> 안내. 캘린더 <mark>구독</mark> 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다. text/calendar · ICS · locale=ko."
+        },
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. 티켓. <mark>구독.</mark> 행사. v1. /v1/events. retryAfterSeconds."
+        },
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작",
+          "excerpt": "행사 API 빠른 시작. 행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다. 한국·일본 행사 검색. 티켓 정보. 캘린더 <mark>구독.</mark> GET /v1/events. country, tags, from, to, q, locale. const"
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. 티켓. <mark>구독.</mark> 행사. v1. /v1/events. retryAfterSeconds."
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "v1",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. 티켓. 구독. 행사. <mark>v1.</mark> <mark>/v1/events.</mark> retryAfterSeconds."
+        },
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작",
+          "excerpt": "행사 API 빠른 시작. 행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다. 한국·일본 행사 검색. 티켓 정보. 캘린더 구독. GET <mark>/v1/events.</mark> country, tags, from, to, q, locale. const"
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. 티켓. 구독. 행사. <mark>v1.</mark> <mark>/v1/events.</mark> retryAfterSeconds."
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "/v1/events",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "url": "/ko/guide/",
+          "title": "행사 API 빠른 시작",
+          "excerpt": "행사 API 빠른 시작. 행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다. 한국·일본 행사 검색. 티켓 정보. 캘린더 구독. GET <mark>/v1/events.</mark> country, tags, from, to, q, locale. const"
+        },
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. 티켓. 구독. 행사. v1. <mark>/v1/events.</mark> retryAfterSeconds."
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. 티켓. 구독. 행사. v1. <mark>/v1/events.</mark> retryAfterSeconds."
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ko",
+      "query": "retryAfterSeconds",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. 티켓. 구독. 행사. v1. /v1/events. <mark>retryAfterSeconds.</mark>"
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ko/search-probe/",
+          "title": "Search control ko",
+          "excerpt": "Search control ko. 티켓. 구독. 행사. v1. /v1/events. <mark>retryAfterSeconds.</mark>"
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "イベント",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート",
+          "excerpt": "<mark>イベント </mark>API クイックスタート. <mark>イベント</mark>一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。 韓国と日本: <mark>イベント</mark>"
+        },
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja",
+          "excerpt": "Search control ja. <mark>イベント</mark>. チケット. 購読. v1. /v1/events. retryAfterSeconds."
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja",
+          "excerpt": "Search control ja. <mark>イベント</mark>. チケット. 購読. v1. /v1/events. retryAfterSeconds."
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "イベントを",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート",
+          "excerpt": "<mark>イベント </mark>API クイックスタート. <mark>イベント</mark>一覧とチケット情報<mark>を</mark>取得します。カレンダー購読には ICS フィード<mark>を</mark>使います。 韓国と日本: <mark>イベント</mark>"
+        }
+      ],
+      "controlledHits": []
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "イベントが",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート",
+          "excerpt": "<mark>イベント </mark>API クイックスタート. <mark>イベント</mark>一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。 韓国と日本: <mark>イベント</mark>"
+        },
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja",
+          "excerpt": "Search control ja. <mark>イベント</mark>. チケット. 購読. v1. /v1/events. retryAfterSeconds."
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja",
+          "excerpt": "Search control ja. <mark>イベント</mark>. チケット. 購読. v1. /v1/events. retryAfterSeconds."
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "チケット",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja",
+          "excerpt": "Search control ja. イベント. <mark>チケット</mark>. 購読. v1. /v1/events. retryAfterSeconds."
+        },
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート",
+          "excerpt": "イベント一覧と<mark>チケット</mark>情報を取得します。カレンダー購読には ICS フィードを使います。 韓国と日本: イベント検索、<mark>チケット</mark>情報、"
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja",
+          "excerpt": "Search control ja. イベント. <mark>チケット</mark>. 購読. v1. /v1/events. retryAfterSeconds."
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "チケットを",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート",
+          "excerpt": "イベント一覧と<mark>チケット</mark>情報<mark>を</mark>取得します。カレンダー購読には ICS フィード<mark>を</mark>使います。 韓国と日本: イベント検索、<mark>チケット</mark>情報、"
+        }
+      ],
+      "controlledHits": []
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "v1",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja",
+          "excerpt": "Search control ja. イベント. チケット. 購読. <mark>v1</mark>. /<mark>v1</mark>/events. retryAfterSeconds."
+        },
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート",
+          "excerpt": "韓国と日本: イベント検索、チケット情報、カレンダー購読。 GET /<mark>v1</mark>/events. country, tags, from, to, q, locale"
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja",
+          "excerpt": "Search control ja. イベント. チケット. 購読. <mark>v1</mark>. /<mark>v1</mark>/events. retryAfterSeconds."
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "/v1/events",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "url": "/ja/guide/",
+          "title": "イベント API クイックスタート",
+          "excerpt": "と日本: イベント検索、チケット情報、カレンダー購読。 GET /<mark>v1</mark>/<mark>events</mark>. country, tags, from, to, q, locale."
+        },
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja",
+          "excerpt": "Search control ja. イベント. チケット. 購読. <mark>v1</mark>. /<mark>v1</mark>/<mark>events</mark>. retryAfterSeconds."
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja",
+          "excerpt": "Search control ja. イベント. チケット. 購読. <mark>v1</mark>. /<mark>v1</mark>/<mark>events</mark>. retryAfterSeconds."
+        }
+      ]
+    },
+    {
+      "app": "starlight-scalar",
+      "language": "ja",
+      "query": "retryAfterSeconds",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja",
+          "excerpt": "Search control ja. イベント. チケット. 購読. v1. /v1/events. <mark>retryAfterSeconds</mark>."
+        }
+      ],
+      "controlledHits": [
+        {
+          "url": "/ja/search-probe/",
+          "title": "Search control ja",
+          "excerpt": "Search control ja. イベント. チケット. 購読. v1. /v1/events. <mark>retryAfterSeconds</mark>."
+        }
+      ]
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "티켓",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "id": "fd-search-option-/ko/search-probe",
+          "title": "SCLS Docs PoCSearch control ko"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-0",
+          "title": "티켓"
+        },
+        {
+          "id": "fd-search-option-/ko/guide",
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "id": "fd-search-option-/ko/guide-2",
+          "title": "한국·일본 행사 검색. 티켓 정보. 캘린더 구독."
+        },
+        {
+          "id": "fd-search-option-/ko/guide-1",
+          "title": "행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다."
+        }
+      ],
+      "controlledHits": [
+        {
+          "id": "fd-search-option-/ko/search-probe",
+          "title": "SCLS Docs PoCSearch control ko"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-0",
+          "title": "티켓"
+        }
+      ],
+      "snapshot": "- dialog \"문서 검색\":\n  - combobox \"문서 검색\" [expanded]: 티켓\n  - button \"검색 닫기\": ESC\n  - status\n  - listbox \"문서 검색\":\n    - option \"SCLS Docs PoC Search control ko\" [selected]:\n      - text: SCLS Docs PoC\n      - paragraph: Search control ko\n    - option \"티켓\":\n      - paragraph: 티켓\n    - option \"SCLS Docs PoC 행사 API 빠른 시작\":\n      - text: SCLS Docs PoC\n      - paragraph: 행사 API 빠른 시작\n    - option \"한국·일본 행사 검색. 티켓 정보. 캘린더 구독.\":\n      - paragraph: 한국·일본 행사 검색. 티켓 정보. 캘린더 구독.\n    - option \"행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다.\":\n      - paragraph: 행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다."
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "티켓을",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [],
+      "controlledHits": [],
+      "snapshot": "- dialog \"문서 검색\":\n  - combobox \"문서 검색\": 티켓을\n  - button \"검색 닫기\": ESC\n  - status\n  - status: 검색 결과가 없습니다"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "티켓이",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [],
+      "controlledHits": [],
+      "snapshot": "- dialog \"문서 검색\":\n  - combobox \"문서 검색\": 티켓이\n  - button \"검색 닫기\": ESC\n  - status\n  - status: 검색 결과가 없습니다"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "구독",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "id": "fd-search-option-/ko/search-probe",
+          "title": "SCLS Docs PoCSearch control ko"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-1",
+          "title": "구독"
+        },
+        {
+          "id": "fd-search-option-/ko/subscription",
+          "title": "SCLS Docs PoC캘린더 구독 안내"
+        },
+        {
+          "id": "fd-search-option-/ko/subscription-0",
+          "title": "캘린더 구독 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다."
+        },
+        {
+          "id": "fd-search-option-/ko/guide",
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "id": "fd-search-option-/ko/guide-2",
+          "title": "한국·일본 행사 검색. 티켓 정보. 캘린더 구독."
+        },
+        {
+          "id": "fd-search-option-/ko/guide-1",
+          "title": "행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다."
+        },
+        {
+          "id": "fd-search-option-/ko/api/get-calendar",
+          "title": "SCLS Docs PoCAPI 레퍼런스캘린더 피드 조회"
+        },
+        {
+          "id": "fd-search-option-/ko/api/get-calendar-0",
+          "title": "캘린더 구독 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다."
+        }
+      ],
+      "controlledHits": [
+        {
+          "id": "fd-search-option-/ko/search-probe",
+          "title": "SCLS Docs PoCSearch control ko"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-1",
+          "title": "구독"
+        }
+      ],
+      "snapshot": "- dialog \"문서 검색\":\n  - combobox \"문서 검색\" [expanded]: 구독\n  - button \"검색 닫기\": ESC\n  - status\n  - listbox \"문서 검색\":\n    - option \"SCLS Docs PoC Search control ko\" [selected]:\n      - text: SCLS Docs PoC\n      - paragraph: Search control ko\n    - option \"구독\":\n      - paragraph: 구독\n    - option \"SCLS Docs PoC 캘린더 구독 안내\":\n      - text: SCLS Docs PoC\n      - paragraph: 캘린더 구독 안내\n    - option \"캘린더 구독 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다.\":\n      - paragraph: 캘린더 구독 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다.\n    - option \"SCLS Docs PoC 행사 API 빠른 시작\":\n      - text: SCLS Docs PoC\n      - paragraph: 행사 API 빠른 시작\n    - option \"한국·일본 행사 검색. 티켓 정보. 캘린더 구독.\":\n      - paragraph: 한국·일본 행사 검색. 티켓 정보. 캘린더 구독.\n    - option \"행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다.\":\n      - paragraph: 행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다.\n    - option \"SCLS Docs PoC API 레퍼런스 캘린더 피드 조회\":\n      - text: SCLS Docs PoCAPI 레퍼런스\n      - paragraph: 캘린더 피드 조회\n    - option \"캘린더 구독 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다.\":\n      - paragraph: 캘린더 구독 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다."
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "구독을",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [],
+      "controlledHits": [],
+      "snapshot": "- dialog \"문서 검색\":\n  - combobox \"문서 검색\": 구독을\n  - button \"검색 닫기\": ESC\n  - status\n  - status: 검색 결과가 없습니다"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "구독이",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [],
+      "controlledHits": [],
+      "snapshot": "- dialog \"문서 검색\":\n  - combobox \"문서 검색\": 구독이\n  - button \"검색 닫기\": ESC\n  - status\n  - status: 검색 결과가 없습니다"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "v1",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "id": "fd-search-option-/ko/search-probe",
+          "title": "SCLS Docs PoCSearch control ko"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-3",
+          "title": "v1"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-4",
+          "title": "/v1/events"
+        },
+        {
+          "id": "fd-search-option-/ko/guide",
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "id": "fd-search-option-/ko/guide-0",
+          "title": "GET /v1/events"
+        }
+      ],
+      "controlledHits": [
+        {
+          "id": "fd-search-option-/ko/search-probe",
+          "title": "SCLS Docs PoCSearch control ko"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-3",
+          "title": "v1"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-4",
+          "title": "/v1/events"
+        }
+      ],
+      "snapshot": "- dialog \"문서 검색\":\n  - combobox \"문서 검색\" [expanded]: v1\n  - button \"검색 닫기\": ESC\n  - status\n  - listbox \"문서 검색\":\n    - option \"SCLS Docs PoC Search control ko\" [selected]:\n      - text: SCLS Docs PoC\n      - paragraph: Search control ko\n    - option \"v1\":\n      - paragraph: v1\n    - option \"/v1/events\":\n      - paragraph: /v1/events\n    - option \"SCLS Docs PoC 행사 API 빠른 시작\":\n      - text: SCLS Docs PoC\n      - paragraph: 행사 API 빠른 시작\n    - option \"GET /v1/events\":\n      - paragraph: GET /v1/events"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "/v1/events",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "id": "fd-search-option-/ko/search-probe",
+          "title": "SCLS Docs PoCSearch control ko"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-4",
+          "title": "/v1/events"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-3",
+          "title": "v1"
+        },
+        {
+          "id": "fd-search-option-/ko/guide",
+          "title": "SCLS Docs PoC행사 API 빠른 시작"
+        },
+        {
+          "id": "fd-search-option-/ko/guide-0",
+          "title": "GET /v1/events"
+        }
+      ],
+      "controlledHits": [
+        {
+          "id": "fd-search-option-/ko/search-probe",
+          "title": "SCLS Docs PoCSearch control ko"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-4",
+          "title": "/v1/events"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-3",
+          "title": "v1"
+        }
+      ],
+      "snapshot": "- dialog \"문서 검색\":\n  - combobox \"문서 검색\" [expanded]: /v1/events\n  - button \"검색 닫기\": ESC\n  - status\n  - listbox \"문서 검색\":\n    - option \"SCLS Docs PoC Search control ko\" [selected]:\n      - text: SCLS Docs PoC\n      - paragraph: Search control ko\n    - option \"/v1/events\":\n      - paragraph: /v1/events\n    - option \"v1\":\n      - paragraph: v1\n    - option \"SCLS Docs PoC 행사 API 빠른 시작\":\n      - text: SCLS Docs PoC\n      - paragraph: 행사 API 빠른 시작\n    - option \"GET /v1/events\":\n      - paragraph: GET /v1/events"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ko",
+      "query": "retryAfterSeconds",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ko/search-probe/",
+      "hits": [
+        {
+          "id": "fd-search-option-/ko/search-probe",
+          "title": "SCLS Docs PoCSearch control ko"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-5",
+          "title": "retryAfterSeconds"
+        }
+      ],
+      "controlledHits": [
+        {
+          "id": "fd-search-option-/ko/search-probe",
+          "title": "SCLS Docs PoCSearch control ko"
+        },
+        {
+          "id": "fd-search-option-/ko/search-probe-5",
+          "title": "retryAfterSeconds"
+        }
+      ],
+      "snapshot": "- dialog \"문서 검색\":\n  - combobox \"문서 검색\" [expanded]: retryAfterSeconds\n  - button \"검색 닫기\": ESC\n  - status\n  - listbox \"문서 검색\":\n    - option \"SCLS Docs PoC Search control ko\" [selected]:\n      - text: SCLS Docs PoC\n      - paragraph: Search control ko\n    - option \"retryAfterSeconds\":\n      - paragraph: retryAfterSeconds"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "イベント",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-0",
+          "title": "イベント"
+        },
+        {
+          "id": "fd-search-option-/ja/api/get-event",
+          "title": "SCLS Docs PoCAPI リファレンスイベント詳細を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/get-event-0",
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "id": "fd-search-option-/ja/api",
+          "title": "SCLS Docs PoCAPI リファレンスAPI リファレンス"
+        },
+        {
+          "id": "fd-search-option-/ja/api-0",
+          "title": "イベント一覧を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api-1",
+          "title": "イベント詳細を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/list-events",
+          "title": "SCLS Docs PoCAPI リファレンスイベント一覧を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/list-events-0",
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "id": "fd-search-option-/ja/guide",
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "id": "fd-search-option-/ja/guide-2",
+          "title": "韓国と日本: イベント検索、チケット情報、カレンダー購読。"
+        },
+        {
+          "id": "fd-search-option-/ja/guide-1",
+          "title": "イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+        }
+      ],
+      "controlledHits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-0",
+          "title": "イベント"
+        }
+      ],
+      "snapshot": "- dialog \"ドキュメント検索\":\n  - combobox \"ドキュメント検索\" [expanded]: イベント\n  - button \"検索を閉じる\": ESC\n  - status\n  - listbox \"ドキュメント検索\":\n    - option \"SCLS Docs PoC Search control ja\" [selected]:\n      - text: SCLS Docs PoC\n      - paragraph: Search control ja\n    - option \"イベント\":\n      - paragraph: イベント\n    - option \"SCLS Docs PoC API リファレンス イベント詳細を取得\":\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: イベント詳細を取得\n    - option \"公開イベント情報を取得します。国とタグで絞り込めます。\":\n      - paragraph: 公開イベント情報を取得します。国とタグで絞り込めます。\n    - option \"SCLS Docs PoC API リファレンス API リファレンス\":\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: API リファレンス\n    - option \"イベント一覧を取得\":\n      - paragraph: イベント一覧を取得\n    - option \"イベント詳細を取得\":\n      - paragraph: イベント詳細を取得\n    - option \"SCLS Docs PoC API リファレンス イベント一覧を取得\":\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: イベント一覧を取得\n    - option \"公開イベント情報を取得します。国とタグで絞り込めます。\":\n      - paragraph: 公開イベント情報を取得します。国とタグで絞り込めます。\n    - option \"SCLS Docs PoC イベント API クイックスタート\":\n      - text: SCLS Docs PoC\n      - paragraph: イベント API クイックスタート\n    - 'option \"韓国と日本: イベント検索、チケット情報、カレンダー購読。\"':\n      - paragraph: \"韓国と日本: イベント検索、チケット情報、カレンダー購読。\"\n    - option \"イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。\":\n      - paragraph: イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "イベントを",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "id": "fd-search-option-/ja/api/get-event",
+          "title": "SCLS Docs PoCAPI リファレンスイベント詳細を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/get-event-0",
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "id": "fd-search-option-/ja/api",
+          "title": "SCLS Docs PoCAPI リファレンスAPI リファレンス"
+        },
+        {
+          "id": "fd-search-option-/ja/api-0",
+          "title": "イベント一覧を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api-1",
+          "title": "イベント詳細を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api-2",
+          "title": "カレンダーフィードを取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/list-events",
+          "title": "SCLS Docs PoCAPI リファレンスイベント一覧を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/list-events-0",
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-0",
+          "title": "イベント"
+        },
+        {
+          "id": "fd-search-option-/ja/guide",
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "id": "fd-search-option-/ja/guide-1",
+          "title": "イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+        },
+        {
+          "id": "fd-search-option-/ja/guide-2",
+          "title": "韓国と日本: イベント検索、チケット情報、カレンダー購読。"
+        },
+        {
+          "id": "fd-search-option-/ja/api/get-calendar",
+          "title": "SCLS Docs PoCAPI リファレンスカレンダーフィードを取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/get-calendar-0",
+          "title": "購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+        },
+        {
+          "id": "fd-search-option-/ja/subscription",
+          "title": "SCLS Docs PoCカレンダー購読ガイド"
+        },
+        {
+          "id": "fd-search-option-/ja/subscription-0",
+          "title": "購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+        }
+      ],
+      "controlledHits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-0",
+          "title": "イベント"
+        }
+      ],
+      "snapshot": "- dialog \"ドキュメント検索\":\n  - combobox \"ドキュメント検索\" [expanded]: イベントを\n  - button \"検索を閉じる\": ESC\n  - status\n  - listbox \"ドキュメント検索\":\n    - option \"SCLS Docs PoC API リファレンス イベント詳細を取得\" [selected]:\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: イベント詳細を取得\n    - option \"公開イベント情報を取得します。国とタグで絞り込めます。\":\n      - paragraph: 公開イベント情報を取得します。国とタグで絞り込めます。\n    - option \"SCLS Docs PoC API リファレンス API リファレンス\":\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: API リファレンス\n    - option \"イベント一覧を取得\":\n      - paragraph: イベント一覧を取得\n    - option \"イベント詳細を取得\":\n      - paragraph: イベント詳細を取得\n    - option \"カレンダーフィードを取得\":\n      - paragraph: カレンダーフィードを取得\n    - option \"SCLS Docs PoC API リファレンス イベント一覧を取得\":\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: イベント一覧を取得\n    - option \"公開イベント情報を取得します。国とタグで絞り込めます。\":\n      - paragraph: 公開イベント情報を取得します。国とタグで絞り込めます。\n    - option \"SCLS Docs PoC Search control ja\":\n      - text: SCLS Docs PoC\n      - paragraph: Search control ja\n    - option \"イベント\":\n      - paragraph: イベント\n    - option \"SCLS Docs PoC イベント API クイックスタート\":\n      - text: SCLS Docs PoC\n      - paragraph: イベント API クイックスタート\n    - option \"イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。\":\n      - paragraph: イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。\n    - 'option \"韓国と日本: イベント検索、チケット情報、カレンダー購読。\"':\n      - paragraph: \"韓国と日本: イベント検索、チケット情報、カレンダー購読。\"\n    - option \"SCLS Docs PoC API リファレンス カレンダーフィードを取得\":\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: カレンダーフィードを取得\n    - option \"購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。\":\n      - paragraph: 購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。\n    - option \"SCLS Docs PoC カレンダー購読ガイド\":\n      - text: SCLS Docs PoC\n      - paragraph: カレンダー購読ガイド\n    - option \"購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。\":\n      - paragraph: 購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "イベントが",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-0",
+          "title": "イベント"
+        },
+        {
+          "id": "fd-search-option-/ja/api/get-event",
+          "title": "SCLS Docs PoCAPI リファレンスイベント詳細を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/get-event-0",
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "id": "fd-search-option-/ja/api",
+          "title": "SCLS Docs PoCAPI リファレンスAPI リファレンス"
+        },
+        {
+          "id": "fd-search-option-/ja/api-0",
+          "title": "イベント一覧を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api-1",
+          "title": "イベント詳細を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/list-events",
+          "title": "SCLS Docs PoCAPI リファレンスイベント一覧を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/list-events-0",
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "id": "fd-search-option-/ja/guide",
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "id": "fd-search-option-/ja/guide-2",
+          "title": "韓国と日本: イベント検索、チケット情報、カレンダー購読。"
+        },
+        {
+          "id": "fd-search-option-/ja/guide-1",
+          "title": "イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+        }
+      ],
+      "controlledHits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-0",
+          "title": "イベント"
+        }
+      ],
+      "snapshot": "- dialog \"ドキュメント検索\":\n  - combobox \"ドキュメント検索\" [expanded]: イベントが\n  - button \"検索を閉じる\": ESC\n  - status\n  - listbox \"ドキュメント検索\":\n    - option \"SCLS Docs PoC Search control ja\" [selected]:\n      - text: SCLS Docs PoC\n      - paragraph: Search control ja\n    - option \"イベント\":\n      - paragraph: イベント\n    - option \"SCLS Docs PoC API リファレンス イベント詳細を取得\":\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: イベント詳細を取得\n    - option \"公開イベント情報を取得します。国とタグで絞り込めます。\":\n      - paragraph: 公開イベント情報を取得します。国とタグで絞り込めます。\n    - option \"SCLS Docs PoC API リファレンス API リファレンス\":\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: API リファレンス\n    - option \"イベント一覧を取得\":\n      - paragraph: イベント一覧を取得\n    - option \"イベント詳細を取得\":\n      - paragraph: イベント詳細を取得\n    - option \"SCLS Docs PoC API リファレンス イベント一覧を取得\":\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: イベント一覧を取得\n    - option \"公開イベント情報を取得します。国とタグで絞り込めます。\":\n      - paragraph: 公開イベント情報を取得します。国とタグで絞り込めます。\n    - option \"SCLS Docs PoC イベント API クイックスタート\":\n      - text: SCLS Docs PoC\n      - paragraph: イベント API クイックスタート\n    - 'option \"韓国と日本: イベント検索、チケット情報、カレンダー購読。\"':\n      - paragraph: \"韓国と日本: イベント検索、チケット情報、カレンダー購読。\"\n    - option \"イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。\":\n      - paragraph: イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "チケット",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-1",
+          "title": "チケット"
+        },
+        {
+          "id": "fd-search-option-/ja/guide",
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "id": "fd-search-option-/ja/guide-2",
+          "title": "韓国と日本: イベント検索、チケット情報、カレンダー購読。"
+        },
+        {
+          "id": "fd-search-option-/ja/guide-1",
+          "title": "イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+        }
+      ],
+      "controlledHits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-1",
+          "title": "チケット"
+        }
+      ],
+      "snapshot": "- dialog \"ドキュメント検索\":\n  - combobox \"ドキュメント検索\" [expanded]: チケット\n  - button \"検索を閉じる\": ESC\n  - status\n  - listbox \"ドキュメント検索\":\n    - option \"SCLS Docs PoC Search control ja\" [selected]:\n      - text: SCLS Docs PoC\n      - paragraph: Search control ja\n    - option \"チケット\":\n      - paragraph: チケット\n    - option \"SCLS Docs PoC イベント API クイックスタート\":\n      - text: SCLS Docs PoC\n      - paragraph: イベント API クイックスタート\n    - 'option \"韓国と日本: イベント検索、チケット情報、カレンダー購読。\"':\n      - paragraph: \"韓国と日本: イベント検索、チケット情報、カレンダー購読。\"\n    - option \"イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。\":\n      - paragraph: イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "チケットを",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": false,
+      "inflectedFormAbsent": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-1",
+          "title": "チケット"
+        },
+        {
+          "id": "fd-search-option-/ja/guide",
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "id": "fd-search-option-/ja/guide-1",
+          "title": "イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。"
+        },
+        {
+          "id": "fd-search-option-/ja/guide-2",
+          "title": "韓国と日本: イベント検索、チケット情報、カレンダー購読。"
+        },
+        {
+          "id": "fd-search-option-/ja/api/get-calendar",
+          "title": "SCLS Docs PoCAPI リファレンスカレンダーフィードを取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/get-calendar-0",
+          "title": "購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+        },
+        {
+          "id": "fd-search-option-/ja/api/get-event",
+          "title": "SCLS Docs PoCAPI リファレンスイベント詳細を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/get-event-0",
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "id": "fd-search-option-/ja/api",
+          "title": "SCLS Docs PoCAPI リファレンスAPI リファレンス"
+        },
+        {
+          "id": "fd-search-option-/ja/api-0",
+          "title": "イベント一覧を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api-1",
+          "title": "イベント詳細を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api-2",
+          "title": "カレンダーフィードを取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/list-events",
+          "title": "SCLS Docs PoCAPI リファレンスイベント一覧を取得"
+        },
+        {
+          "id": "fd-search-option-/ja/api/list-events-0",
+          "title": "公開イベント情報を取得します。国とタグで絞り込めます。"
+        },
+        {
+          "id": "fd-search-option-/ja/subscription",
+          "title": "SCLS Docs PoCカレンダー購読ガイド"
+        },
+        {
+          "id": "fd-search-option-/ja/subscription-0",
+          "title": "購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+        }
+      ],
+      "controlledHits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-1",
+          "title": "チケット"
+        }
+      ],
+      "snapshot": "- dialog \"ドキュメント検索\":\n  - combobox \"ドキュメント検索\" [expanded]: チケットを\n  - button \"検索を閉じる\": ESC\n  - status\n  - listbox \"ドキュメント検索\":\n    - option \"SCLS Docs PoC Search control ja\" [selected]:\n      - text: SCLS Docs PoC\n      - paragraph: Search control ja\n    - option \"チケット\":\n      - paragraph: チケット\n    - option \"SCLS Docs PoC イベント API クイックスタート\":\n      - text: SCLS Docs PoC\n      - paragraph: イベント API クイックスタート\n    - option \"イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。\":\n      - paragraph: イベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。\n    - 'option \"韓国と日本: イベント検索、チケット情報、カレンダー購読。\"':\n      - paragraph: \"韓国と日本: イベント検索、チケット情報、カレンダー購読。\"\n    - option \"SCLS Docs PoC API リファレンス カレンダーフィードを取得\":\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: カレンダーフィードを取得\n    - option \"購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。\":\n      - paragraph: 購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。\n    - option \"SCLS Docs PoC API リファレンス イベント詳細を取得\":\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: イベント詳細を取得\n    - option \"公開イベント情報を取得します。国とタグで絞り込めます。\":\n      - paragraph: 公開イベント情報を取得します。国とタグで絞り込めます。\n    - option \"SCLS Docs PoC API リファレンス API リファレンス\":\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: API リファレンス\n    - option \"イベント一覧を取得\":\n      - paragraph: イベント一覧を取得\n    - option \"イベント詳細を取得\":\n      - paragraph: イベント詳細を取得\n    - option \"カレンダーフィードを取得\":\n      - paragraph: カレンダーフィードを取得\n    - option \"SCLS Docs PoC API リファレンス イベント一覧を取得\":\n      - text: SCLS Docs PoCAPI リファレンス\n      - paragraph: イベント一覧を取得\n    - option \"公開イベント情報を取得します。国とタグで絞り込めます。\":\n      - paragraph: 公開イベント情報を取得します。国とタグで絞り込めます。\n    - option \"SCLS Docs PoC カレンダー購読ガイド\":\n      - text: SCLS Docs PoC\n      - paragraph: カレンダー購読ガイド\n    - option \"購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。\":\n      - paragraph: 購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "v1",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-3",
+          "title": "v1"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-4",
+          "title": "/v1/events"
+        },
+        {
+          "id": "fd-search-option-/ja/guide",
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "id": "fd-search-option-/ja/guide-0",
+          "title": "GET /v1/events"
+        }
+      ],
+      "controlledHits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-3",
+          "title": "v1"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-4",
+          "title": "/v1/events"
+        }
+      ],
+      "snapshot": "- dialog \"ドキュメント検索\":\n  - combobox \"ドキュメント検索\" [expanded]: v1\n  - button \"検索を閉じる\": ESC\n  - status\n  - listbox \"ドキュメント検索\":\n    - option \"SCLS Docs PoC Search control ja\" [selected]:\n      - text: SCLS Docs PoC\n      - paragraph: Search control ja\n    - option \"v1\":\n      - paragraph: v1\n    - option \"/v1/events\":\n      - paragraph: /v1/events\n    - option \"SCLS Docs PoC イベント API クイックスタート\":\n      - text: SCLS Docs PoC\n      - paragraph: イベント API クイックスタート\n    - option \"GET /v1/events\":\n      - paragraph: GET /v1/events"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "/v1/events",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-4",
+          "title": "/v1/events"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-3",
+          "title": "v1"
+        },
+        {
+          "id": "fd-search-option-/ja/guide",
+          "title": "SCLS Docs PoCイベント API クイックスタート"
+        },
+        {
+          "id": "fd-search-option-/ja/guide-0",
+          "title": "GET /v1/events"
+        }
+      ],
+      "controlledHits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-4",
+          "title": "/v1/events"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-3",
+          "title": "v1"
+        }
+      ],
+      "snapshot": "- dialog \"ドキュメント検索\":\n  - combobox \"ドキュメント検索\" [expanded]: /v1/events\n  - button \"検索を閉じる\": ESC\n  - status\n  - listbox \"ドキュメント検索\":\n    - option \"SCLS Docs PoC Search control ja\" [selected]:\n      - text: SCLS Docs PoC\n      - paragraph: Search control ja\n    - option \"/v1/events\":\n      - paragraph: /v1/events\n    - option \"v1\":\n      - paragraph: v1\n    - option \"SCLS Docs PoC イベント API クイックスタート\":\n      - text: SCLS Docs PoC\n      - paragraph: イベント API クイックスタート\n    - option \"GET /v1/events\":\n      - paragraph: GET /v1/events"
+    },
+    {
+      "app": "fumadocs",
+      "language": "ja",
+      "query": "retryAfterSeconds",
+      "suite": "controlled-morphology-identifiers",
+      "queryLiterallyInControl": true,
+      "controlDocument": "/ja/search-probe/",
+      "hits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-5",
+          "title": "retryAfterSeconds"
+        }
+      ],
+      "controlledHits": [
+        {
+          "id": "fd-search-option-/ja/search-probe",
+          "title": "SCLS Docs PoCSearch control ja"
+        },
+        {
+          "id": "fd-search-option-/ja/search-probe-5",
+          "title": "retryAfterSeconds"
+        }
+      ],
+      "snapshot": "- dialog \"ドキュメント検索\":\n  - combobox \"ドキュメント検索\" [expanded]: retryAfterSeconds\n  - button \"検索を閉じる\": ESC\n  - status\n  - listbox \"ドキュメント検索\":\n    - option \"SCLS Docs PoC Search control ja\" [selected]:\n      - text: SCLS Docs PoC\n      - paragraph: Search control ja\n    - option \"retryAfterSeconds\":\n      - paragraph: retryAfterSeconds"
+    }
+  ],
+  "errors": [],
+  "lastRunCase": "all",
+  "summary": {
+    "starlight-scalar": {
+      "passed": 15,
+      "total": 15
+    },
+    "fumadocs": {
+      "passed": 15,
+      "total": 15
+    }
+  },
+  "supplementalChecks": [
+    {
+      "app": "starlight-scalar",
+      "name": "scalar-modern-doc",
+      "criterion": "Internal search is visible and returns event operations with showSidebar:false",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "settings": {
+          "showSidebar": false,
+          "hideDarkModeToggle": true,
+          "withDefaultFonts": false,
+          "showDeveloperTools": "never",
+          "telemetry": false,
+          "cdn": "/vendor/scalar.js",
+          "mode": "client",
+          "input": "url",
+          "template": "doc"
+        },
+        "visibleSearch": false,
+        "rawTriggers": [],
+        "visibleInputs": [],
+        "query": "events",
+        "results": [],
+        "starlightSidebarVisible": true
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "scalar-modern-splash",
+      "criterion": "Internal search is visible and returns event operations with showSidebar:false",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "settings": {
+          "showSidebar": false,
+          "hideDarkModeToggle": true,
+          "withDefaultFonts": false,
+          "showDeveloperTools": "never",
+          "telemetry": false,
+          "cdn": "/vendor/scalar.js",
+          "mode": "client",
+          "input": "url",
+          "template": "splash"
+        },
+        "visibleSearch": false,
+        "rawTriggers": [],
+        "visibleInputs": [],
+        "query": "events",
+        "results": [],
+        "starlightSidebarVisible": false
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "scalar-classic-doc",
+      "criterion": "Internal search is visible and returns event operations with showSidebar:false",
+      "executed": true,
+      "pass": true,
+      "detail": {
+        "pass": true,
+        "settings": {
+          "layout": "classic",
+          "showSidebar": false,
+          "hideDarkModeToggle": true,
+          "withDefaultFonts": false,
+          "showDeveloperTools": "never",
+          "telemetry": false,
+          "cdn": "/vendor/scalar.js",
+          "mode": "client",
+          "input": "url",
+          "template": "doc"
+        },
+        "visibleSearch": true,
+        "rawTriggers": [
+          "Open SearchSearchKeyboard Shortcut:Control⌃ k"
+        ],
+        "visibleInputs": [],
+        "query": "events",
+        "results": [
+          " Tag:   events ,Description:  イベント一覧を取得",
+          " Operation:   イベント一覧を取得 , getHTTP Method: getPath:  /events",
+          " Operation:   イベント詳細を取得 , getHTTP Method: getPath:  /events/{slug}"
+        ],
+        "operationResults": [
+          " Operation:   イベント一覧を取得 , getHTTP Method: getPath:  /events",
+          " Operation:   イベント詳細を取得 , getHTTP Method: getPath:  /events/{slug}"
+        ],
+        "namedSchemaCount": 0,
+        "snapshot": "- dialog \"Search\":\n  - search:\n    - combobox \"Enter search query\": events\n    - button \"Clear Search\"\n  - listbox \"Reference Search Results\":\n    - 'option \"Tag: events , Description: イベント一覧を取得\"'\n    - 'option \"Operation: イベント一覧を取得 , HTTP Method: get Path: /events\"'\n    - 'option \"Operation: イベント詳細を取得 , HTTP Method: get Path: /events/{slug}\"'\n  - text: Press up arrow / down arrow to navigate, enter to select, type to filter results",
+        "starlightSidebarVisible": true
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "scalar-classic-splash",
+      "criterion": "Internal search is visible and returns event operations with showSidebar:false",
+      "executed": true,
+      "pass": true,
+      "detail": {
+        "pass": true,
+        "settings": {
+          "layout": "classic",
+          "showSidebar": false,
+          "hideDarkModeToggle": true,
+          "withDefaultFonts": false,
+          "showDeveloperTools": "never",
+          "telemetry": false,
+          "cdn": "/vendor/scalar.js",
+          "mode": "client",
+          "input": "url",
+          "template": "splash"
+        },
+        "visibleSearch": true,
+        "rawTriggers": [
+          "Open SearchSearchKeyboard Shortcut:Control⌃ k"
+        ],
+        "visibleInputs": [],
+        "query": "events",
+        "results": [
+          " Tag:   events ,Description:  イベント一覧を取得",
+          " Operation:   イベント一覧を取得 , getHTTP Method: getPath:  /events",
+          " Operation:   イベント詳細を取得 , getHTTP Method: getPath:  /events/{slug}"
+        ],
+        "operationResults": [
+          " Operation:   イベント一覧を取得 , getHTTP Method: getPath:  /events",
+          " Operation:   イベント詳細を取得 , getHTTP Method: getPath:  /events/{slug}"
+        ],
+        "namedSchemaCount": 0,
+        "snapshot": "- dialog \"Search\":\n  - search:\n    - combobox \"Enter search query\": events\n    - button \"Clear Search\"\n  - listbox \"Reference Search Results\":\n    - 'option \"Tag: events , Description: イベント一覧を取得\"'\n    - 'option \"Operation: イベント一覧を取得 , HTTP Method: get Path: /events\"'\n    - 'option \"Operation: イベント詳細を取得 , HTTP Method: get Path: /events/{slug}\"'\n  - text: Press up arrow / down arrow to navigate, enter to select, type to filter results",
+        "starlightSidebarVisible": false
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "scalar-classic-static-doc",
+      "criterion": "Internal search is visible and returns event operations with showSidebar:false",
+      "executed": true,
+      "pass": true,
+      "detail": {
+        "pass": true,
+        "settings": {
+          "layout": "classic",
+          "showSidebar": false,
+          "hideDarkModeToggle": true,
+          "withDefaultFonts": false,
+          "showDeveloperTools": "never",
+          "telemetry": false,
+          "cdn": "/vendor/scalar.js",
+          "mode": "static",
+          "input": "content",
+          "template": "doc"
+        },
+        "visibleSearch": true,
+        "rawTriggers": [
+          "Open SearchSearchKeyboard Shortcut:Control⌃ k"
+        ],
+        "visibleInputs": [],
+        "query": "events",
+        "results": [
+          " Tag:   events ,Description:  イベント一覧を取得",
+          " Operation:   イベント一覧を取得 , getHTTP Method: getPath:  /events",
+          " Operation:   イベント詳細を取得 , getHTTP Method: getPath:  /events/{slug}"
+        ],
+        "operationResults": [
+          " Operation:   イベント一覧を取得 , getHTTP Method: getPath:  /events",
+          " Operation:   イベント詳細を取得 , getHTTP Method: getPath:  /events/{slug}"
+        ],
+        "namedSchemaCount": 0,
+        "snapshot": "- dialog \"Search\":\n  - search:\n    - combobox \"Enter search query\": events\n    - button \"Clear Search\"\n  - listbox \"Reference Search Results\":\n    - 'option \"Tag: events , Description: イベント一覧を取得\"'\n    - 'option \"Operation: イベント一覧を取得 , HTTP Method: get Path: /events\"'\n    - 'option \"Operation: イベント詳細を取得 , HTTP Method: get Path: /events/{slug}\"'\n  - text: Press up arrow / down arrow to navigate, enter to select, type to filter results",
+        "starlightSidebarVisible": true
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "scalar-classic-static-splash",
+      "criterion": "Internal search is visible and returns event operations with showSidebar:false",
+      "executed": true,
+      "pass": true,
+      "detail": {
+        "pass": true,
+        "settings": {
+          "layout": "classic",
+          "showSidebar": false,
+          "hideDarkModeToggle": true,
+          "withDefaultFonts": false,
+          "showDeveloperTools": "never",
+          "telemetry": false,
+          "cdn": "/vendor/scalar.js",
+          "mode": "static",
+          "input": "content",
+          "template": "splash"
+        },
+        "visibleSearch": true,
+        "rawTriggers": [
+          "Open SearchSearchKeyboard Shortcut:Control⌃ k"
+        ],
+        "visibleInputs": [],
+        "query": "events",
+        "results": [
+          " Tag:   events ,Description:  イベント一覧を取得",
+          " Operation:   イベント一覧を取得 , getHTTP Method: getPath:  /events",
+          " Operation:   イベント詳細を取得 , getHTTP Method: getPath:  /events/{slug}"
+        ],
+        "operationResults": [
+          " Operation:   イベント一覧を取得 , getHTTP Method: getPath:  /events",
+          " Operation:   イベント詳細を取得 , getHTTP Method: getPath:  /events/{slug}"
+        ],
+        "namedSchemaCount": 0,
+        "snapshot": "- dialog \"Search\":\n  - search:\n    - combobox \"Enter search query\": events\n    - button \"Clear Search\"\n  - listbox \"Reference Search Results\":\n    - 'option \"Tag: events , Description: イベント一覧を取得\"'\n    - 'option \"Operation: イベント一覧を取得 , HTTP Method: get Path: /events\"'\n    - 'option \"Operation: イベント詳細を取得 , HTTP Method: get Path: /events/{slug}\"'\n  - text: Press up arrow / down arrow to navigate, enter to select, type to filter results",
+        "starlightSidebarVisible": false
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "root-url",
+      "criterion": "Root / serves a page or redirect instead of HTTP 404",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "status": 404,
+        "finalUrl": "http://127.0.0.1:4321/",
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "ja-logo-link",
+      "criterion": "Site title preserves ja and reaches a valid page",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "href": "/ja",
+        "finalUrl": "http://127.0.0.1:4321/ja",
+        "status": 404,
+        "languageMaintained": true,
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "ko-relative-url",
+      "criterion": "Relative guide link resolves to the translated sibling and HTTP 200",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "sourceSyntax": "subscription/",
+        "href": "subscription/",
+        "resolved": "http://127.0.0.1:4321/ko/guide/subscription/",
+        "status": 404,
+        "finalUrl": "http://127.0.0.1:4321/ko/guide/subscription/",
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "ko-relative-file",
+      "criterion": "Relative guide link resolves to the translated sibling and HTTP 200",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "sourceSyntax": "./subscription.md",
+        "href": "./subscription.md",
+        "resolved": "http://127.0.0.1:4321/ko/guide/subscription.md",
+        "status": 404,
+        "finalUrl": "http://127.0.0.1:4321/ko/guide/subscription.md",
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "ja-relative-url",
+      "criterion": "Relative guide link resolves to the translated sibling and HTTP 200",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "sourceSyntax": "subscription/",
+        "href": "subscription/",
+        "resolved": "http://127.0.0.1:4321/ja/guide/subscription/",
+        "status": 404,
+        "finalUrl": "http://127.0.0.1:4321/ja/guide/subscription/",
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "starlight-scalar",
+      "name": "ja-relative-file",
+      "criterion": "Relative guide link resolves to the translated sibling and HTTP 200",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "sourceSyntax": "./subscription.md",
+        "href": "./subscription.md",
+        "resolved": "http://127.0.0.1:4321/ja/guide/subscription.md",
+        "status": 404,
+        "finalUrl": "http://127.0.0.1:4321/ja/guide/subscription.md",
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "root-url",
+      "criterion": "Root / serves a page or redirect instead of HTTP 404",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "status": 404,
+        "finalUrl": "http://127.0.0.1:4322/",
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "ja-logo-link",
+      "criterion": "Site title preserves ja and reaches a valid page",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "href": "/",
+        "finalUrl": "http://127.0.0.1:4322/",
+        "status": 404,
+        "languageMaintained": false,
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "ko-relative-url",
+      "criterion": "Relative guide link resolves to the translated sibling and HTTP 200",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "sourceSyntax": "subscription/",
+        "href": "subscription/",
+        "resolved": "http://127.0.0.1:4322/ko/guide/subscription/",
+        "status": 404,
+        "finalUrl": "http://127.0.0.1:4322/ko/guide/subscription/",
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "ko-relative-file",
+      "criterion": "Relative guide link resolves to the translated sibling and HTTP 200",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "sourceSyntax": "./subscription.mdx",
+        "href": "./subscription.mdx",
+        "resolved": "http://127.0.0.1:4322/ko/guide/subscription.mdx",
+        "status": 404,
+        "finalUrl": "http://127.0.0.1:4322/ko/guide/subscription.mdx",
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "ja-relative-url",
+      "criterion": "Relative guide link resolves to the translated sibling and HTTP 200",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "sourceSyntax": "subscription/",
+        "href": "subscription/",
+        "resolved": "http://127.0.0.1:4322/ja/guide/subscription/",
+        "status": 404,
+        "finalUrl": "http://127.0.0.1:4322/ja/guide/subscription/",
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "ja-relative-file",
+      "criterion": "Relative guide link resolves to the translated sibling and HTTP 200",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "sourceSyntax": "./subscription.mdx",
+        "href": "./subscription.mdx",
+        "resolved": "http://127.0.0.1:4322/ja/guide/subscription.mdx",
+        "status": 404,
+        "finalUrl": "http://127.0.0.1:4322/ja/guide/subscription.mdx",
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "ko-relative-file-with-resolver",
+      "criterion": "Official createRelativeLink resolves a translated sibling file to HTTP 200",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "sourceSyntax": "./subscription.mdx",
+        "sourceDiagnostics": {
+          "parser": "dir",
+          "pagePath": "ko/guide.mdx",
+          "pageLocale": "ko",
+          "resolved": "./subscription.mdx",
+          "rootLookup": "/ko/subscription"
+        },
+        "href": "./subscription.mdx",
+        "status": 404,
+        "finalUrl": "http://127.0.0.1:4322/ko/relative-link-probe/subscription.mdx",
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "ko-relative-file-dot-parser",
+      "criterion": "Dot parser with official resolver reaches the translated sibling",
+      "executed": true,
+      "pass": true,
+      "detail": {
+        "pass": true,
+        "sourceSyntax": "./subscription.mdx",
+        "sourceDiagnostics": {
+          "parser": "dot",
+          "pagePath": "guide.ko.mdx",
+          "pageLocale": "ko",
+          "resolved": "/ko/subscription"
+        },
+        "href": "/ko/subscription/",
+        "status": 200,
+        "finalUrl": "http://127.0.0.1:4322/ko/subscription/",
+        "rawBody": "SCLS Docs PoC\n문서 검색\nCtrl\nK\n행사 API 빠른 시작\n캘린더 구독 안내\nAPI 레퍼런스\nSearch control ko\n한국어\nko\nja\nen\n캘린더 구독 안내\n\n캘린더 구독 주소를 복사해서 Google Calendar 또는 Apple 캘린더에 추가합니다.\n\ntext/calendar · ICS · locale=ko\n\n행사 API 빠른 시작\n\n행사 목록과 티켓 정보를 조회합니다. 캘린더 구독은 ICS 피드를 사용합니다.\n\nAPI 레퍼런스\n\n다음 페이지"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "ja-relative-file-with-resolver",
+      "criterion": "Official createRelativeLink resolves a translated sibling file to HTTP 200",
+      "executed": true,
+      "pass": false,
+      "detail": {
+        "pass": false,
+        "sourceSyntax": "./subscription.mdx",
+        "sourceDiagnostics": {
+          "parser": "dir",
+          "pagePath": "ja/guide.mdx",
+          "pageLocale": "ja",
+          "resolved": "./subscription.mdx",
+          "rootLookup": "/ja/subscription"
+        },
+        "href": "./subscription.mdx",
+        "status": 404,
+        "finalUrl": "http://127.0.0.1:4322/ja/relative-link-probe/subscription.mdx",
+        "rawBody": "Static file not found"
+      }
+    },
+    {
+      "app": "fumadocs",
+      "name": "ja-relative-file-dot-parser",
+      "criterion": "Dot parser with official resolver reaches the translated sibling",
+      "executed": true,
+      "pass": true,
+      "detail": {
+        "pass": true,
+        "sourceSyntax": "./subscription.mdx",
+        "sourceDiagnostics": {
+          "parser": "dot",
+          "pagePath": "guide.ja.mdx",
+          "pageLocale": "ja",
+          "resolved": "/ja/subscription"
+        },
+        "href": "/ja/subscription/",
+        "status": 200,
+        "finalUrl": "http://127.0.0.1:4322/ja/subscription/",
+        "rawBody": "SCLS Docs PoC\nドキュメント検索\nCtrl\nK\nイベント API クイックスタート\nカレンダー購読ガイド\nAPI リファレンス\nSearch control ja\n日本語\nko\nja\nen\nカレンダー購読ガイド\n\n購読 URL をコピーし、Google Calendar または Apple カレンダーに追加します。\n\ntext/calendar · ICS · locale=ja\n\nイベント API クイックスタート\n\nイベント一覧とチケット情報を取得します。カレンダー購読には ICS フィードを使います。\n\nAPI リファレンス\n\n次のページ"
+      }
+    }
+  ],
+  "supplement": {
+    "date": "2026-10-24",
+    "browser": "156.0.8078.4",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "errors": [],
+    "translationAudit": {
+      "path": "artifacts/ui-translations-audit.json",
+      "uiKeys": 59,
+      "openapiKeys": 151,
+      "unionKeys": 206,
+      "locales": {
+        "ko": {
+          "translatedKeys": 89,
+          "missingKeys": 117,
+          "visibleEnglishLabelCount": 3,
+          "visibleEnglishLabels": [
+            "Copy Link",
+            "Length",
+            "Value in"
+          ],
+          "accessibleEnglishLabelCount": 1
+        },
+        "ja": {
+          "translatedKeys": 89,
+          "missingKeys": 117,
+          "visibleEnglishLabelCount": 3,
+          "visibleEnglishLabels": [
+            "Copy Link",
+            "Length",
+            "Value in"
+          ],
+          "accessibleEnglishLabelCount": 1
+        }
+      }
+    },
+    "summary": {
+      "observed": 22,
+      "unverified": 0,
+      "criterionPassed": 6,
+      "criterionFailed": 16,
+      "controlledSearchQueries": 34
+    }
+  }
+}

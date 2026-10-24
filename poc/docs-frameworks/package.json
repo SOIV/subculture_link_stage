@@ -1,0 +1,41 @@
+{
+  "name": "scls-docs-framework-poc",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:fixtures": "node scripts/prepare.mjs",
+    "fixture:serve": "node scripts/fixture-server.mjs",
+    "serve": "node scripts/serve-all.mjs",
+    "build:starlight": "node scripts/build-starlight.mjs",
+    "build:fumadocs": "npm --prefix apps/fumadocs run build",
+    "test:browser": "node scripts/compare.mjs"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "7.3.0",
+    "@astrojs/starlight": "0.42.7",
+    "@scalar/api-reference": "1.76.0",
+    "@scalar/astro": "0.4.31",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/mdx": "2.0.14",
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "astro": "7.4.2",
+    "fumadocs-core": "16.17.8",
+    "fumadocs-mdx": "15.4.10",
+    "fumadocs-openapi": "12.5.5",
+    "fumadocs-ui": "16.17.8",
+    "next": "16.4.3",
+    "playwright": "1.64.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "shiki": "4.5.0",
+    "tailwindcss": "4.3.3",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "zod": "4.6.7"
+  },
+  "engines": {
+    "node": ">=24.22.1"
+  }
+}

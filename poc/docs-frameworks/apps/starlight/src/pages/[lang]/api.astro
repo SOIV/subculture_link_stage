@@ -1,0 +1,55 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { ScalarComponent } from '@scalar/astro';
+import labels from '../../../../../fixtures/content.json';
+
+export function getStaticPaths() { return ['ko','ja','en'].map(lang => ({ params: { lang } })); }
+const lang = Astro.params.lang as 'ko' | 'ja' | 'en';
+const t = labels[lang];
+const translated = lang === 'ko' ? {
+  search: { label: 'API 검색', open: 'API 검색 열기', inputLabel: 'API 검색어 입력', placeholder: 'API 검색...', noResults: '검색 결과가 없습니다' },
+  operation: { testRequest: '요청 테스트', responses: '응답', queryParameters: '쿼리 매개변수', pathParameters: '경로 매개변수' },
+  common: { description: '설명', path: '경로' },
+  schema: { required: '필수', optional: '선택' },
+  apiClient: {
+    addressBar: { send: '요청 보내기', sendRequest: '요청 보내기' },
+    responseEmpty: { sendRequest: '요청 보내기' },
+    requestBlock: { queryParameters: '쿼리 매개변수', headers: '헤더', requestBody: '요청 본문' },
+    responseBlock: { response: '응답', body: '본문' },
+    header: { closeClient: '클라이언트 닫기' },
+  },
+} : lang === 'ja' ? {
+  search: { label: 'API 検索', open: 'API 検索を開く', inputLabel: 'API 検索キーワード', placeholder: 'API 検索...', noResults: '検索結果がありません' },
+  operation: { testRequest: 'リクエストをテスト', responses: 'レスポンス', queryParameters: 'クエリパラメーター', pathParameters: 'パスパラメーター' },
+  common: { description: '説明', path: 'パス' },
+  schema: { required: '必須', optional: '任意' },
+  apiClient: {
+    addressBar: { send: '送信', sendRequest: '送信' },
+    responseEmpty: { sendRequest: '送信' },
+    requestBlock: { queryParameters: 'クエリパラメーター', headers: 'ヘッダー', requestBody: 'リクエストボディ' },
+    responseBlock: { response: 'レスポンス', body: 'ボディ' },
+    header: { closeClient: 'クライアントを閉じる' },
+  },
+} : {};
+---
+<StarlightPage frontmatter={{ title: t.api, description: t.description, template: 'splash' }}>
+  <nav aria-label="API language" class="not-content" data-poc-api-languages>
+    <a href={`/${lang}/guide/`}>{t.guide}</a>
+    <a href={`/${lang}/subscription/`}>{t.subscription}</a>
+    {['ko','ja','en'].map(locale => <a href={`/${locale}/api/`} lang={locale}>{locale}</a>)}
+  </nav>
+  <div class="scalar-shell">
+    <ScalarComponent renderMode="client" configuration={{
+      url: `/openapi.${lang}.json`,
+      cdn: '/vendor/scalar.js',
+      showSidebar: true,
+      hideSearch: false,
+      hideModels: true,
+      hideDownloadButton: true,
+      withDefaultFonts: false,
+      defaultOpenAllTags: true,
+      localization: { locale: lang, translations: translated },
+    }} />
+  </div>
+</StarlightPage>
+<style>nav { display: flex; gap: 1rem; margin-bottom: 1rem; }</style>

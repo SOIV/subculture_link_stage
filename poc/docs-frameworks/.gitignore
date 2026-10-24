@@ -1,0 +1,12 @@
+node_modules
+**/node_modules
+**/.astro/
+**/.next/
+**/.source/
+**/dist/
+**/out/
+**/next-env.d.ts
+**/tsconfig.tsbuildinfo
+artifacts/*.png
+artifacts/*.log
+apps/starlight/public/vendor/

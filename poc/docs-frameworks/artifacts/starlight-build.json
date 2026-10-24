@@ -1,0 +1,6 @@
+{
+  "milliseconds": 12996,
+  "stagedBuild": true,
+  "reason": "Astro dependency symlinks and mounted-drive path isolation",
+  "node": "v24.22.1"
+}

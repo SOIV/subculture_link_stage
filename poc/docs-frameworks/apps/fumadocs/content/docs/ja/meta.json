@@ -1,0 +1,9 @@
+{
+  "title": "SCLS Docs PoC",
+  "pages": [
+    "guide",
+    "subscription",
+    "api",
+    "search-probe"
+  ]
+}

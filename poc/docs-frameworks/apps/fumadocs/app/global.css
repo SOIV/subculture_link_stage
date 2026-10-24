@@ -1,0 +1,9 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+@import 'fumadocs-openapi/css/preset.css';
+@source '../content';
+@source '../../../node_modules/fumadocs-ui/dist';
+@source '../../../node_modules/fumadocs-openapi/dist';
+.poc-language-links { display: flex; gap: 1rem; margin-bottom: 1rem; }
+.poc-fallback { padding: .75rem; border: 1px solid #c084fc; border-radius: .5rem; margin-block: 1rem; }

@@ -1,0 +1,368 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SCLS Docs PoC API",
+    "version": "1.0.0",
+    "description": "Read public events. Filter by country and tags."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:4310/v1",
+      "description": "Local deterministic fixture (not production)"
+    }
+  ],
+  "tags": [
+    {
+      "name": "events",
+      "description": "List events"
+    },
+    {
+      "name": "calendars",
+      "description": "Get calendar feed"
+    }
+  ],
+  "paths": {
+    "/events": {
+      "get": {
+        "operationId": "listEvents",
+        "summary": "List events",
+        "description": "Read public events. Filter by country and tags.",
+        "tags": [
+          "events"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Language of the API response content, independent from the documentation language.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ko",
+                "ja",
+                "en"
+              ],
+              "default": "ko"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "Country code where the event takes place, such as JP or KR.",
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 2
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event list response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "const": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "count": {
+                          "type": "integer"
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "id",
+                              "slug",
+                              "locale",
+                              "title"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "slug": {
+                                "type": "string"
+                              },
+                              "locale": {
+                                "type": "string",
+                                "enum": [
+                                  "ko",
+                                  "ja",
+                                  "en"
+                                ]
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "countryCode": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "VALIDATION_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "success": false,
+                  "error": "VALIDATION_ERROR"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "success": false,
+                  "error": "RATE_LIMITED"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{slug}": {
+      "get": {
+        "operationId": "getEvent",
+        "summary": "Get event details",
+        "description": "Read public events. Filter by country and tags.",
+        "tags": [
+          "events"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "poc-event"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Language of the API response content, independent from the documentation language.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ko",
+                "ja",
+                "en"
+              ],
+              "default": "ko"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get event details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "const": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "id",
+                        "slug",
+                        "locale",
+                        "title"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        },
+                        "locale": {
+                          "type": "string",
+                          "enum": [
+                            "ko",
+                            "ja",
+                            "en"
+                          ]
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "countryCode": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "VALIDATION_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "success": false,
+                  "error": "VALIDATION_ERROR"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "EVENT_NOT_FOUND"
+          },
+          "429": {
+            "description": "RATE_LIMITED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "success": false,
+                  "error": "RATE_LIMITED"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calendars/custom.ics": {
+      "get": {
+        "operationId": "getCalendar",
+        "summary": "Get calendar feed",
+        "description": "Copy the subscription URL into Google Calendar or Apple Calendar.",
+        "tags": [
+          "calendars"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Language of the API response content, independent from the documentation language.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ko",
+                "ja",
+                "en"
+              ],
+              "default": "ko"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "Country code where the event takes place, such as JP or KR.",
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 2
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ICS calendar (RFC 5545)",
+            "content": {
+              "text/calendar": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nEND:VCALENDAR"
+              }
+            }
+          },
+          "400": {
+            "description": "VALIDATION_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "success": false,
+                  "error": "VALIDATION_ERROR"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "success": false,
+                  "error": "RATE_LIMITED"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

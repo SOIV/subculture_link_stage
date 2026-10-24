@@ -1,0 +1,6 @@
+{
+  "name": "scls-docs-poc-fumadocs",
+  "private": true,
+  "type": "module",
+  "scripts": { "generate": "node scripts/generate-openapi.mjs", "build": "node scripts/generate-openapi.mjs && next build --webpack", "dev": "next dev --port 4322" }
+}
