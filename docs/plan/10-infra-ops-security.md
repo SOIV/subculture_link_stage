@@ -17,7 +17,8 @@
 | Onstage | Svelte/SvelteKit | 이 공개 Repository(`apps/onstage`)에서 개발 중, 임시 도메인으로 초기 배포 |
 | DB | PostgreSQL (Supabase) | 초기 제공자 확정, 비용 부담 시 자체 호스팅 이전 검토 |
 | ORM | Prisma | Private `scls-platform`에 Phase 1 schema/migration 적용 |
-| Queue | Redis + BullMQ | 수집·번역·알림 Worker |
+| Collector Worker | Python | Phase 2 예정, DB는 API를 거쳐 사용 ([§3.2.1](03-architecture-and-domain.md#321-repository-구조-확정)) |
+| Queue | 미정 | 수집·번역·알림 Worker. Python Worker와 함께 쓸 수 있어야 함 ([미결 사항](#1012-배포-구조-예시)) |
 | Storage | Cloudflare R2 / S3 | 원본 및 이미지 |
 | Search | PostgreSQL FTS | 설계상 초기 검색 방향, 현재 공개 검색 API 초기 구현 범위는 로드맵 참고 |
 | Vector | pgvector | 데이터 축적 후 도입 |
@@ -97,7 +98,7 @@ API·Worker·Scheduler는 Supabase와 같은 도쿄(`nrt`) 리전에 둔다. 개
 - Phase 2 수집 Worker·Scheduler는 API와 별도 프로세스 그룹으로 분리해 머신 증가로 작업이 중복 실행되지 않게 한다.
 - 머신 증설 절차와 `deploy:api`의 `--ha=false` 옵션 처리는 릴리즈 때 Fly 문서를 확인하여 정한다. 증설 후 청구서를 비용 상한 판단에 반영한다.
 - 서비스별 Dockerfile·`fly.toml`을 두며 수동은 `fly deploy`, 자동은 GitHub Actions의 `flyctl deploy --remote-only`를 사용한다. 배포 토큰은 `FLY_API_TOKEN` Secret으로 관리한다. Fly 대시보드의 Launch from GitHub는 사용하지 않는다.
-- Monorepo 루트를 빌드 컨텍스트로 두고 `--config`·`--dockerfile`로 앱 파일을 지정한다. 공유 패키지가 TS 소스를 가리키므로 컨테이너는 `tsx`로 실행하며 `.env`는 이미지에서 제외한다.
+- Monorepo 루트를 빌드 컨텍스트로 두고 `--config`·`--dockerfile`로 앱 파일을 지정한다. 공유 패키지가 TS 소스를 가리키므로 컨테이너는 `tsx`로 실행하며 `.env`는 이미지에서 제외한다. Python 수집 Worker는 Python 이미지 기반의 별도 Dockerfile·`fly.toml`을 둔다.
 - DB 런타임은 IPv4 풀러, migration은 IPv6 직접 연결 주소를 사용한다. Prisma 풀러 모드의 세부 설정은 부하가 생기면 다시 확인한다.
 - Fly는 유휴 상태에도 상시 머신 비용이 발생하며, 배포·재시작 시 실시간 연결은 재연결해야 한다.
 
@@ -112,6 +113,8 @@ API·Worker·Scheduler는 Supabase와 같은 도쿄(`nrt`) 리전에 둔다. 개
 > 5. 공개 `/v1`의 GET·HEAD·OPTIONS는 현재 모든 오리진(`*`)을 허용하고, `/admin`은 별도 Origin 허용 목록을 유지한다. 위젯용 CORS 최종 정책은 [§10.3.3](#1033-위젯-임베드-격리-정책)에서 확정한다. 공개 요청 제한은 이미 구현되어 있다 ([§10.3.2](#1032-기본-정책)). Cloudflare 프록시를 새로 연결할 때도 실제 방문자 IP 전달·신뢰 범위와 요청 제한 동작을 확인한다.
 
 > **미결 사항 — 작업 대기열(Queue)**: Worker가 필요해지는 Phase 2 착수 때 정한다. 후보는 Redis(BullMQ)를 Fly에 볼륨과 함께 직접 띄우는 방식, 관리형 Redis(Upstash 고정 플랜 등), Supabase Postgres 기반 대기열(pg-boss 등)로 Redis 없이 가는 방식이다. Phase 1에는 필요하지 않다.
+>
+> 수집 Worker를 Python으로 만들기로 했으므로(2026-11-05) Python에서도 쓸 수 있는지가 선택 조건에 더해진다. pg-boss는 Node 전용이다. BullMQ는 Python 패키지가 있지만 Node 판보다 기능이 적어, 쓰려면 착수 때 필요한 기능이 있는지 확인한다. 언어와 관계없이 쓸 수 있는 방법으로는 Postgres 표 하나에 작업을 넣고 `SELECT … FOR UPDATE SKIP LOCKED`로 꺼내는 직접 구현이 있다. Redis 없이 갈 수 있어 지금 구성에 가장 단순한 후보다.
 
 ### 10.1.3 무료 운영 원칙 수정
 

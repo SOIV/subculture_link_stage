@@ -78,7 +78,7 @@ Subculture_Link_Stage   (공식 공개 Repository — 현재 이 저장소)
 scls-platform          (비공개, 단일 Monorepo — pnpm workspaces 등)
 ├─ apps/api            (scls-api)
 ├─ apps/backstage       (scls-backstage)
-├─ apps/worker          (scls-worker)
+├─ apps/worker          (scls-worker — Python, Phase 2 예정)
 ├─ apps/scheduler       (scls-scheduler)
 └─ packages/
    ├─ db                (실제 Prisma ORM schema 및 migration — 공개 DDL은 설계 참고용)
@@ -89,7 +89,12 @@ scls-platform          (비공개, 단일 Monorepo — pnpm workspaces 등)
 **구현 기준**
 
 - Onstage는 공개 REST API만 소비하고 Private DB 스키마·패키지에 직접 결합하지 않는다. `scls-onstage`는 서비스 식별자이며 별도 공개 Repository 이름이 아니다.
-- 비공개 API·Backstage·Worker·Scheduler는 `packages/db`·`packages/domain`으로 스키마·도메인 타입을 공유한다.
+- 비공개 API·Backstage(와 TypeScript로 만드는 Scheduler 등)는 `packages/db`·`packages/domain`으로 스키마·도메인 타입을 공유한다.
+- 수집 Worker는 Python으로 만든다(방향, 2026-11-05 — [§5.3.1](05-storage-and-collection.md#531-기본-흐름)). Python은 Prisma 타입과 `packages/*`를 쓸 수 없으므로 다음을 지킨다.
+  - Worker는 DB에 직접 쓰지 않는다. 수집 대상 출처를 읽는 것과 수집 결과(변경 제안 후보)를 보내는 것 모두 API의 Worker 전용 경로를 거친다. DB 규칙을 TypeScript API 한 곳에만 두기 위해서다.
+  - 원본 HTML·이미지는 Worker가 Object Storage(R2)에 바로 올리고, 저장 위치 등 메타데이터만 API로 보낸다.
+  - Worker와 API가 주고받는 데이터 모양은 OpenAPI 스펙([§8.5](08-api-and-ics.md#85-openapi-공개-전략)) 또는 JSON Schema로 적어 두고 양쪽이 같은 정의를 따른다. 정확한 방식은 Worker 착수 때 정한다.
+  - 번역·알림 생성까지 Python Worker에 둘지는 Phase 3 착수 때 정한다.
 - Backstage는 React + Vite + TanStack Router/Query + Tailwind v4를 사용하는 SPA다. 개발에서는 Vite가 `/admin`을 API로 프록시하고, 프로덕션도 Backstage 호스트의 `/admin/*` 프록시를 쓴다 ([§10.1.2](10-infra-ops-security.md#1012-배포-구조-예시)).
 - Onstage는 이 공개 Repository의 `apps/onstage`에서 Svelte/SvelteKit으로 개발한다.
 

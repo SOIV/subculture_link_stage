@@ -191,6 +191,18 @@ CONTENT_TYPE_FILTER
 14. API·ICS·알림 갱신
 ```
 
+> **구현 언어 (방향, 2026-11-05)**: 위 흐름의 1~10단계(수집·중복 검사·언어 감지·분류·정보 추출·변경 제안 생성)는 Python Worker로 만든다. 크롤링, 일본어·한국어 날짜 읽기, 텍스트 분류·임베딩에 쓸 라이브러리가 Python에 많기 때문이다. 11~14단계(검수·공개 DB 반영·API·ICS)는 지금처럼 TypeScript API가 맡는다. Worker와 API 사이 규칙은 [§3.2.1](03-architecture-and-domain.md#321-repository-구조-확정)에 둔다.
+>
+> 단계별 라이브러리 후보 (착수 때 확정):
+>
+> | 단계 | 후보 |
+> |---|---|
+> | 2. 문서 수집 | `httpx`, `feedparser`, `selectolax` |
+> | 4. 언어 감지 | `lingua` |
+> | 5. 관련성 분류 | 처음에는 포함·제외 키워드 규칙, 데이터가 쌓이면 `scikit-learn`·`sentence-transformers` |
+> | 7. 날짜 등 정보 추출 | `dateparser` |
+> | 포스터·이미지 처리 | `Pillow`, `imagehash` |
+
 ### 5.3.2 후보 처리 유형
 
 ```text

@@ -58,7 +58,7 @@
   - [x] Sources 표·`/admin/sources` API·Backstage 수집 출처 화면 — 2026-10-21 구현. 목록 필터, 생성·수정·삭제, 활성 토글, 이용 조건 메모(`terms_note`) 입력 ([§5.2.1](05-storage-and-collection.md#521-행사별-수집-프로필), [§7.3](07-admin-dashboard.md#73-수집-소스-관리))
   - [ ] Sources migration 적용·초기 9개 시리즈 출처 입력 — migration 파일과 입력 데이터(32건, 전부 비활성)·스크립트(`seed:sources`)는 준비했으나 DB에는 아직 적용하지 않았다
   - [ ] Source Rules — 미착수
-- [ ] 공식 웹사이트 1~2개 Collector 구현
+- [ ] 공식 웹사이트 1~2개 Collector 구현 — Python Worker로 만든다(방향, 2026-11-05). DB는 API를 거쳐 쓰고, Queue는 Python에서 쓸 수 있는 것으로 고른다 ([§3.2.1](03-architecture-and-domain.md#321-repository-구조-확정), [§10.1.2](10-infra-ops-security.md#1012-배포-구조-예시))
 - [ ] Collected Documents 및 Storage Object 구현
 - [ ] 해시 중복 검사
 - [ ] Change Proposal 생성
