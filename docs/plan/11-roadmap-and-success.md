@@ -64,7 +64,7 @@
 - [ ] Change Proposal 생성
 - [ ] 관리자 승인·거절 UI
 - [ ] 원문 스냅샷 및 변경 비교
-- [ ] **OpenAPI 3.x 스펙 작성 착수** (비공개, 내부 검증용) — [08-api-and-ics.md §OpenAPI 공개 전략](08-api-and-ics.md#85-openapi-공개-전략)
+- [ ] **OpenAPI 3.x 스펙 작성 착수** (비공개, 내부 검증용) — 공개 라우트에 요청·응답 스키마를 붙여 코드에서 자동 생성한다(2026-11-10 결정) — [08-api-and-ics.md §8.5.2](08-api-and-ics.md#852-미결-사항)
 - [ ] **API Docs 페이지 개발 착수** (비공개) — 문서 사이트 도구는 Fumadocs 우선, 차선책 Starlight + Scalar ([§8.5.3](08-api-and-ics.md#853-문서-사이트-도구-확정)). 구현은 미착수
 
 ### Phase 3 — 다국어 번역
@@ -142,6 +142,7 @@
 - [x] 프로젝트명 확정: Subculture Link Stage (SCLS)
 - [x] 계획 문서 주제별 분리 ([목차](README.md))
 - [x] OpenAPI 공개 단계 확정 — Phase 2 착수 / Phase 3 공개 ([§8.5](08-api-and-ics.md#85-openapi-공개-전략))
+- [x] OpenAPI 스펙 작성 방식 확정 — 코드에서 자동 생성(Code-first) ([§8.5.2](08-api-and-ics.md#852-미결-사항))
 - [x] 운영 형태 방향 정리 — 무료·후원 기본, 유료화·광고는 검토 중 ([§1.6.2](01-overview-and-principles.md#162-운영-형태))
 - [x] 프로젝트·설계·Onstage 공개 및 내부 구현 비공개 범위 확정 ([§1.6.3](01-overview-and-principles.md#163-소스-공개-및-참여-정책))
 - [x] 개발·운영 참여 방식 확정 — 메인 개발자 문의
