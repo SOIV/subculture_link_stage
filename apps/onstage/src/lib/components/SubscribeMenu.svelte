@@ -86,7 +86,7 @@
 	}
 
 	const itemClass =
-		'flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/5';
+		'flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm text-zinc-700 transition-colors hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-white/5';
 </script>
 
 <svelte:window onclick={onWindowClick} onkeydown={onWindowKeydown} />
@@ -108,7 +108,7 @@
 		<div
 			bind:this={panel}
 			id={panelId}
-			class="absolute z-30 w-72 max-w-[calc(100vw-2rem)] rounded-2xl border border-slate-200 bg-white p-2 shadow-xl shadow-slate-900/10 dark:border-white/10 dark:bg-slate-900 dark:shadow-black/40 {placement ===
+			class="absolute z-30 w-72 max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-900/[0.08] bg-white p-2 shadow-[0_8px_24px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-zinc-900 dark:shadow-black/40 {placement ===
 			'up'
 				? 'bottom-full mb-2'
 				: 'top-full mt-2'}"
@@ -159,19 +159,19 @@
 								<Check class="size-3.5" aria-hidden="true" />{t(locale, 'subscribe.copied')}
 							</span>
 						{:else}
-							<Copy class="size-4 text-slate-400" aria-hidden="true" />
+							<Copy class="size-4 text-zinc-400" aria-hidden="true" />
 						{/if}
 					</button>
 				</li>
 				<li>
 					<a href={links.https} download onclick={() => (open = false)} class={itemClass}>
 						{t(locale, 'subscribe.file')}
-						<Download class="size-4 text-slate-400" aria-hidden="true" />
+						<Download class="size-4 text-zinc-400" aria-hidden="true" />
 					</a>
 				</li>
 			</ul>
 			<p
-				class="mt-1 border-t border-slate-200/70 px-3 pt-2 pb-1 text-xs text-slate-500 dark:border-white/10 dark:text-slate-400"
+				class="mt-1 border-t border-zinc-900/[0.08] px-3 pt-2 pb-1 text-xs text-zinc-500 dark:border-white/10 dark:text-zinc-400"
 			>
 				{t(locale, 'subscribe.hint')}
 			</p>

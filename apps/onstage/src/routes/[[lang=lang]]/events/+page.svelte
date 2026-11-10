@@ -30,33 +30,37 @@
 </script>
 
 <div class="space-y-6">
-	<h1 class="font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
+	<h1
+		class="font-display text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50"
+	>
 		{t(locale, 'nav.events')}
 	</h1>
 
 	<FilterBar {locale} tagGroups={data.tagGroups.items} filters={data.filters} />
 
 	<div class="flex flex-wrap items-center justify-between gap-3">
-		<p class="text-sm text-slate-500 dark:text-slate-400" aria-live="polite">{countText}</p>
+		<p class="text-sm text-zinc-500 tabular-nums dark:text-zinc-400" aria-live="polite">
+			{countText}
+		</p>
 		<SubscribeMenu
 			{locale}
 			url={subscribeHref}
 			name="SCLS"
-			triggerClass="inline-flex items-center gap-1.5 rounded-full border border-violet-300 px-4 py-2 text-sm font-bold text-violet-700 hover:bg-violet-50 dark:border-violet-700 dark:text-violet-300 dark:hover:bg-violet-950"
+			triggerClass="inline-flex h-9 items-center gap-2 rounded-lg border border-zinc-900/[0.08] bg-white px-3 text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:bg-white/[0.08]"
 		>
-			<CalendarPlus class="size-4" aria-hidden="true" />
+			<CalendarPlus class="size-4 text-zinc-500 dark:text-zinc-400" aria-hidden="true" />
 			{t(locale, 'subscribe.title')}
 		</SubscribeMenu>
 	</div>
 
 	{#if data.events.items.length === 0}
 		<p
-			class="rounded-xl border border-dashed border-slate-300 p-8 text-center text-slate-500 dark:border-slate-700"
+			class="rounded-2xl border border-dashed border-zinc-300 p-8 text-center text-zinc-500 dark:border-zinc-700"
 		>
 			{t(locale, 'list.empty')}
 		</p>
 	{:else}
-		<div class="grid gap-4 sm:grid-cols-2">
+		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			{#each data.events.items as event (event.id)}
 				<EventCard {event} {locale} {tagIndex} />
 			{/each}

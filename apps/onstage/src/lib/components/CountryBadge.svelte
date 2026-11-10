@@ -26,7 +26,7 @@
 			alt=""
 			width="21"
 			height="16"
-			class="h-4 w-auto shrink-0 rounded-[3px] ring-1 ring-slate-900/15 dark:ring-white/25"
+			class="h-4 w-auto shrink-0 rounded-[3px] ring-1 ring-zinc-900/15 dark:ring-white/25"
 		/>
 	{:else}
 		<Globe class="size-4 shrink-0 opacity-70" aria-hidden="true" />

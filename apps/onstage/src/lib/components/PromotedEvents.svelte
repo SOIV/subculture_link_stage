@@ -15,11 +15,11 @@
 {#if events.length > 0}
 	<section class="space-y-4">
 		<div class="flex items-center gap-2">
-			<h2 class="font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
+			<h2 class="font-display text-xl font-semibold tracking-tight sm:text-2xl">
 				{t(locale, 'home.promoted')}
 			</h2>
 			<span
-				class="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-500 dark:bg-white/10 dark:text-slate-300"
+				class="rounded bg-zinc-100 px-1.5 py-0.5 text-[11px] leading-4 font-medium text-zinc-500 dark:bg-white/10 dark:text-zinc-300"
 			>
 				{t(locale, 'ad.label')}
 			</span>
@@ -33,7 +33,7 @@
 {:else if import.meta.env.DEV}
 	<section
 		aria-hidden="true"
-		class="rounded-2xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-400 dark:border-slate-700 dark:text-slate-500"
+		class="rounded-2xl border border-dashed border-zinc-300 p-6 text-center text-sm text-zinc-400 dark:border-zinc-700 dark:text-zinc-500"
 	>
 		{t(locale, 'home.promoted')} · {t(locale, 'home.promoted.placeholder')}
 	</section>

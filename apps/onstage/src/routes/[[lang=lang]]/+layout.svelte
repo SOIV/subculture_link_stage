@@ -56,23 +56,13 @@
 	/>
 </svelte:head>
 
+<!-- 배경은 무채색 한 장이다. 색은 보라 포인트 하나와 행사 시리즈 색 띠(카드·일정 목록)에만 쓴다.
+	본문 폭(max-w-7xl)은 헤더·푸터와 같아서 세 영역의 양 끝이 한 줄로 맞는다. -->
 <div
-	class="relative flex min-h-screen flex-col bg-violet-50/40 text-slate-900 dark:bg-slate-950 dark:text-slate-100"
+	class="flex min-h-screen flex-col bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100"
 >
-	<!-- 브랜드 톤(보라/핑크)의 은은한 배경 광원 — 카드 사이 빈 공간에서만 보이면 된다.
-		카드 자체는 각 컴포넌트에서 거의 불투명한 흰색(예: bg-white/90)을 써서 광원이
-		비쳐도 글자 대비는 그대로 유지한다. -->
-	<div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
-		<div
-			class="absolute -top-40 -left-40 h-[32rem] w-[32rem] rounded-full bg-violet-400/25 blur-3xl dark:bg-violet-500/10"
-		></div>
-		<div
-			class="absolute top-1/3 -right-40 h-[28rem] w-[28rem] rounded-full bg-pink-400/20 blur-3xl dark:bg-pink-500/10"
-		></div>
-	</div>
-
 	<Header {locale} />
-	<main class="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
+	<main class="mx-auto w-full max-w-7xl flex-1 px-4 pt-10 pb-8 sm:px-6 sm:pt-12 lg:px-8">
 		{@render children()}
 	</main>
 	<Footer {locale} />

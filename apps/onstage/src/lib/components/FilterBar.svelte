@@ -21,11 +21,11 @@
 
 	// appearance-none + 오른쪽 여백으로 브라우저 기본 화살표를 지우고 배경 SVG 화살표로 대신한다
 	// (셀렉트를 필터 칩처럼 알약 모양으로 통일하기 위해).
-	const selectClass =
-		"w-full appearance-none rounded-full border border-slate-300 bg-white bg-[url('data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%2020%2020%27%20fill=%27none%27%3E%3Cpath%20d=%27M5%208l5%205%205-5%27%20stroke=%27%2394a3b8%27%20stroke-width=%271.5%27%20stroke-linecap=%27round%27%20stroke-linejoin=%27round%27/%3E%3C/svg%3E')] bg-[length:16px] bg-[right_0.6rem_center] bg-no-repeat py-1.5 pr-8 pl-3 text-sm font-medium dark:border-slate-600 dark:bg-slate-900";
-	const dateClass =
-		'w-full rounded-full border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium dark:border-slate-600 dark:bg-slate-900';
-	const labelClass = 'flex flex-col gap-1 text-xs font-semibold text-slate-500 dark:text-slate-400';
+	const fieldBase =
+		'h-9 w-full rounded-lg border border-zinc-900/[0.12] bg-white text-sm text-zinc-800 transition-colors focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 focus:outline-none dark:border-white/[0.12] dark:bg-zinc-900 dark:text-zinc-100';
+	const selectClass = `${fieldBase} appearance-none bg-[url('data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%2020%2020%27%20fill=%27none%27%3E%3Cpath%20d=%27M5%208l5%205%205-5%27%20stroke=%27%2394a3b8%27%20stroke-width=%271.5%27%20stroke-linecap=%27round%27%20stroke-linejoin=%27round%27/%3E%3C/svg%3E')] bg-[length:16px] bg-[right_0.6rem_center] bg-no-repeat pr-8 pl-3`;
+	const dateClass = `${fieldBase} px-3`;
+	const labelClass = 'flex min-w-0 flex-col gap-1.5 text-xs text-zinc-500 dark:text-zinc-400';
 
 	// 하위 태그는 앞에 들여쓰기와 └ 표시를 붙여 상위 태그 아래에 속한다는 걸 보여준다.
 	function optionLabel(name: string, depth: number) {
@@ -49,17 +49,18 @@
 	}
 </script>
 
+<!-- 넓은 화면에서는 검색 한 줄 + 조건 6칸 한 줄로 끝난다(국가·태그 그룹·기간). -->
 <form
 	method="GET"
 	action={localeHref(locale, '/events')}
 	{onsubmit}
-	class="space-y-3 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-white/[0.03] dark:shadow-none"
+	class="space-y-4 rounded-2xl border border-zinc-900/[0.08] bg-white p-4 sm:p-5 dark:border-white/[0.08] dark:bg-zinc-900"
 >
 	<div class="flex gap-2">
 		<label class="relative flex-1">
 			<span class="sr-only">{t(locale, 'search.placeholder')}</span>
 			<Search
-				class="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-slate-400"
+				class="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-zinc-400"
 				aria-hidden="true"
 			/>
 			<input
@@ -69,18 +70,26 @@
 				placeholder={t(locale, 'search.placeholder')}
 				autocomplete="off"
 				enterkeyhint="search"
-				class="w-full rounded-full border border-slate-300 bg-white py-2.5 pr-4 pl-11 text-sm shadow-sm focus:border-violet-400 focus:outline-none dark:border-white/10 dark:bg-white/[0.04] dark:shadow-none"
+				class="h-10 w-full rounded-lg border border-zinc-900/[0.12] bg-white pr-4 pl-10 text-sm transition-colors placeholder:text-zinc-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 focus:outline-none dark:border-white/[0.12] dark:bg-zinc-900"
 			/>
 		</label>
 		<button
 			type="submit"
-			class="rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-6 py-2.5 text-sm font-bold text-white shadow-md shadow-violet-600/20 transition-transform hover:scale-[1.03] hover:shadow-lg hover:shadow-violet-600/30"
+			class="h-10 rounded-lg bg-violet-600 px-5 text-sm font-medium text-white transition-colors hover:bg-violet-700 active:scale-[0.98] dark:bg-violet-500 dark:hover:bg-violet-400 dark:hover:text-zinc-950"
 		>
 			{t(locale, 'search.button')}
 		</button>
+		{#if active}
+			<a
+				href={localeHref(locale, '/events')}
+				class="flex h-10 items-center rounded-lg px-3 text-sm text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:text-zinc-50"
+			>
+				{t(locale, 'filter.reset')}
+			</a>
+		{/if}
 	</div>
 
-	<div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+	<div class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
 		<label class={labelClass}>
 			{t(locale, 'filter.country')}
 			<select name="country" value={filters.country} onchange={submitOnChange} class={selectClass}>
@@ -108,10 +117,8 @@
 				</select>
 			</label>
 		{/each}
-	</div>
 
-	<div class="flex flex-wrap items-end gap-3">
-		<label class="{labelClass} w-[calc(50%-0.375rem)] sm:w-44">
+		<label class={labelClass}>
 			{t(locale, 'filter.from')}
 			<input
 				type="date"
@@ -121,17 +128,9 @@
 				class={dateClass}
 			/>
 		</label>
-		<label class="{labelClass} w-[calc(50%-0.375rem)] sm:w-44">
+		<label class={labelClass}>
 			{t(locale, 'filter.to')}
 			<input type="date" name="to" value={filters.to} onchange={submitOnChange} class={dateClass} />
 		</label>
-		{#if active}
-			<a
-				href={localeHref(locale, '/events')}
-				class="rounded-full border border-slate-300 px-5 py-1.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 sm:ml-auto dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800"
-			>
-				{t(locale, 'filter.reset')}
-			</a>
-		{/if}
 	</div>
 </form>

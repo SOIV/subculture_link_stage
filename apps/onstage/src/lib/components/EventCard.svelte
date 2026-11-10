@@ -42,51 +42,47 @@
 		return days === 0 ? t(locale, 'card.today') : tv(locale, 'card.dday', { n: days });
 	}
 
-	const badgeClass = 'rounded-md px-1.5 py-0.5 text-[10px] font-bold';
+	const badgeClass = 'rounded px-1.5 py-0.5 text-[11px] leading-4 font-medium';
 </script>
 
+<!-- 시리즈 색은 맨 위 얇은 띠 하나에만 쓴다(일정 목록의 왼쪽 띠와 같은 색). 나머지는 무채색이다. -->
 <a
 	href={localeHref(locale, `/events/${event.slug}`)}
 	style:--accent={accent}
-	class="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white/90 shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-1 hover:border-[var(--accent)]/40 hover:shadow-[var(--accent)]/15 hover:shadow-xl dark:border-white/10 dark:bg-white/[0.04] dark:shadow-none"
+	class="group flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-900/[0.08] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[border-color,box-shadow] duration-150 hover:border-zinc-900/[0.16] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-zinc-900 dark:shadow-none dark:hover:border-white/[0.16]"
 >
-	<div class="h-1.5 w-full shrink-0 bg-[var(--accent)]"></div>
-	<div class="flex flex-1 flex-col p-4">
-		<div
-			class="flex items-center justify-between gap-2 text-xs font-medium text-slate-500 dark:text-slate-400"
-		>
+	<div class="h-1 w-full shrink-0 bg-[var(--accent)]"></div>
+	<div class="flex flex-1 flex-col p-5">
+		<div class="flex items-center justify-between gap-3 text-xs text-zinc-500 dark:text-zinc-400">
 			<span class="flex min-w-0 items-center gap-2">
 				<span class="shrink-0 whitespace-nowrap">
 					<CountryBadge {locale} countryCode={event.countryCode} isOnline={event.isOnline} />
 				</span>
 				{#if promoted}
-					<span
-						class="{badgeClass} bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-300"
-					>
+					<span class="{badgeClass} bg-zinc-100 text-zinc-500 dark:bg-white/10 dark:text-zinc-300">
 						{t(locale, 'ad.label')}
 					</span>
 				{/if}
 				{#if showStatus}
 					<span
-						class="{badgeClass} bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300"
+						class="{badgeClass} bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300"
 					>
 						{statusLabel(locale, event.status)}
 					</span>
 				{/if}
 			</span>
-			<span
-				class="rounded-full px-2 py-0.5 text-right font-semibold text-[var(--accent)]"
-				style:background-color="color-mix(in oklch, var(--accent) 14%, transparent)"
-			>
+			<span class="text-right tabular-nums">
 				{formatCardPeriod(locale, period, new Date())}
 			</span>
 		</div>
 
-		<h3 class="mt-2 font-display text-lg leading-snug font-bold text-slate-900 dark:text-white">
+		<h3
+			class="mt-3 font-display text-lg leading-snug font-semibold text-zinc-900 dark:text-zinc-50"
+		>
 			{event.title ?? event.slug}
 			{#if needsReview}
 				<span
-					class="{badgeClass} ml-1 inline-block bg-amber-100 align-middle text-amber-700 dark:bg-amber-500/15 dark:text-amber-300"
+					class="{badgeClass} ml-1 inline-block bg-amber-100 align-middle text-amber-800 dark:bg-amber-500/15 dark:text-amber-300"
 					title={t(locale, 'detail.translationNotice')}
 				>
 					{t(locale, 'card.autoTranslated')}
@@ -95,11 +91,11 @@
 		</h3>
 
 		{#if event.summary}
-			<p class="mt-1 line-clamp-2 text-sm text-slate-600 dark:text-slate-400">{event.summary}</p>
+			<p class="mt-1 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">{event.summary}</p>
 		{/if}
 
-		<p class="mt-2 flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
-			<MapPin class="size-4 shrink-0" aria-hidden="true" />
+		<p class="mt-2 flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+			<MapPin class="size-4 shrink-0" strokeWidth={1.75} aria-hidden="true" />
 			<span class="min-w-0">{event.venue?.name ?? t(locale, 'card.venueUnknown')}</span>
 		</p>
 
@@ -107,15 +103,13 @@
 			<ul class="mt-3 flex flex-wrap gap-1.5">
 				{#each chips.shown as chip (chip.slug)}
 					<li
-						class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-semibold text-slate-600 dark:border-white/10 dark:bg-white/5 dark:text-slate-300"
+						class="rounded-md bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300"
 					>
 						{chip.name}
 					</li>
 				{/each}
 				{#if chips.hidden > 0}
-					<li
-						class="rounded-full px-1.5 py-0.5 text-[11px] font-semibold text-slate-400 dark:text-slate-500"
-					>
+					<li class="px-1 py-0.5 text-xs text-zinc-400 dark:text-zinc-500">
 						+{chips.hidden}
 					</li>
 				{/if}
@@ -124,37 +118,30 @@
 
 		{#if next}
 			<!-- 카드 높이가 달라도 이 영역은 항상 맨 아래에 붙는다(mt-auto). -->
-			<div class="mt-auto pt-3">
-				<div class="border-t border-slate-200/70 pt-3 dark:border-white/10">
+			<div class="mt-auto pt-4">
+				<div class="border-t border-zinc-900/[0.06] pt-4 dark:border-white/[0.06]">
 					{#if next.kind === 'ongoing'}
 						<p
-							class="flex items-center gap-2 text-sm font-bold text-emerald-600 dark:text-emerald-400"
+							class="flex items-center gap-2 text-sm font-medium text-emerald-700 dark:text-emerald-400"
 						>
-							<span class="relative flex size-2" aria-hidden="true">
-								<span
-									class="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-60"
-								></span>
-								<span class="relative inline-flex size-2 rounded-full bg-emerald-500"></span>
-							</span>
+							<span class="size-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
 							{t(locale, 'card.inProgress')}
 						</p>
 					{:else}
 						<div class="flex items-start justify-between gap-3">
 							<div class="min-w-0 text-sm">
-								<p
-									class="text-[11px] font-bold tracking-wide text-slate-400 uppercase dark:text-slate-500"
-								>
+								<p class="text-xs text-zinc-500 dark:text-zinc-400">
 									{t(locale, 'card.next')}
 								</p>
-								<p class="mt-0.5 font-semibold text-slate-800 dark:text-slate-100">
+								<p class="mt-1 font-medium text-zinc-900 dark:text-zinc-100">
 									{scheduleTypeLabel(locale, next.schedule.type)}
 								</p>
 								{#if scheduleQualifier(locale, next.schedule)}
-									<p class="text-xs font-semibold text-violet-600 dark:text-violet-300">
+									<p class="text-xs text-zinc-500 dark:text-zinc-400">
 										{scheduleQualifier(locale, next.schedule)}
 									</p>
 								{/if}
-								<p class="text-slate-500 dark:text-slate-400">
+								<p class="mt-0.5 text-zinc-600 tabular-nums dark:text-zinc-400">
 									{formatShortDate(
 										locale,
 										next.startsAt,
@@ -164,8 +151,10 @@
 								</p>
 							</div>
 							<span
-								class="shrink-0 rounded-full px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-[var(--accent)]"
-								style:background-color="color-mix(in oklch, var(--accent) 14%, transparent)"
+								class="shrink-0 rounded-md px-2 py-1 text-xs font-medium whitespace-nowrap tabular-nums {next.days ===
+								0
+									? 'bg-violet-600 text-white dark:bg-violet-500'
+									: 'bg-zinc-100 text-zinc-700 dark:bg-white/[0.08] dark:text-zinc-200'}"
 							>
 								{ddayLabel(next.days)}
 							</span>
@@ -173,10 +162,10 @@
 					{/if}
 					{#if moreSchedules > 0}
 						<p
-							class="mt-2 flex items-center gap-0.5 text-xs font-semibold text-slate-500 dark:text-slate-400"
+							class="mt-3 flex items-center gap-1 text-xs text-zinc-500 transition-colors group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
 						>
 							{tv(locale, 'card.moreSchedules', { n: moreSchedules })}
-							<ChevronRight class="size-3.5 text-[var(--accent)]" aria-hidden="true" />
+							<ChevronRight class="size-3.5" aria-hidden="true" />
 						</p>
 					{/if}
 				</div>
