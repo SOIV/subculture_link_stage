@@ -54,6 +54,13 @@ function lastDayOf(range: TimeRange): number | null {
 }
 
 /** 아직 끝나지 않은(진행 중이거나 앞으로 열릴) 행사인지. 날짜가 없는 행사는 false. */
+/** 행사 기간의 마지막 날이 지났는지. 날짜를 모르는 행사는 끝나지 않은 것으로 본다(목록에서 숨기지 않게). */
+export function hasEnded(event: EventSummary, now: Date): boolean {
+	const range = eventPeriod(event);
+	const last = lastDayOf(range);
+	return last !== null && last < dayNumber(now, range.timezone);
+}
+
 export function isUpcomingOrOngoing(event: EventSummary, now: Date): boolean {
 	const range = eventPeriod(event);
 	const last = lastDayOf(range);

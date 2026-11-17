@@ -1,4 +1,5 @@
 import { listEvents, listTagGroups } from '$lib/api';
+import { hasEnded } from '$lib/schedule';
 import type { ListFilters } from '$lib/filters';
 import { t } from '$lib/i18n';
 import type { PageSeo } from '$lib/seo';
@@ -24,10 +25,11 @@ export const load: PageLoad = async ({ fetch, parent, url }) => {
 		country: param('country'),
 		from: param('from'),
 		to: param('to'),
-		groups
+		groups,
+		showEnded: param('ended') === '1'
 	};
 
-	const events = await listEvents(fetch, {
+	const allEvents = await listEvents(fetch, {
 		locale,
 		q: filters.q || undefined,
 		country: filters.country || undefined,
@@ -37,11 +39,24 @@ export const load: PageLoad = async ({ fetch, parent, url }) => {
 		tags: Object.values(groups).join(',') || undefined
 	});
 
+	// 기본은 끝난 행사를 빼고 보여준다(?ended=1이면 전부). 숨긴 개수는 스위치 옆에 알려준다.
+	const now = new Date();
+	const endedCount = allEvents.items.filter((event) => hasEnded(event, now)).length;
+	const items = filters.showEnded
+		? allEvents.items
+		: allEvents.items.filter((event) => !hasEnded(event, now));
+	const events = { count: items.length, items };
+
 	// 검색어·필터를 건 결과 페이지는 조합이 무한히 많아 색인에 넣지 않는다(조건 없는 목록만 색인).
 	const isFiltered = Boolean(
-		filters.q || filters.country || filters.from || filters.to || Object.keys(groups).length > 0
+		filters.q ||
+		filters.country ||
+		filters.from ||
+		filters.to ||
+		filters.showEnded ||
+		Object.keys(groups).length > 0
 	);
 	const seo: PageSeo = { title: t(locale, 'nav.events'), noindex: isFiltered };
 
-	return { events, tagGroups, filters, seo };
+	return { events, endedCount, tagGroups, filters, seo };
 };

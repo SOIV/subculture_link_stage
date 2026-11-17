@@ -56,6 +56,10 @@
 	{onsubmit}
 	class="space-y-4 rounded-2xl border border-zinc-900/[0.08] bg-white p-4 sm:p-5 dark:border-white/[0.08] dark:bg-zinc-900"
 >
+	<!-- 조건을 바꿔도 "끝난 행사 보기" 선택은 그대로 둔다(목록 오른쪽 위 스위치). -->
+	{#if filters.showEnded}
+		<input type="hidden" name="ended" value="1" />
+	{/if}
 	<div class="flex gap-2">
 		<label class="relative flex-1">
 			<span class="sr-only">{t(locale, 'search.placeholder')}</span>

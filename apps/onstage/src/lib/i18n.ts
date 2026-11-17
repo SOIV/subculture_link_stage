@@ -46,6 +46,7 @@ const ko = {
 	'list.empty': '조건에 맞는 행사가 없습니다.',
 	'list.count': '개 행사',
 	'list.searchResults': '‘{q}’ 검색 결과',
+	'list.showEnded': '종료된 행사 보기',
 
 	'card.online': '온라인',
 	'card.venueUnknown': '장소 미정',
@@ -180,6 +181,7 @@ const ja: Record<keyof typeof ko, string> = {
 	'list.empty': '条件に合うイベントがありません。',
 	'list.count': '件のイベント',
 	'list.searchResults': '「{q}」の検索結果',
+	'list.showEnded': '終了したイベントも表示',
 
 	'card.online': 'オンライン',
 	'card.venueUnknown': '会場未定',
@@ -316,6 +318,7 @@ const en: Record<keyof typeof ko, string> = {
 	'list.empty': 'No events match these filters.',
 	'list.count': ' events',
 	'list.searchResults': 'Results for “{q}”',
+	'list.showEnded': 'Show ended events',
 
 	'card.online': 'Online',
 	'card.venueUnknown': 'Venue TBA',

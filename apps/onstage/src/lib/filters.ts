@@ -8,6 +8,8 @@ export type ListFilters = {
 	to: string;
 	/** 태그 그룹 slug → 그 그룹에서 고른 태그 slug(안 골랐으면 키가 없다). */
 	groups: Record<string, string>;
+	/** 끝난 행사도 보여줄지(?ended=1). 기본은 진행 중·예정 행사만. */
+	showEnded: boolean;
 };
 
 /** 폼에 입력된 값에서 비어 있는 조건을 뺀 쿼리스트링(앞의 ? 없이). 조건이 없으면 빈 문자열. */

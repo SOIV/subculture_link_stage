@@ -1,9 +1,7 @@
 <script lang="ts">
-	import CalendarPlus from '@lucide/svelte/icons/calendar-plus';
-	import { icsUrl } from '$lib/api';
+	import { page } from '$app/state';
 	import EventCard from '$lib/components/EventCard.svelte';
 	import FilterBar from '$lib/components/FilterBar.svelte';
-	import SubscribeMenu from '$lib/components/SubscribeMenu.svelte';
 	import { t, tv } from '$lib/i18n';
 	import { buildTagIndex } from '$lib/tags';
 	import type { PageProps } from './$types';
@@ -17,16 +15,15 @@
 			`${data.events.count}${t(locale, 'list.count')}`
 	);
 
-	// 구독 링크는 지금 고른 조건(국가·태그·기간)을 그대로 담는다. 검색어는 구독에 반영되지 않는다.
-	let subscribeHref = $derived(
-		icsUrl('custom', {
-			locale,
-			country: data.filters.country || undefined,
-			tags: Object.values(data.filters.groups).join(',') || undefined,
-			from: data.filters.from || undefined,
-			to: data.filters.to || undefined
-		}).toString()
-	);
+	// "끝난 행사 보기" 스위치: 지금 조건은 그대로 두고 ?ended=1만 켜고 끈다(자바스크립트 없이도 동작하는 링크).
+	// 캘린더 구독은 이 페이지에 따로 두지 않는다 — 페이지 맨 아래(푸터)에서 구독할 수 있다.
+	let endedToggleHref = $derived.by(() => {
+		const params = new URLSearchParams(page.url.search);
+		if (data.filters.showEnded) params.delete('ended');
+		else params.set('ended', '1');
+		const query = params.toString();
+		return page.url.pathname + (query ? `?${query}` : '');
+	});
 </script>
 
 <div class="space-y-6">
@@ -42,15 +39,32 @@
 		<p class="text-sm text-zinc-500 tabular-nums dark:text-zinc-400" aria-live="polite">
 			{countText}
 		</p>
-		<SubscribeMenu
-			{locale}
-			url={subscribeHref}
-			name="SCLS"
-			triggerClass="inline-flex h-9 items-center gap-2 rounded-lg border border-zinc-900/[0.08] bg-white px-3 text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:bg-white/[0.08]"
+		<a
+			href={endedToggleHref}
+			role="switch"
+			aria-checked={data.filters.showEnded}
+			data-sveltekit-noscroll
+			data-sveltekit-keepfocus
+			class="inline-flex h-9 items-center gap-2.5 rounded-lg px-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-900/[0.04] dark:text-zinc-200 dark:hover:bg-white/[0.06]"
 		>
-			<CalendarPlus class="size-4 text-zinc-500 dark:text-zinc-400" aria-hidden="true" />
-			{t(locale, 'subscribe.title')}
-		</SubscribeMenu>
+			<span
+				class="relative h-5 w-9 shrink-0 rounded-full transition-colors {data.filters.showEnded
+					? 'bg-violet-600 dark:bg-violet-500'
+					: 'bg-zinc-300 dark:bg-zinc-600'}"
+				aria-hidden="true"
+			>
+				<span
+					class="absolute top-0.5 left-0.5 size-4 rounded-full bg-white shadow-sm transition-transform {data
+						.filters.showEnded
+						? 'translate-x-4'
+						: ''}"
+				></span>
+			</span>
+			{t(locale, 'list.showEnded')}
+			{#if data.endedCount > 0}
+				<span class="text-zinc-400 tabular-nums dark:text-zinc-500">{data.endedCount}</span>
+			{/if}
+		</a>
 	</div>
 
 	{#if data.events.items.length === 0}
