@@ -64,6 +64,10 @@ const ko = {
 	'status.ENDED': '종료',
 	'status.ARCHIVED': '보관됨',
 
+	'scheduleStatus.COMPLETED': '종료',
+	'scheduleStatus.CANCELLED': '취소',
+	'scheduleStatus.POSTPONED': '연기',
+
 	'schedule.EVENT_START': '행사 시작',
 	'schedule.EVENT_END': '행사 종료',
 	'schedule.TICKET_OPEN': '티켓 판매 시작',
@@ -189,6 +193,10 @@ const ja: Record<keyof typeof ko, string> = {
 	'status.POSTPONED': '延期',
 	'status.ENDED': '終了',
 	'status.ARCHIVED': 'アーカイブ',
+
+	'scheduleStatus.COMPLETED': '終了',
+	'scheduleStatus.CANCELLED': '中止',
+	'scheduleStatus.POSTPONED': '延期',
 
 	'schedule.EVENT_START': '開催開始',
 	'schedule.EVENT_END': '開催終了',
@@ -317,6 +325,10 @@ const en: Record<keyof typeof ko, string> = {
 	'status.POSTPONED': 'Postponed',
 	'status.ENDED': 'Ended',
 	'status.ARCHIVED': 'Archived',
+
+	'scheduleStatus.COMPLETED': 'Ended',
+	'scheduleStatus.CANCELLED': 'Cancelled',
+	'scheduleStatus.POSTPONED': 'Postponed',
 
 	'schedule.EVENT_START': 'Event starts',
 	'schedule.EVENT_END': 'Event ends',

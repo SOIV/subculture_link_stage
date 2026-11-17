@@ -13,6 +13,7 @@
 		formatPrices,
 		formatSchedule,
 		scheduleQualifier,
+		scheduleStatusLabel,
 		scheduleTypeLabel,
 		statusLabel,
 		urlTypeLabel
@@ -184,9 +185,24 @@
 		<ul class="divide-y divide-zinc-900/[0.06] dark:divide-white/[0.06]">
 			{#each sortedSchedules as schedule, index (index)}
 				{@const qualifier = scheduleQualifier(locale, schedule)}
-				<li class="flex flex-wrap items-center justify-between gap-2 py-3 text-sm">
+				{@const statusText = scheduleStatusLabel(locale, schedule.status)}
+				<!-- 끝났거나 취소된 일정은 흐리게 하고 상태를 붙인다(진행 중인 판매가 눈에 먼저 띄도록). -->
+				<li
+					class="flex flex-wrap items-center justify-between gap-2 py-3 text-sm {statusText &&
+					schedule.status !== 'POSTPONED'
+						? 'opacity-55'
+						: ''}"
+				>
 					<span class="min-w-0">
-						<span class="block font-medium">{scheduleTypeLabel(locale, schedule.type)}</span>
+						<span class="flex flex-wrap items-center gap-1.5 font-medium"
+							>{scheduleTypeLabel(locale, schedule.type)}
+							{#if statusText}
+								<span
+									class="rounded-md bg-zinc-100 px-1.5 py-0.5 text-xs font-normal text-zinc-600 dark:bg-white/[0.08] dark:text-zinc-300"
+									>{statusText}</span
+								>
+							{/if}
+						</span>
 						{#if qualifier}
 							<span class="block text-xs text-zinc-500 dark:text-zinc-400">{qualifier}</span>
 						{/if}

@@ -163,6 +163,14 @@ export function statusLabel(locale: Locale, status: string): string {
 	return t(locale, `status.${status}`);
 }
 
+// 일정 옆에 따로 표시할 상태. 예정·확정은 평소 상태라 표시하지 않는다.
+// COMPLETED는 API가 끝 시각이 지나면 자동으로 붙인다.
+const NOTABLE_SCHEDULE_STATUSES = ['COMPLETED', 'CANCELLED', 'POSTPONED'];
+
+export function scheduleStatusLabel(locale: Locale, status: string): string | null {
+	return NOTABLE_SCHEDULE_STATUSES.includes(status) ? t(locale, `scheduleStatus.${status}`) : null;
+}
+
 export function scheduleTypeLabel(locale: Locale, type: string): string {
 	return t(locale, `schedule.${type}`);
 }
