@@ -69,6 +69,7 @@ CREATE TABLE event_schedules (
   status              TEXT NOT NULL DEFAULT 'SCHEDULED'
                         CHECK (status IN ('SCHEDULED','CONFIRMED','CANCELLED','POSTPONED','COMPLETED')),
   audience            TEXT CHECK (audience IS NULL OR audience IN ('DOMESTIC','OVERSEAS')), -- 티켓 판매 일정의 대상(NULL=전체)
+  until_sold_out      BOOLEAN NOT NULL DEFAULT FALSE,                -- 판매가 "소진 시 마감"인지
   source_document_id  UUID, -- FK는 §10에서 지연 부여
   created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()

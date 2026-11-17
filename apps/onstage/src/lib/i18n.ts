@@ -83,6 +83,7 @@ const ko = {
 	'schedule.MERCH_OPEN': '굿즈 판매 시작',
 	'schedule.MERCH_CLOSE': '굿즈 판매 종료',
 	'schedule.ANNOUNCEMENT': '공지',
+	'schedule.untilSoldOut': '소진 시 마감',
 
 	'url.OFFICIAL_SITE': '공식 사이트',
 	'url.TICKET': '티켓 구매',
@@ -213,6 +214,7 @@ const ja: Record<keyof typeof ko, string> = {
 	'schedule.MERCH_OPEN': 'グッズ販売開始',
 	'schedule.MERCH_CLOSE': 'グッズ販売終了',
 	'schedule.ANNOUNCEMENT': 'お知らせ',
+	'schedule.untilSoldOut': 'なくなり次第終了',
 
 	'url.OFFICIAL_SITE': '公式サイト',
 	'url.TICKET': 'チケット購入',
@@ -345,6 +347,7 @@ const en: Record<keyof typeof ko, string> = {
 	'schedule.MERCH_OPEN': 'Merch sales open',
 	'schedule.MERCH_CLOSE': 'Merch sales close',
 	'schedule.ANNOUNCEMENT': 'Announcement',
+	'schedule.untilSoldOut': 'until sold out',
 
 	'url.OFFICIAL_SITE': 'Official site',
 	'url.TICKET': 'Buy tickets',

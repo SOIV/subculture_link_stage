@@ -111,7 +111,11 @@ export function formatRange(locale: Locale, range: TimeRange): string {
 }
 
 export function formatSchedule(locale: Locale, schedule: EventScheduleItem): string {
-	return formatRange(locale, schedule);
+	const range = formatRange(locale, schedule);
+	// 마감일이 없으면 "~ 소진 시 마감", 마감일이 있으면 그 뒤에 덧붙인다(그 전에 끝날 수 있음).
+	if (!schedule.untilSoldOut) return range;
+	const label = t(locale, 'schedule.untilSoldOut');
+	return schedule.endsAt ? `${range} · ${label}` : `${range} ~ ${label}`;
 }
 
 /**

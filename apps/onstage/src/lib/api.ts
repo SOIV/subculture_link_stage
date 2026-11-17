@@ -43,6 +43,8 @@ export type EventScheduleItem = {
 	timezone: string;
 	isAllDay: boolean;
 	status: string;
+	/** 판매가 "소진 시 마감"인지(마감일이 없거나 그 전에 끝날 수 있음). 이전 API 응답에는 없을 수 있다. */
+	untilSoldOut?: boolean;
 };
 
 export type EventTranslation = {

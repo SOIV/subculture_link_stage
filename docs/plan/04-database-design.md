@@ -162,6 +162,7 @@ CREATE TABLE event_schedules (
   is_all_day BOOLEAN DEFAULT FALSE,
   status TEXT NOT NULL,
   audience TEXT, -- 티켓 판매 일정의 대상: DOMESTIC | OVERSEAS (NULL이면 전체)
+  until_sold_out BOOLEAN NOT NULL DEFAULT FALSE, -- 판매가 "소진 시 마감"인지
   source_document_id UUID,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -175,6 +176,8 @@ CREATE TABLE event_schedules (
 - `TICKET_OPEN`처럼 기간의 시작을 나타내는 일정에서 `ends_at`은 **판매·접수 마감**이다. 마감이 따로 없고 행사 전까지 계속 팔면 비워 둔다.
 - 하루짜리 종일 일정(예: "11월 12일 판매 시작", `ends_at` = 다음 날 0시)은 마감이 아니라 시작일만 적은 것으로 본다. 캘린더 피드와 공개 API가 같은 기준을 쓴다.
 - 종일 일정의 `ends_at`은 "마지막 날 다음 날 0시"(배타적 끝, iCalendar와 같은 규칙)로 저장한다. 관리자가 이 규칙을 몰라도 되도록 Backstage는 "종일"을 체크하면 날짜만 받고, 끝은 **마지막 날**을 그대로 입력·표시한 뒤 저장할 때 바꾼다(0시는 일정의 시간대 기준).
+- 티켓 판매 일정은 기본으로 종일(날짜만)로 쓴다. 행사 기간은 시각이 있으면 시각으로 쓴다(2026-11-17 사용자 결정).
+- `until_sold_out`은 마감일 없이 "소진 시 마감"인 판매를 표시한다(마감일과 함께 켜면 "그 날까지 또는 소진 시"). Backstage는 `TICKET_OPEN`·`MERCH_OPEN` 일정에서만 고를 수 있고, Onstage·캘린더 피드는 "소진 시 마감"을 함께 보여 준다.
 - `status = COMPLETED`는 "판매·접수가 끝남"이다. "시작됨"의 뜻으로 쓰지 않는다.
 - 관리자가 상태를 손으로 바꾸지 않아도 된다. 공개 API는 끝 시각이 지난 `SCHEDULED`·`CONFIRMED` 일정을 `COMPLETED`로, 끝난 `CONFIRMED` 행사를 `ENDED`로 바꿔 내보낸다(DB 값은 그대로). 마감이 없는 판매는 행사가 끝날 때 함께 끝난 것으로 본다. 매진 등으로 일찍 끝났을 때만 직접 `COMPLETED`로 바꾸고, `CANCELLED`·`POSTPONED`도 손으로 정한 값을 그대로 쓴다.
 
