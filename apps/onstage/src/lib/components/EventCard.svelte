@@ -63,13 +63,6 @@
 						{t(locale, 'ad.label')}
 					</span>
 				{/if}
-				{#if showStatus}
-					<span
-						class="{badgeClass} bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300"
-					>
-						{statusLabel(locale, event.status)}
-					</span>
-				{/if}
 			</span>
 			<span class="text-right tabular-nums">
 				{formatCardPeriod(locale, period, new Date())}
@@ -80,6 +73,16 @@
 			class="mt-3 font-display text-lg leading-snug font-semibold text-zinc-900 dark:text-zinc-50"
 		>
 			{event.title ?? event.slug}
+			<!-- 행사 상태(종료·연기 등)와 자동 번역 표시는 제목 바로 뒤에 나란히 둔다. 종료는 경고가 아니라 무채색이다. -->
+			{#if showStatus}
+				<span
+					class="{badgeClass} ml-1 inline-block align-middle {event.status === 'ENDED'
+						? 'bg-zinc-100 text-zinc-600 dark:bg-white/10 dark:text-zinc-300'
+						: 'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300'}"
+				>
+					{statusLabel(locale, event.status)}
+				</span>
+			{/if}
 			{#if needsReview}
 				<span
 					class="{badgeClass} ml-1 inline-block bg-amber-100 align-middle text-amber-800 dark:bg-amber-500/15 dark:text-amber-300"
