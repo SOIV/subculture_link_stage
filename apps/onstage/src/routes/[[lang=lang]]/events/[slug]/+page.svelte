@@ -19,6 +19,7 @@
 		urlTypeLabel
 	} from '$lib/format';
 	import { localeHref, t } from '$lib/i18n';
+	import { venueMapLinks } from '$lib/map';
 	import { eventJsonLd, jsonLdScript } from '$lib/seo';
 	import { accentColor } from '$lib/theme';
 	import CountryBadge from '$lib/components/CountryBadge.svelte';
@@ -56,16 +57,7 @@
 			.filter((group) => group.channels.length > 0)
 	);
 	let hasTicketInfo = $derived(event.ticket.types.length > 0 || event.ticket.channels.length > 0);
-	let mapHref = $derived.by(() => {
-		const venue = event.venue;
-		if (!venue) return null;
-		if (venue.latitude != null && venue.longitude != null) {
-			return `https://www.google.com/maps/search/?api=1&query=${venue.latitude},${venue.longitude}`;
-		}
-		if (venue.address)
-			return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.address)}`;
-		return null;
-	});
+	let mapLinks = $derived(venueMapLinks(event.venue, event.countryCode));
 
 	const linkButtonClass =
 		'inline-flex h-9 items-center rounded-lg border border-zinc-900/[0.08] bg-white px-3 text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:bg-white/[0.08]';
@@ -144,15 +136,29 @@
 				{#if event.venue.address}
 					<p class="mt-0.5 text-sm text-zinc-600 dark:text-zinc-400">{event.venue.address}</p>
 				{/if}
-				{#if mapHref}
+				{#if mapLinks.length === 1}
 					<a
-						href={mapHref}
+						href={mapLinks[0].href}
 						target="_blank"
 						rel="noreferrer"
 						class="mt-2 inline-block text-sm font-medium text-violet-700 transition-colors hover:text-violet-900 dark:text-violet-400 dark:hover:text-violet-300"
 					>
 						{t(locale, 'detail.map')}
 					</a>
+				{:else if mapLinks.length > 1}
+					<div class="mt-3 flex flex-wrap items-center gap-2">
+						<span class="text-xs text-zinc-500 dark:text-zinc-400">{t(locale, 'detail.map')}</span>
+						{#each mapLinks as link (link.provider)}
+							<a
+								href={link.href}
+								target="_blank"
+								rel="noreferrer"
+								class="inline-flex h-8 items-center rounded-lg border border-zinc-900/[0.08] bg-white px-2.5 text-xs font-medium text-zinc-800 transition-colors hover:bg-zinc-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:bg-white/[0.08]"
+							>
+								{t(locale, `map.${link.provider}`)}
+							</a>
+						{/each}
+					</div>
 				{/if}
 			{:else}
 				<p class="text-sm text-zinc-500 dark:text-zinc-400">{t(locale, 'card.venueUnknown')}</p>
