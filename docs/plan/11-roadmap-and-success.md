@@ -47,7 +47,8 @@
   - [x] 검색엔진·링크 미리보기 기반 — 제목·설명·Open Graph·행사 JSON-LD·sitemap·robots, 검색·필터 목록은 `noindex`
   - [ ] 링크 미리보기 이미지(`og:image`) — 디자인 확정 후 추가
   - [ ] 사용 중 발견되는 UI·UX 보완 — 1차 정리 완료, 후속 수정 계속
-  - [ ] 티켓 판매 구조 점검·확장 — DB·공개 API·상세 표시·초기 데이터·Backstage 입력 UI 구현 완료. Onstage 리디자인 뒤 필수·선택·불필요 정보를 구분하여 API·수집·보관 방식과 구조 재검토 ([DB 설계](04-database-design.md))
+  - [x] 티켓 판매 구조 점검·확장 — DB·공개 API·상세 표시·초기 데이터·Backstage 입력 UI 구현. 2026-11-17 재검토: 표 구조는 그대로 두고 필수·선택·보류·안 함을 정리했으며, 끝난 판매·행사를 날짜로 자동 "종료" 표시하게 했다 ([DB 설계](04-database-design.md), [작업 로그 2026-11](../devlog/2026-11.md))
+  - [ ] 비어 있는 티켓 정보 채우기 — 애니메재팬 2027·코믹월드 338·코미케 109·일러스타 14, WONDERLIVET JST 일정의 판매처 확인
   - [ ] 행사장 부스 찾기 연결 — 해시태그·공식 배치도·서클 목록·외부 지도 링크 검토 중, 착수 시점 미정 ([§2.2.4](02-users-and-scope.md#224-후기-확장-기능))
 
 ### Phase 2 — 수집 및 검수
@@ -56,7 +57,7 @@
 - [ ] 행사 관리자 계정 도입 — 대표·하위 권한 부여와 Change Proposal 제안 제출 ([§7.6.3](07-admin-dashboard.md#763-권한-부여-절차))
 - [ ] Sources 및 Source Rules 구현 — Sources부터 착수. 구현 기록은 [작업 로그 2026-10](../devlog/2026-10.md)
   - [x] Sources 표·`/admin/sources` API·Backstage 수집 출처 화면 — 2026-10-21 구현. 목록 필터, 생성·수정·삭제, 활성 토글, 이용 조건 메모(`terms_note`) 입력 ([§5.2.1](05-storage-and-collection.md#521-행사별-수집-프로필), [§7.3](07-admin-dashboard.md#73-수집-소스-관리))
-  - [ ] Sources migration 적용·초기 9개 시리즈 출처 입력 — migration 파일과 입력 데이터(32건, 전부 비활성)·스크립트(`seed:sources`)는 준비했으나 DB에는 아직 적용하지 않았다
+  - [x] Sources migration 적용·초기 9개 시리즈 출처 입력 — 2026-11-17 운영 DB에 반영. 출처 32건은 전부 비활성으로 들어가 아직 아무것도 수집하지 않는다 ([작업 로그 2026-11](../devlog/2026-11.md))
   - [ ] Source Rules — 미착수
 - [ ] 공식 웹사이트 1~2개 Collector 구현 — Python Worker로 만든다(방향, 2026-11-05). DB는 API를 거쳐 쓰고, Queue는 Python에서 쓸 수 있는 것으로 고른다 ([§3.2.1](03-architecture-and-domain.md#321-repository-구조-확정), [§10.1.2](10-infra-ops-security.md#1012-배포-구조-예시))
 - [ ] Collected Documents 및 Storage Object 구현

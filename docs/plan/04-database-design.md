@@ -170,6 +170,13 @@ CREATE TABLE event_schedules (
 
 `audience`는 같은 종류의 티켓 일정을 국내/해외 판매처별로 나누어 적을 때 쓴다. 일정의 짧은 구별 이름(예: "프리리저브")은 `entity_localizations`(`entity_type='EVENT_SCHEDULE'`)의 `title`로 둔다.
 
+**상태와 기간의 뜻 (2026-11-17 정리)**
+
+- `TICKET_OPEN`처럼 기간의 시작을 나타내는 일정에서 `ends_at`은 **판매·접수 마감**이다. 마감이 따로 없고 행사 전까지 계속 팔면 비워 둔다.
+- 하루짜리 종일 일정(예: "11월 12일 판매 시작", `ends_at` = 다음 날 0시)은 마감이 아니라 시작일만 적은 것으로 본다. 캘린더 피드와 공개 API가 같은 기준을 쓴다.
+- `status = COMPLETED`는 "판매·접수가 끝남"이다. "시작됨"의 뜻으로 쓰지 않는다.
+- 관리자가 상태를 손으로 바꾸지 않아도 된다. 공개 API는 끝 시각이 지난 `SCHEDULED`·`CONFIRMED` 일정을 `COMPLETED`로, 끝난 `CONFIRMED` 행사를 `ENDED`로 바꿔 내보낸다(DB 값은 그대로). 마감이 없는 판매는 행사가 끝날 때 함께 끝난 것으로 본다. 매진 등으로 일찍 끝났을 때만 직접 `COMPLETED`로 바꾸고, `CANCELLED`·`POSTPONED`도 손으로 정한 값을 그대로 쓴다.
+
 #### event_ticket_channels / event_ticket_types
 
 같은 행사를 여러 예매처(국내·해외)에서 판매하고 권종별 가격이 다른 경우를 담는다. 이름과 메모의 다국어는 `entity_localizations`의 `TICKET_CHANNEL`·`TICKET_TYPE`(`title`=이름, `description`=메모)으로 둔다.
@@ -198,6 +205,21 @@ CREATE TABLE event_ticket_types (
 ```
 
 `audience`의 "해외"는 개최국 기준이라(일본 행사에서는 한국이 해외다) 두 값만 두고, 일본·글로벌 같은 세부 시장은 예매처 메모에 적는다. 가격은 통화별로 입력하며 합산·환산하지 않는다.
+
+**어떤 정보를 담는가 (2026-11-17 재검토)**
+
+| 구분 | 정보 | 담는 곳 |
+|---|---|---|
+| 필수 | 판매 시작·마감 | `event_schedules`(`TICKET_OPEN` 등) |
+| 필수 | 예매처와 링크, 국내/해외 대상 | `event_ticket_channels` |
+| 필수 | 권종과 통화별 가격 | `event_ticket_types` |
+| 필수 | 무료/유료, 선착순/추첨 | 태그(티켓 방식 그룹) |
+| 선택 | 1인 매수 제한, 연령 조건, 우선 입장 같은 조건 | 권종·예매처 메모 |
+| 선택 | 현장 판매 | 링크 없는 예매처 "현장 판매" |
+| 보류 | 일정 ↔ 예매처 연결 | 지금은 일정 이름에 글자로 적는다. 수집기를 만들 때 다시 본다 |
+| 안 함 | 매진 표시, 좌석 등급, 수수료, 환율 환산 | 실시간으로 맞출 방법이 없어 틀린 정보가 될 위험이 크다 |
+
+이 재검토에서 표 구조는 바꾸지 않았다.
 
 #### entity_localizations
 
