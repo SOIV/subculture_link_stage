@@ -15,7 +15,7 @@ export const LOCALE_NAMES: Record<Locale, string> = { ko: '한국어', ja: '日�
 const ko = {
 	'site.name': 'Subculture Onstage',
 	'site.tagline': '한국·일본·글로벌 서브컬처 행사 캘린더',
-	'nav.events': '행사',
+	'nav.events': '행사 일정 목록',
 
 	'menu.settings': '설정',
 	'menu.language': '언어',

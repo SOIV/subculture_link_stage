@@ -27,7 +27,7 @@
 					<a
 						href={localeHref(locale, '/events')}
 						aria-current={inEvents ? 'page' : undefined}
-						class="flex h-9 items-center rounded-lg px-3 text-sm font-medium transition-colors {inEvents
+						class="flex h-9 items-center rounded-lg px-3 text-sm font-medium whitespace-nowrap transition-colors {inEvents
 							? 'bg-zinc-900/[0.06] text-zinc-900 dark:bg-white/[0.08] dark:text-zinc-50'
 							: 'text-zinc-600 hover:bg-zinc-900/[0.04] hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:text-zinc-50'}"
 					>
