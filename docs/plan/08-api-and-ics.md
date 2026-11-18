@@ -193,7 +193,8 @@ Phase 6 (운영 확장)
     - 스펙 파일은 Private `scls-platform`의 `apps/api/openapi/openapi.v1.json`에 두고(Phase 3 공개 전까지 비공개), `pnpm --filter @scls/api openapi`로 다시 만든다. 테스트가 파일이 코드와 같은지 확인한다.
     - 캘린더 피드(ICS)는 JSON이 아니라 응답 스키마 대신 스펙에 `text/calendar`로 적는다.
     - 요청 검사 실패(400)는 예전과 같은 `{ success: false, error: "VALIDATION_ERROR", issues }` 모양을 유지한다.
-  - 남은 일: 언어별 설명 문구, 요청 제한(429)·응답 헤더를 스펙에 적기, 문서 사이트(Fumadocs)에 붙이기.
+    - **(2026-11-18)** 요청 수 제한은 모든 경로에서 429 `{ success: false, error: "RATE_LIMITED", retryAfterSeconds }`로 응답하고, 스펙에 적었다. 모든 응답에 `X-RateLimit-Limit`·`X-RateLimit-Remaining`·`X-RateLimit-Reset`, 429에 `Retry-After`, 성공(200)에 `Cache-Control`(JSON 60초, ICS 300초, health `no-store`)을 적는다.
+  - 남은 일: 언어별 설명 문구, 문서 사이트(Fumadocs)에 붙이기.
   - 언어별 설명 문구(한·일·영)는 코드에 넣지 않는다. 코드에서 뽑은 기준 스펙 하나에 번역 문구를 덧입히는 방식으로 하며, 그 방식은 아래 항목대로 착수 때 정한다.
 - API 문서는 이 공식 공개 Repository에서 관리할 예정이다. 문서 사이트 도구는 Fumadocs 우선, Starlight 차선으로 정했고([§8.5.3](#853-문서-사이트-도구-확정)), Fumadocs 사이트는 Onstage(SvelteKit)와 별개의 Next.js 앱이라 Onstage 내부 route가 아니라 별도 docs deployment(정적 산출물)로 간다. 서브도메인 등 배포 구성은 미정이다.
 - API 레퍼런스는 Fumadocs의 `fumadocs-openapi`로 만든다. 언어별 OpenAPI 문서를 두는 방향이며, 그 관리 방식(3개 파일과 구조 검사, 또는 OpenAPI Overlay)은 Phase 2 OpenAPI 작업 착수 시점에 정한다.
