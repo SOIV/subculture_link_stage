@@ -317,6 +317,7 @@ CREATE TABLE collection_jobs (
 CREATE TABLE collected_documents (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   source_id           UUID NOT NULL REFERENCES sources(id),
+  collection_job_id   UUID REFERENCES collection_jobs(id) ON DELETE SET NULL, -- 처음 저장한 수집 작업
   original_url        TEXT NOT NULL,
   external_id         TEXT,
   title               TEXT,

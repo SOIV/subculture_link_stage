@@ -93,7 +93,8 @@ scls-platform          (비공개, 단일 Monorepo — pnpm workspaces 등)
 - 수집 Worker는 Python으로 만든다(방향, 2026-11-05 — [§5.3.1](05-storage-and-collection.md#531-기본-흐름)). Python은 Prisma 타입과 `packages/*`를 쓸 수 없으므로 다음을 지킨다.
   - Worker는 DB에 직접 쓰지 않는다. 수집 대상 출처를 읽는 것과 수집 결과(변경 제안 후보)를 보내는 것 모두 API의 Worker 전용 경로를 거친다. DB 규칙을 TypeScript API 한 곳에만 두기 위해서다.
   - 원본 HTML·이미지는 Worker가 Object Storage(R2)에 바로 올리고, 저장 위치 등 메타데이터만 API로 보낸다.
-  - Worker와 API가 주고받는 데이터 모양은 OpenAPI 스펙([§8.5](08-api-and-ics.md#85-openapi-공개-전략)) 또는 JSON Schema로 적어 두고 양쪽이 같은 정의를 따른다. 정확한 방식은 Worker 착수 때 정한다.
+  - Worker와 API가 주고받는 데이터 모양은 OpenAPI 스펙([§8.5](08-api-and-ics.md#85-openapi-공개-전략)) 또는 JSON Schema로 적어 두고 양쪽이 같은 정의를 따른다. **(정함, 2026-11-18)** 처음에는 경로가 4개(출처 목록, 작업 시작, 문서 보내기, 작업 끝내기)뿐이라 공개 스펙에 넣지 않고, API의 Zod 스키마(`apps/api/src/routes/worker.ts`, `lib/collected-documents.ts`)를 기준으로 Python 쪽 테스트가 같은 필드 이름을 쓰는지 확인한다. 경로가 늘어나면 비공개 OpenAPI로 옮긴다.
+  - Worker 전용 경로는 `/worker/*`이고, `Authorization: Bearer <WORKER_API_TOKEN>`으로 인증한다(토큰이 API에 없으면 모두 거부). Backstage 프록시는 `/admin/*`만 넘기므로 브라우저에서는 닿지 않는다.
   - 번역·알림 생성까지 Python Worker에 둘지는 Phase 3 착수 때 정한다.
 - Backstage는 React + Vite + TanStack Router/Query + Tailwind v4를 사용하는 SPA다. 개발에서는 Vite가 `/admin`을 API로 프록시하고, 프로덕션도 Backstage 호스트의 `/admin/*` 프록시를 쓴다 ([§10.1.2](10-infra-ops-security.md#1012-배포-구조-예시)).
 - Onstage는 이 공개 Repository의 `apps/onstage`에서 Svelte/SvelteKit으로 개발한다.

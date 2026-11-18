@@ -155,6 +155,7 @@ erDiagram
     SOURCES ||--o{ SOURCE_RULES : has
     SOURCES ||--o{ COLLECTION_JOBS : has
     SOURCES ||--o{ COLLECTED_DOCUMENTS : produces
+    COLLECTION_JOBS ||--o{ COLLECTED_DOCUMENTS : "first saved by"
     SOURCES ||--o{ SOURCE_SNAPSHOTS : has
     COLLECTED_DOCUMENTS ||--o| SOURCE_SNAPSHOTS : "captured as"
     COLLECTED_DOCUMENTS ||--o{ DOCUMENT_ANALYSES : has
@@ -185,6 +186,7 @@ erDiagram
     COLLECTED_DOCUMENTS {
         uuid id PK
         uuid source_id FK
+        uuid collection_job_id FK
         uuid storage_object_id FK
         text content_hash
         integer revision
