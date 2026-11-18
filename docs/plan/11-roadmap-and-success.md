@@ -70,7 +70,7 @@
   - [ ] Source Rules — 미착수
 - [ ] 공식 웹사이트 1~2개 Collector 구현 — Python Worker로 만든다(방향, 2026-11-05). DB는 API를 거쳐 쓰고, Queue는 Python에서 쓸 수 있는 것으로 고른다 ([§3.2.1](03-architecture-and-domain.md#321-repository-구조-확정), [§10.1.2](10-infra-ops-security.md#1012-배포-구조-예시))
   - [x] 첫 단계(수집 → 저장 → Backstage에서 보기) 구현 — 2026-11-18. `scls-platform/apps/worker`, 코미케 일반 참가 안내·AGF Korea 공지 두 출처, API `/worker/*`, Backstage 수집 출처의 "수집 기록" ([§5.3.1](05-storage-and-collection.md#531-기본-흐름), [작업 로그 2026-11](../devlog/2026-11.md))
-  - [ ] 운영 DB migration 적용·두 출처 활성화·첫 수집(`--backfill`) — 사용자가 실행
+  - [x] 운영 DB migration 적용·두 출처 활성화·첫 수집(`--backfill`) — 2026-11-19 사용자 실행. 코미케 1건, AGF 공지 38건(게시판 전체) 저장
   - [ ] 정기 실행 위치와 Queue 정하기 — 출처가 늘 때
 - [ ] Collected Documents 및 Storage Object 구현 — Collected Documents(+수집 작업 기록)는 2026-11-18 구현, Storage Object(원본 HTML·이미지 보관)는 남음
 - [x] 해시 중복 검사 — 2026-11-18. 같은 출처 안에서 제목+본문 해시가 같으면 건너뛰고, 같은 글이 바뀌면 리비전을 올린다
