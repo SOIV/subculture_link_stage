@@ -398,6 +398,10 @@ CREATE TABLE event_matches (
 -- "둘 중 하나만 채워짐"을 표현한다. 둘 다 NULL이면 SYSTEM(자동 파이프라인) 제출.
 -- =========================================================================
 
+-- 구현 메모(2026-11-19, scls-platform migration 20261119090000): 분석 결과(document_analyses)가 아직 없어
+-- collected_document_id로 수집 문서에 바로 연결하고, 검수자가 1명이라 review_tasks·review_decisions 대신
+-- reviewed_by_staff_id·reviewed_at·review_note를 이 표에 둔다. 승인으로 새로 만든 일정은 applied_event_schedule_id에
+-- 남긴다(FK 없음, 일정을 지워도 기록 유지). 검수자가 여럿이 되면 아래 review_* 표로 나눈다.
 CREATE TABLE change_proposals (
   id                            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   proposal_type                 TEXT NOT NULL CHECK (proposal_type IN (
