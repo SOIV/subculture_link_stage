@@ -117,7 +117,7 @@ notification_jobs
 notification_deliveries
 ```
 
-`users`는 Onstage 소셜 로그인 사용자 전용이며, 위 `staff_accounts`/`event_organizer_accounts`와는 별개 계정 체계다.
+`users`는 Onstage 소셜 로그인 사용자 전용이며, 위 `staff_accounts`/`event_organizer_accounts`와는 별개 계정 체계다. 로그인 수단은 처음에는 Google·LINE으로 정했다(Apple은 요청이 생기면 검토, 2026-11-19, [로드맵 Phase 4](11-roadmap-and-success.md#phase-4--커뮤니티-기여)). 한 사람이 여러 수단을 연결할 수 있게 하려면 `users.login_provider`/`login_identifier`를 별도 로그인 수단 표로 나눠야 하므로 구현 때 정한다.
 
 #### 파일 및 스토리지
 
