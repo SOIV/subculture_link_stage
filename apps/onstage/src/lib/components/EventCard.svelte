@@ -120,8 +120,9 @@
 		{/if}
 
 		{#if next}
-			<!-- 카드 높이가 달라도 이 영역은 항상 맨 아래에 붙는다(mt-auto). -->
-			<div class="mt-auto pt-4">
+			<!-- 다음 일정은 위 내용에 바로 이어 붙인다(상단 기준) — "일정 더 보기" 줄이 없는 카드도
+			     구분선 위치가 같은 줄의 다른 카드와 맞는다. 남는 높이는 아래 "더 보기" 줄 위로 간다. -->
+			<div class="pt-4">
 				<div class="border-t border-zinc-900/[0.06] pt-4 dark:border-white/[0.06]">
 					{#if next.kind === 'ongoing'}
 						<p
@@ -163,16 +164,17 @@
 							</span>
 						</div>
 					{/if}
-					{#if moreSchedules > 0}
-						<p
-							class="mt-3 flex items-center gap-1 text-xs text-zinc-500 transition-colors group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
-						>
-							{tv(locale, 'card.moreSchedules', { n: moreSchedules })}
-							<ChevronRight class="size-3.5" aria-hidden="true" />
-						</p>
-					{/if}
 				</div>
 			</div>
+			{#if moreSchedules > 0}
+				<!-- "더 보기" 줄은 카드 맨 아래에 붙는다(mt-auto) — 같은 줄 카드끼리 이 줄 위치도 맞는다. -->
+				<p
+					class="mt-auto flex items-center gap-1 pt-3 text-xs text-zinc-500 transition-colors group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
+				>
+					{tv(locale, 'card.moreSchedules', { n: moreSchedules })}
+					<ChevronRight class="size-3.5" aria-hidden="true" />
+				</p>
+			{/if}
 		{/if}
 	</div>
 </a>
