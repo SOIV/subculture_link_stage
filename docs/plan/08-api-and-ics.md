@@ -190,14 +190,18 @@ Phase 6 (운영 확장)
   - 이유: 1인 운영이라 코드와 설명서를 따로 고치면 어긋나기 쉽다. 응답 모양을 적어 두면 Fastify가 거기 없는 항목을 응답에서 빼므로 내부용 필드가 실수로 나가는 것도 막는다.
   - **(착수, 2026-11-17)** 생성 도구는 `@fastify/type-provider-zod` + `@fastify/swagger`로 정했다(이를 위해 API의 Zod를 3 → 4로 올렸다). 공개 `/v1` 12개 경로 모두에 요청·응답 스키마를 붙였고, 스펙은 OpenAPI 3.1로 만든다.
     - 응답은 그 스키마로 직렬화된다. 스키마에 없는 항목은 빠지고, 모양이 다르면 500이 난다. 그래서 스키마가 곧 실제 응답이다.
-    - 스펙 파일은 Private `scls-platform`의 `apps/api/openapi/openapi.v1.json`에 두고(Phase 3 공개 전까지 비공개), `pnpm --filter @scls/api openapi`로 다시 만든다. 테스트가 파일이 코드와 같은지 확인한다.
+    - 스펙 파일은 Private `scls-platform`의 `apps/api/openapi/openapi.v1.{ko,ja,en}.json`(언어별 3개)에 두고(Phase 3 공개 전까지 비공개), `pnpm --filter @scls/api openapi`로 다시 만든다. 테스트가 파일이 코드와 같은지 확인한다.
     - 캘린더 피드(ICS)는 JSON이 아니라 응답 스키마 대신 스펙에 `text/calendar`로 적는다.
     - 요청 검사 실패(400)는 예전과 같은 `{ success: false, error: "VALIDATION_ERROR", issues }` 모양을 유지한다.
     - **(2026-11-18)** 요청 수 제한은 모든 경로에서 429 `{ success: false, error: "RATE_LIMITED", retryAfterSeconds }`로 응답하고, 스펙에 적었다. 모든 응답에 `X-RateLimit-Limit`·`X-RateLimit-Remaining`·`X-RateLimit-Reset`, 429에 `Retry-After`, 성공(200)에 `Cache-Control`(JSON 60초, ICS 300초, health `no-store`)을 적는다.
-  - 남은 일: 언어별 설명 문구, 문서 사이트(Fumadocs)에 붙이기.
-  - 언어별 설명 문구(한·일·영)는 코드에 넣지 않는다. 코드에서 뽑은 기준 스펙 하나에 번역 문구를 덧입히는 방식으로 하며, 그 방식은 아래 항목대로 착수 때 정한다.
+  - **(결정·구현, 2026-11-18)** 언어별 설명 문구(한·일·영)는 코드(스키마)에 넣지 않고 **문구 표** 방식으로 입힌다. OpenAPI Overlay는 쓰지 않는다.
+    - 코드에서 뽑은 구조 하나에 언어별 문구 표(`apps/api/src/openapi/texts.{ko,ja,en}.ts`)를 입혀 스펙 3개를 만든다. 위치는 기능 이름(operationId), 스키마 이름, 항목 경로(`venue.name`)로 가리킨다. 여러 기능이 함께 쓰는 입력값·응답 설명은 공통 칸에 한 번 적고, 기능별로 다르면 그 기능 칸에 덮어쓴다. 태그의 화면 이름은 `x-displayName`으로 넣는다.
+    - 기준 언어는 영어다. 한국어·일본어 표에 없는 문구는 영어로 채우고 생성 때 빈 자리 목록을 보여 준다(공개 전까지는 막지 않는다). 표에 있는데 스펙에 없는 이름(코드가 바뀌어 낡은 문구·오타)과 영어 빈 자리는 생성 확인(`--check`)과 테스트가 실패로 잡는다. 세 스펙은 문구만 다르고 구조가 같은지도 테스트한다.
+    - 표기는 언어마다 그 언어의 관례를 따른다. 영어는 문장으로 쓰고 마침표를 찍는다. 한국어는 개조식으로 쓰고 끝에 마침표를 찍지 않으며, 짧은 설명은 쉼표나 이어 주는 말로 한 줄로 잇는다. 일본어는 항목의 짧은 설명은 체언으로 끝내 「。」를 붙이지 않고 조건은 전각 괄호（）에 넣으며, 문장(です・ます)이 들어가는 설명은 문장마다 「。」를 붙인다. 일본어 괄호·콜론은 전각, 전각 문자와 반각 영숫자 사이는 반각 띄어쓰기.
+    - Overlay를 고르지 않은 이유: 경로식(JSONPath)이 틀려도 조용히 넘어가는 도구가 많아 자체 검사가 따로 필요하고, 스펙을 밖에 넘기지 않고 우리 스크립트로만 만드니 표준 형식의 이점이 없다. 문구 표 방식은 10월 문서 도구 PoC에서 Fumadocs 로케일별 레퍼런스까지 확인했다([PoC 기록](../devlog/docs-tool-poc-results-2026-10-24.md)).
+  - 남은 일: 문서 사이트(Fumadocs)에 붙이기.
 - API 문서는 이 공식 공개 Repository에서 관리할 예정이다. 문서 사이트 도구는 Fumadocs 우선, Starlight 차선으로 정했고([§8.5.3](#853-문서-사이트-도구-확정)), Fumadocs 사이트는 Onstage(SvelteKit)와 별개의 Next.js 앱이라 Onstage 내부 route가 아니라 별도 docs deployment(정적 산출물)로 간다. 서브도메인 등 배포 구성은 미정이다.
-- API 레퍼런스는 Fumadocs의 `fumadocs-openapi`로 만든다. 언어별 OpenAPI 문서를 두는 방향이며, 그 관리 방식(3개 파일과 구조 검사, 또는 OpenAPI Overlay)은 Phase 2 OpenAPI 작업 착수 시점에 정한다.
+- API 레퍼런스는 Fumadocs의 `fumadocs-openapi`로 만든다. 언어별 OpenAPI 문서 3개를 넘기며, 관리 방식은 위의 문구 표 방식으로 정했다(2026-11-18).
 - 문서 버전 관리는 공개 계약이 `/v1` 하나인 동안 필요하지 않다. `/v2`가 현실화될 때 정한다.
 
 ### 8.5.3 문서 사이트 도구 (확정)
