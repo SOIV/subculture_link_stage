@@ -1,6 +1,6 @@
 [← 목차](README.md)
 
-# 07. 관리자 대시보드 (Subculture Backstage)
+# 07. 관리자 대시보드 (SCLS Backstage)
 
 > [!NOTE]
 > 현재 Private `scls-platform`에서 루트 관리자 로그인, 행사·일정·기준 데이터 수동 관리 UI, 수집 출처(Sources) 관리 UI와 관리자 UI 다국어 지원을 구현했다. 아래에는 향후 수집·검수·번역 및 행사 관리자 기능 설계도 포함한다. 구현 범위와 남은 작업은 [로드맵](11-roadmap-and-success.md)을 참고한다.

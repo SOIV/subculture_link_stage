@@ -6,7 +6,7 @@
 
 > [!NOTE]
 > 본 문서는 SCLS의 설계 및 개발 방향을 기록하며 구현 진행에 따라 갱신하는 living document입니다.
-> 현재 Private `scls-platform`에서 Phase 1 Core MVP 구현을 진행 중이며, API·Backstage 일부 기능과 공개 GET API·ICS 피드가 구현되었고 Backstage·API는 임시 도메인으로 초기 배포해 테스트 중입니다. Subculture Onstage는 이 공개 Repository의 `apps/onstage`에서 착수해 메인 페이지·행사 목록·상세를 구현했고 Cloudflare Workers에 임시 도메인으로 초기 배포해 테스트 중입니다(정식 도메인은 미정).
+> 현재 Private `scls-platform`에서 Phase 1 Core MVP 구현을 진행 중이며, API·Backstage 일부 기능과 공개 GET API·ICS 피드가 구현되었고 Backstage·API는 임시 도메인으로 초기 배포해 테스트 중입니다. SCLS Onstage는 이 공개 Repository의 `apps/onstage`에서 착수해 메인 페이지·행사 목록·상세를 구현했고 Cloudflare Workers에 임시 도메인으로 초기 배포해 테스트 중입니다(정식 도메인은 미정).
 > 일부 항목은 계획/참고 설계로, 실제 내부·운영 구현과 차이가 있을 수 있습니다. 현재 구현 범위는 [로드맵](11-roadmap-and-success.md)을 기준으로 확인합니다.
 > [ERD](database/erd.md)와 [schema.sql](database/schema.sql)은 설계 및 참고용 DDL이며, Private Repository의 실제 ORM schema/migration과 항상 1:1로 동일함을 보장하지 않습니다.
 
@@ -18,7 +18,7 @@
 4. [데이터베이스 설계](04-database-design.md) — DB 선택, 테이블 그룹, 핵심 테이블 스키마, 태그 구조, [ERD·전체 DDL](database/erd.md)
 5. [오브젝트 스토리지 및 수집 파이프라인](05-storage-and-collection.md) — 스토리지 설계, 수집 소스·규칙, 분석 파이프라인
 6. [다국어, 번역, 용어집](06-i18n-translation-glossary.md) — 번역 설계, 용어집 구조, 사용자 번역 수정/용어 제안
-7. [관리자 대시보드](07-admin-dashboard.md) — Subculture Backstage 기능, 3단계 인증·권한 구조(루트 관리자 / 행사 관리자 대표 / 하위 계정)
+7. [관리자 대시보드](07-admin-dashboard.md) — SCLS Backstage 기능, 3단계 인증·권한 구조(루트 관리자 / 행사 관리자 대표 / 하위 계정)
 8. [SCLS API 및 ICS 설계](08-api-and-ics.md) — 공개 API, OpenAPI 공개 전략, ICS/캘린더 설계
 9. [검색 및 알림](09-search-and-notifications.md) — 전문 검색, 유사도 검색, 알림 설계
 10. [인프라, 데이터 보관, 보안, 운영](10-infra-ops-security.md) — 기술 스택, 보관 정책, 보안·권한, 운영 모니터링

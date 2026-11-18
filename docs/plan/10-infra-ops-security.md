@@ -54,8 +54,8 @@ Queue
 
 | 호스트 | 용도 | 배포 |
 |---|---|---|
-| `scls.app` | Subculture Onstage | Cloudflare (SvelteKit) |
-| `backstage.scls.app` | Subculture Backstage | Cloudflare Workers (정적 SPA + `/admin/*` 프록시) |
+| `scls.app` | SCLS Onstage | Cloudflare (SvelteKit) |
+| `backstage.scls.app` | SCLS Backstage | Cloudflare Workers (정적 SPA + `/admin/*` 프록시) |
 | `widget.scls.app` | iFrame 위젯 정적 셸 | Cloudflare (정적) |
 | `api.scls.app` | 공개 REST API + 실시간(WS/SSE) 경로 | Fly.io 도쿄, 앞단 Cloudflare |
 

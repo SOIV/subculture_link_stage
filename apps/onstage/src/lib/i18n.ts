@@ -13,7 +13,7 @@ export const PREFIXED_LOCALES = LOCALES.filter((locale) => locale !== DEFAULT_LO
 export const LOCALE_NAMES: Record<Locale, string> = { ko: '한국어', ja: '日本語', en: 'English' };
 
 const ko = {
-	'site.name': 'Subculture Onstage',
+	'site.name': 'SCLS Onstage',
 	'site.tagline': '한국·일본·글로벌 서브컬처 행사 캘린더',
 	'nav.events': '행사 일정 목록',
 
@@ -148,7 +148,7 @@ const ko = {
 };
 
 const ja: Record<keyof typeof ko, string> = {
-	'site.name': 'Subculture Onstage',
+	'site.name': 'SCLS Onstage',
 	'site.tagline': '韓国・日本・グローバルのサブカルチャーイベントカレンダー',
 	'nav.events': 'イベント',
 
@@ -285,7 +285,7 @@ const ja: Record<keyof typeof ko, string> = {
 };
 
 const en: Record<keyof typeof ko, string> = {
-	'site.name': 'Subculture Onstage',
+	'site.name': 'SCLS Onstage',
 	'site.tagline': 'A calendar for Korean, Japanese, and global subculture events',
 	'nav.events': 'Events',
 

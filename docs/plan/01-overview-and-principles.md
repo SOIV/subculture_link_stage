@@ -8,15 +8,15 @@
 |---|---|---|
 | 전체 프로젝트·플랫폼 | **Subculture Link Stage** | 플랫폼 전체를 지칭하는 공식 명칭 |
 | 프로젝트 약칭 | **SCLS** | 저장소, API, 기술 문서 및 내부 식별자에 사용하는 약칭 |
-| 사용자 공개 서비스 | **Subculture Onstage** | 행사 검색, 상세 정보, 캘린더, 알림 및 사용자 제안 기능 |
-| 관리자·운영 서비스 | **Subculture Backstage** | 수집 후보 검수, 행사·번역·용어집·소스 및 운영 상태 관리 |
+| 사용자 공개 서비스 | **SCLS Onstage** | 행사 검색, 상세 정보, 캘린더, 알림 및 사용자 제안 기능 |
+| 관리자·운영 서비스 | **SCLS Backstage** | 수집 후보 검수, 행사·번역·용어집·소스 및 운영 상태 관리 |
 | API | **SCLS API** | Onstage, ICS, 디스코드 봇, 개인 앱 및 기타 외부 서비스에 데이터 제공 |
 
 명칭 사용 원칙:
 
 - 문서에서 전체 플랫폼을 처음 언급할 때는 `Subculture Link Stage (SCLS)`로 표기하고, 이후에는 `SCLS`를 사용할 수 있다.
-- 사용자에게 공개되는 웹 서비스는 `Subculture Onstage`로 표기한다.
-- 관리자 및 운영자 전용 서비스는 `Subculture Backstage`로 표기한다.
+- 사용자에게 공개되는 웹 서비스는 `SCLS Onstage`로 표기한다. (2026-11-18 변경: 처음에는 `Subculture Onstage`였으나, 플랫폼 이름에서 "Subculture"만 떼어 붙이면 "Subculture Link"의 일부만 남는 어색한 이름이 되어 약칭 `SCLS`를 앞에 붙이는 방식으로 바꿨다.)
+- 관리자 및 운영자 전용 서비스는 `SCLS Backstage`로 표기한다. (2026-11-18 변경: 처음에는 `Subculture Backstage`였으나 위와 같은 이유로 바꿨다. Backstage 화면은 처음부터 `SCLS Backstage`로 표시하고 있었다.)
 - 공개·관리 API를 통칭할 때는 `SCLS API`로 표기한다.
 - 디스코드 봇은 SCLS API를 활용할 수 있는 외부 소비 채널 중 하나이며, SCLS에 소속된 필수 구성요소로 간주하지 않는다.
 
@@ -46,10 +46,10 @@ Subculture Link Stage(SCLS)는 v2에서 정의한 공식 행사 일정 기준 �
 ├─ 행사 데이터베이스
 ├─ 수집 및 분석 Worker
 ├─ 번역 및 용어집 Worker
-├─ Subculture Backstage
+├─ SCLS Backstage
 ├─ 사용자 제보·수정 요청
 ├─ SCLS API
-├─ Subculture Onstage
+├─ SCLS Onstage
 └─ ICS 피드
           ↓
 [웹사이트 / 디스코드 봇 / 개인 앱 / 기타 외부 서비스]
@@ -93,9 +93,9 @@ SCLS는 한국·일본을 포함한 전 세계 서브컬처 관련 공식 행사
 
 ### 1.6.3 소스 공개 및 참여 정책
 
-- 공식 공개 Repository는 현재의 `Subculture_Link_Stage`이다. 프로젝트·설계/개발 문서, 아키텍처·데이터 모델, ERD, 참고 DDL, Roadmap, Legacy 문서를 공개하며, 향후 OpenAPI/API 개발자 문서와 Subculture Onstage 소스도 이 저장소에서 관리한다.
-- API 서버, Subculture Backstage, Collector/Worker(수집·번역·알림 처리), Scheduler 및 내부 서비스·운영 구현은 별도 Private `scls-platform`에서 개발하며 오픈소스로 공개하지 않는다. OpenAPI 스펙 공개([08-api-and-ics.md](08-api-and-ics.md))는 API 사용법을 공개하는 것이며, 구현 소스코드 공개를 의미하지 않는다.
-- 서비스 구현 소스 중 **Subculture Onstage(사용자 공개 웹)** 는 오픈소스로 공개하며, 현재 이 공개 Repository의 `apps/onstage`에서 개발 중이다(임시 도메인으로 초기 배포, 정식 공개 전). 운영자가 UI/UX·디자인 역량이 약해 이 부분은 외부 기여를 받고자 하는 의도다. 공개된 이후에는 이 저장소에 한해 공개 PR 방식의 기여도 받을 수 있다.
+- 공식 공개 Repository는 현재의 `Subculture_Link_Stage`이다. 프로젝트·설계/개발 문서, 아키텍처·데이터 모델, ERD, 참고 DDL, Roadmap, Legacy 문서를 공개하며, 향후 OpenAPI/API 개발자 문서와 SCLS Onstage 소스도 이 저장소에서 관리한다.
+- API 서버, SCLS Backstage, Collector/Worker(수집·번역·알림 처리), Scheduler 및 내부 서비스·운영 구현은 별도 Private `scls-platform`에서 개발하며 오픈소스로 공개하지 않는다. OpenAPI 스펙 공개([08-api-and-ics.md](08-api-and-ics.md))는 API 사용법을 공개하는 것이며, 구현 소스코드 공개를 의미하지 않는다.
+- 서비스 구현 소스 중 **SCLS Onstage(사용자 공개 웹)** 는 오픈소스로 공개하며, 현재 이 공개 Repository의 `apps/onstage`에서 개발 중이다(임시 도메인으로 초기 배포, 정식 공개 전). 운영자가 UI/UX·디자인 역량이 약해 이 부분은 외부 기여를 받고자 하는 의도다. 공개된 이후에는 이 저장소에 한해 공개 PR 방식의 기여도 받을 수 있다.
 - 비공개 구현 범위와 설계 문서의 공개 범위는 구분한다. Backstage 인증·권한 모델을 포함한 설계와 개발 과정은 공개 문서로 유지한다.
 - API·Backstage·Worker·Scheduler 등 비공개 영역도 문의를 통해 공동 개발·운영에 참여할 수 있다. 공개 저장소 PR이 아니라 메인 개발자에게 직접 문의하는 방식으로 진행한다.
   - 연락처: `biz@soiv-studio.xyz`

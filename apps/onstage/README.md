@@ -1,4 +1,4 @@
-# Subculture Onstage
+# SCLS Onstage
 
 SCLS(Subculture Link Stage)의 사용자 공개 웹. [SCLS 공개 API](../../docs/plan/08-api-and-ics.md)만 소비하며, 내부 DB나 Private `scls-platform`에는 직접 접근하지 않는다(전체 아키텍처는 [docs/plan/03-architecture-and-domain.md §3.2.1](../../docs/plan/03-architecture-and-domain.md#321-repository-구조-확정) 참고). Phase 1 범위는 메인 페이지, 행사 목록·필터·검색·상세와 ICS 구독 링크이며, 사용자 제보/수정 요청 같은 이후 기능은 아직 없다([docs/plan/02-users-and-scope.md §2.2.1](../../docs/plan/02-users-and-scope.md#221-core-mvp-기능-phase-1)). 목록의 검색어(`q`)와 태그 그룹별 조건(같은 그룹 "또는", 그룹 사이 "그리고")은 공개 API가 지원해야 동작한다([docs/plan/08-api-and-ics.md §8.2](../../docs/plan/08-api-and-ics.md#82-공개-api-예시)) — API를 먼저 배포한 뒤 Onstage를 배포한다.
 

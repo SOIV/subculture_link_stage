@@ -17,7 +17,7 @@
 
 ## 기록 당시 현황
 
-현황 기준: 2026-10-02. 현재 Phase 1 Core MVP 개발을 Private `scls-platform`에서 진행 중이다. API·Backstage 초기 기능과 공개 GET API·ICS 피드, Localizations CRUD API/UI를 구현했고, Backstage(Cloudflare Workers)와 API(Fly.io 도쿄)를 임시 도메인으로 초기 배포해 테스트 중이다. §2.3.3 확정 9개 시리즈 기준 초기 행사 데이터 22건(장소 7·태그 16·다국어 이름 162건 포함)을 등록했다 — 공식 출처로 확인한 것은 13건, 기사 등 간접 출처로 확인한 것은 9건이며 공식 표기가 없는 언어의 제목 다수는 기계번역(검수 필요) 상태다. 정식 도메인 확정 등은 남아 있다. Subculture Onstage는 이 공식 공개 Repository의 `apps/onstage`에서 착수해 메인 페이지·행사 목록·상세를 구현했고, Cloudflare Workers에 임시 도메인으로 초기 배포해 테스트 중이다(2026-10-02, 정식 도메인은 미정).
+현황 기준: 2026-10-02. 현재 Phase 1 Core MVP 개발을 Private `scls-platform`에서 진행 중이다. API·Backstage 초기 기능과 공개 GET API·ICS 피드, Localizations CRUD API/UI를 구현했고, Backstage(Cloudflare Workers)와 API(Fly.io 도쿄)를 임시 도메인으로 초기 배포해 테스트 중이다. §2.3.3 확정 9개 시리즈 기준 초기 행사 데이터 22건(장소 7·태그 16·다국어 이름 162건 포함)을 등록했다 — 공식 출처로 확인한 것은 13건, 기사 등 간접 출처로 확인한 것은 9건이며 공식 표기가 없는 언어의 제목 다수는 기계번역(검수 필요) 상태다. 정식 도메인 확정 등은 남아 있다. SCLS Onstage는 이 공식 공개 Repository의 `apps/onstage`에서 착수해 메인 페이지·행사 목록·상세를 구현했고, Cloudflare Workers에 임시 도메인으로 초기 배포해 테스트 중이다(2026-10-02, 정식 도메인은 미정).
 
 ## 기반 데이터·관리자 기능
 
@@ -53,7 +53,7 @@
 
 ## Onstage 구현·후속 항목
 
-- **미완료·진행/검토 중** — Subculture Onstage 행사 상세 웹페이지 — 착수. `apps/onstage`(SvelteKit, `adapter-cloudflare`)에 메인 페이지(`/`), 행사 목록·필터·검색(`/events`), 상세와 ICS 구독 링크, ko/ja/en(로케일 접두사 `/ja`, `/en`, 기본 `/`) 구현 완료. 실제 공개 API 데이터로 확인했고, Cloudflare Workers에 Git 연결(Workers Builds)로 임시 도메인에 초기 배포해 테스트 중이다(2026-10-02, 정식 공개는 정식 도메인 확정 뒤). 사용자 제보·수정 요청 등 이후 기능은 범위 밖([02-users-and-scope.md §2.2.1](../plan/02-users-and-scope.md#221-core-mvp-기능-phase-1)). 아래는 1차 디자인 패스 뒤에 적어 둔 수정 항목이다(2026-09-30 반영)
+- **미완료·진행/검토 중** — SCLS Onstage 행사 상세 웹페이지 — 착수. `apps/onstage`(SvelteKit, `adapter-cloudflare`)에 메인 페이지(`/`), 행사 목록·필터·검색(`/events`), 상세와 ICS 구독 링크, ko/ja/en(로케일 접두사 `/ja`, `/en`, 기본 `/`) 구현 완료. 실제 공개 API 데이터로 확인했고, Cloudflare Workers에 Git 연결(Workers Builds)로 임시 도메인에 초기 배포해 테스트 중이다(2026-10-02, 정식 공개는 정식 도메인 확정 뒤). 사용자 제보·수정 요청 등 이후 기능은 범위 밖([02-users-and-scope.md §2.2.1](../plan/02-users-and-scope.md#221-core-mvp-기능-phase-1)). 아래는 1차 디자인 패스 뒤에 적어 둔 수정 항목이다(2026-09-30 반영)
 
   - **완료** — Main HP 작업 — 메인 페이지가 없이 곧바로 행사 검색으로 넘어가던 구조를 바꿔 `/`를 메인 페이지로, 행사 목록은 `/events`로 분리했다(`apps/onstage`의 `routes/[[lang=lang]]/+page.svelte`, `events/+page.svelte`). 메인에는 소개 문구, 필터와 무관하게 검색어만 넘기는 단독 검색창, 국가·분류 바로가기, 곧 열리는 행사, 티켓·신청 임박 일정, 캘린더 구독 안내를 둔다. 행사 광고는 "광고" 표시가 붙는 추천 행사 자리(`lib/components/PromotedEvents.svelte`)만 마련했고, 광고 데이터가 없어 운영 화면에는 나오지 않는다(개발 모드에서만 점선 자리 표시) — 광고 등록·과금·표기 정책은 미정
 
