@@ -60,7 +60,7 @@
 	let mapLinks = $derived(venueMapLinks(event.venue, event.countryCode));
 
 	const linkButtonClass =
-		'inline-flex h-9 items-center rounded-lg border border-zinc-900/[0.08] bg-white px-3 text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:bg-white/[0.08]';
+		'inline-flex h-11 items-center rounded-lg border border-zinc-900/[0.08] bg-white px-3 text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-50 sm:h-9 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:bg-white/[0.08]';
 	const infoCardClass =
 		'rounded-2xl border border-zinc-900/[0.08] bg-white p-5 dark:border-white/[0.08] dark:bg-zinc-900';
 	const sectionHeadingClass =
@@ -76,13 +76,16 @@
 </svelte:head>
 
 <article class="space-y-8">
-	<a
-		href={localeHref(locale, '/events')}
-		class="inline-flex items-center gap-1 text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-	>
-		<ArrowLeft class="size-4" aria-hidden="true" />
-		{t(locale, 'detail.backToList')}
-	</a>
+	<!-- 누르는 영역은 위아래로 넓히되(py-3) 음수 여백으로 줄 간격은 그대로 둔다. -->
+	<div class="-mt-3 flex">
+		<a
+			href={localeHref(locale, '/events')}
+			class="-mb-3 inline-flex items-center gap-1 py-3 text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+		>
+			<ArrowLeft class="size-4" aria-hidden="true" />
+			{t(locale, 'detail.backToList')}
+		</a>
+	</div>
 
 	<!-- 시리즈 색은 목록 카드처럼 맨 위 얇은 띠에만 쓴다. -->
 	<header
@@ -141,7 +144,7 @@
 						href={mapLinks[0].href}
 						target="_blank"
 						rel="noreferrer"
-						class="mt-2 inline-block text-sm font-medium text-violet-700 transition-colors hover:text-violet-900 dark:text-violet-400 dark:hover:text-violet-300"
+						class="mt-1 inline-flex min-h-11 items-center text-sm font-medium text-violet-700 transition-colors hover:text-violet-900 sm:mt-2 sm:min-h-0 dark:text-violet-400 dark:hover:text-violet-300"
 					>
 						{t(locale, 'detail.map')}
 					</a>
@@ -153,7 +156,7 @@
 								href={link.href}
 								target="_blank"
 								rel="noreferrer"
-								class="inline-flex h-8 items-center rounded-lg border border-zinc-900/[0.08] bg-white px-2.5 text-xs font-medium text-zinc-800 transition-colors hover:bg-zinc-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:bg-white/[0.08]"
+								class="inline-flex h-10 items-center rounded-lg border border-zinc-900/[0.08] bg-white px-3 text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-50 sm:h-8 sm:px-2.5 sm:text-xs dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:bg-white/[0.08]"
 							>
 								{t(locale, `map.${link.provider}`)}
 							</a>
@@ -265,7 +268,7 @@
 								</a>
 							{:else}
 								<span
-									class="inline-flex h-9 items-center rounded-lg border border-dashed border-zinc-900/[0.12] px-3 text-sm text-zinc-600 dark:border-white/[0.12] dark:text-zinc-300"
+									class="inline-flex h-11 items-center rounded-lg border border-dashed border-zinc-900/[0.12] px-3 text-sm text-zinc-600 sm:h-9 dark:border-white/[0.12] dark:text-zinc-300"
 								>
 									{channel.name}
 								</span>

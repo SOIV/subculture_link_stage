@@ -26,14 +26,19 @@
 	});
 </script>
 
-<div class="space-y-6">
+<div class="space-y-5 sm:space-y-6">
 	<h1
 		class="font-display text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50"
 	>
 		{t(locale, 'nav.events')}
 	</h1>
 
-	<FilterBar {locale} tagGroups={data.tagGroups.items} filters={data.filters} />
+	<FilterBar
+		{locale}
+		tagGroups={data.tagGroups.items}
+		filters={data.filters}
+		count={data.events.count}
+	/>
 
 	<div class="flex flex-wrap items-center justify-between gap-3">
 		<p class="text-sm text-zinc-500 tabular-nums dark:text-zinc-400" aria-live="polite">
@@ -45,7 +50,7 @@
 			aria-checked={data.filters.showEnded}
 			data-sveltekit-noscroll
 			data-sveltekit-keepfocus
-			class="inline-flex h-9 items-center gap-2.5 rounded-lg px-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-900/[0.04] dark:text-zinc-200 dark:hover:bg-white/[0.06]"
+			class="-mr-2 inline-flex h-11 items-center gap-2.5 rounded-lg px-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-900/[0.04] sm:mr-0 sm:h-9 dark:text-zinc-200 dark:hover:bg-white/[0.06]"
 		>
 			<span
 				class="relative h-5 w-9 shrink-0 rounded-full transition-colors {data.filters.showEnded

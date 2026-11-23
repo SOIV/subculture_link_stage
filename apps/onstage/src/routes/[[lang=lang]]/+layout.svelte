@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import OfflineNotice from '$lib/components/OfflineNotice.svelte';
 	import { DEFAULT_LOCALE, LOCALES, localeHref, stripLocale, t } from '$lib/i18n';
 	import { OG_LOCALE } from '$lib/seo';
 	import type { LayoutProps } from './$types';
@@ -29,6 +30,7 @@
 
 <svelte:head>
 	<title>{title}</title>
+	<link rel="manifest" href={localeHref(locale, '/manifest.webmanifest')} />
 	<meta name="description" content={description} />
 	{#if seo.noindex}<meta name="robots" content="noindex,follow" />{/if}
 	<link rel="canonical" href={canonical} />
@@ -58,11 +60,13 @@
 
 <!-- 배경은 무채색 한 장이다. 색은 보라 포인트 하나와 행사 시리즈 색 띠(카드·일정 목록)에만 쓴다.
 	본문 폭(max-w-7xl)은 헤더·푸터와 같아서 세 영역의 양 끝이 한 줄로 맞는다. -->
+<!-- 노치가 있는 폰을 가로로 돌리면 좌우가 가려지므로 그만큼 비운다(viewport-fit=cover — src/app.html). -->
 <div
-	class="flex min-h-screen flex-col bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100"
+	class="flex min-h-dvh flex-col bg-zinc-50 pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)] text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100"
 >
 	<Header {locale} />
-	<main class="mx-auto w-full max-w-7xl flex-1 px-4 pt-10 pb-8 sm:px-6 sm:pt-12 lg:px-8">
+	<OfflineNotice {locale} />
+	<main class="mx-auto w-full max-w-7xl flex-1 px-4 pt-8 pb-8 sm:px-6 sm:pt-12 lg:px-8">
 		{@render children()}
 	</main>
 	<Footer {locale} />

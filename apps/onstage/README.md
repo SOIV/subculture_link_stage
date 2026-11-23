@@ -36,11 +36,21 @@ src/
 │  ├─ schedule.ts            카드의 다음 일정·D-day, 메인의 티켓·신청 임박 일정 계산
 │  ├─ filters.ts             행사 목록의 검색·필터 조건(URL 쿼리와 1:1)
 │  └─ components/            Header, SettingsMenu(언어·화면 모드), Footer, EventCard,
-│                            FilterBar, CountryBadge(국기), PromotedEvents(광고 자리),
-│                            UpcomingSchedules
+│                            FilterBar(휴대폰에서는 아래에서 올라오는 시트), CountryBadge(국기),
+│                            PromotedEvents(광고 자리), UpcomingSchedules, OfflineNotice
+├─ service-worker.ts          오프라인 보기(본 페이지·API 응답 저장) — SvelteKit이 자동 등록
 └─ routes/
-   └─ [[lang=lang]]/         메인(/), events(목록+검색+필터), events/[slug](상세)
+   └─ [[lang=lang]]/         메인(/), events(목록+검색+필터), events/[slug](상세), +error,
+                             manifest.webmanifest(언어별 설치 정보)
+static/icons/                 앱 아이콘(임시 — 디자인 확정 전)
 ```
+
+## 휴대폰·PWA
+
+- 휴대폰 폭(약 360~430px)에서 가로 스크롤이 없고, 누르는 곳은 40px 이상, 입력칸 글자는 16px 이상(아이폰 확대 방지)으로 둔다. 넓은 화면 크기는 `sm:` 이상에서 따로 준다.
+- 홈 화면에 설치할 수 있다(언어별 매니페스트, 아이콘은 임시). 한 번 본 페이지는 통신이 끊겨도 다시 열린다 — 동작은 `src/service-worker.ts` 위 주석 참고. 새로 배포하면 지난 저장본은 지워지고 다시 본 페이지부터 저장된다.
+- 개발 서버(`pnpm dev`)에서도 service worker가 등록된다. 이상하면 브라우저 개발자 도구 → Application → Service workers에서 해제한다.
+- 오프라인 시험은 운영 빌드로 한다(`pnpm build` 뒤 `pnpm preview`). 페이지를 몇 개 본 뒤 서버를 끄고 다시 연다(개발자 도구로 할 때는 Network의 Offline이 아니라 Application → Service workers의 Offline을 켠다 — Network 쪽은 service worker의 요청까지 막지 못할 수 있다).
 
 ## 배포
 

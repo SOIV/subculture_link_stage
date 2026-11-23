@@ -7,11 +7,33 @@
 @theme {
 	/* 제목·브랜드 전용 — 본문은 계속 시스템 폰트를 쓴다(추가 로딩 비용 최소화). */
 	--font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+
+	/* 휴대폰 필터 시트가 아래에서 올라오는 움직임(src/lib/components/FilterBar.svelte). */
+	--animate-sheet-in: sheet-in 220ms cubic-bezier(0.32, 0.72, 0, 1);
+
+	@keyframes sheet-in {
+		from {
+			transform: translateY(100%);
+		}
+	}
+}
+
+/* 움직임 줄이기를 켠 사람에게는 시트를 바로 띄운다. */
+@media (prefers-reduced-motion: reduce) {
+	.animate-sheet-in {
+		animation: none;
+	}
 }
 
 /* 한국어는 띄어쓰기 단위로 줄바꿈한다 — 기본값은 글자 단위로 끊겨서 "곳에/서"처럼 단어 중간에서
 	줄이 나뉜다. 일본어는 띄어쓰기가 없어 keep-all을 쓰면 줄바꿈이 아예 안 되므로 ko에만 적용한다
 	(<html lang>은 hooks.server.ts와 [[lang=lang]]/+layout.svelte가 맞춘다). */
+/* 휴대폰을 가로로 돌렸을 때 iOS가 글자를 멋대로 키우지 않게 한다(사용자의 글자 크기 설정은 그대로 따른다). */
+html {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+
 html:lang(ko) {
 	word-break: keep-all;
 	overflow-wrap: break-word;

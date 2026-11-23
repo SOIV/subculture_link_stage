@@ -58,9 +58,9 @@
 	}
 
 	const chipClass =
-		'inline-flex h-8 items-center gap-2 rounded-full border border-zinc-900/[0.08] bg-white px-3 text-sm text-zinc-700 transition-colors hover:border-zinc-900/[0.16] hover:text-zinc-900 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-200 dark:hover:border-white/[0.16] dark:hover:text-zinc-50';
+		'inline-flex h-10 items-center gap-2 rounded-full border border-zinc-900/[0.08] bg-white px-3.5 text-sm text-zinc-700 transition-colors hover:border-zinc-900/[0.16] hover:text-zinc-900 sm:h-8 sm:px-3 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-200 dark:hover:border-white/[0.16] dark:hover:text-zinc-50';
 	const subscribeButtonClass =
-		'inline-flex h-9 items-center gap-2 rounded-lg border border-zinc-900/[0.08] bg-white px-3 text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:bg-white/[0.08]';
+		'inline-flex h-11 items-center gap-2 rounded-lg border border-zinc-900/[0.08] bg-white px-3 text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-50 sm:h-9 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:bg-white/[0.08]';
 	const sectionTitleClass = 'font-display text-xl font-semibold tracking-tight sm:text-2xl';
 </script>
 
@@ -143,7 +143,7 @@
 				<h2 class={sectionTitleClass}>{t(locale, 'home.upcoming')}</h2>
 				<a
 					href={localeHref(locale, '/events')}
-					class="inline-flex items-center gap-1 text-sm font-medium text-violet-700 transition-colors hover:text-violet-900 dark:text-violet-400 dark:hover:text-violet-300"
+					class="-my-3 inline-flex shrink-0 items-center gap-1 py-3 text-sm font-medium text-violet-700 transition-colors hover:text-violet-900 dark:text-violet-400 dark:hover:text-violet-300"
 				>
 					{t(locale, 'home.viewAll')}
 					<ArrowRight class="size-4" aria-hidden="true" />

@@ -13,6 +13,7 @@
 	import Settings from '@lucide/svelte/icons/settings';
 	import Sun from '@lucide/svelte/icons/sun';
 	import { LOCALES, LOCALE_NAMES, localeHref, stripLocale, t, type Locale } from '$lib/i18n';
+	import { applyThemeColor } from '$lib/theme';
 
 	let { locale }: { locale: Locale } = $props();
 
@@ -71,6 +72,7 @@
 		if (next === 'system') localStorage.removeItem('theme');
 		else localStorage.setItem('theme', next);
 		document.documentElement.setAttribute('data-theme', resolve(next));
+		applyThemeColor(next);
 	}
 
 	// "시스템"을 선택한 상태에서 OS 설정이 바뀌면 즉시 반영한다.
@@ -102,7 +104,7 @@
 		aria-controls="settings-panel"
 		aria-label={t(locale, 'menu.settings')}
 		onclick={() => (open = !open)}
-		class="flex h-9 items-center gap-2 rounded-lg px-3 text-sm font-medium transition-colors {open
+		class="flex h-11 min-w-11 items-center justify-center gap-2 rounded-lg px-3 text-sm font-medium transition-colors sm:h-9 sm:min-w-0 {open
 			? 'bg-zinc-900/[0.06] text-zinc-900 dark:bg-white/[0.08] dark:text-zinc-50'
 			: 'text-zinc-600 hover:bg-zinc-900/[0.04] hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:text-zinc-50'}"
 	>
@@ -113,7 +115,7 @@
 	{#if open}
 		<div
 			id="settings-panel"
-			class="absolute top-full right-0 z-30 mt-4 w-64 rounded-xl border border-zinc-900/[0.08] bg-white p-2 shadow-[0_8px_24px_rgba(0,0,0,0.08)] dark:border-white/[0.08] dark:bg-zinc-900 dark:shadow-black/40"
+			class="absolute top-full right-0 z-30 mt-3 w-64 max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-900/[0.08] bg-white p-2 shadow-[0_8px_24px_rgba(0,0,0,0.08)] dark:border-white/[0.08] dark:bg-zinc-900 dark:shadow-black/40"
 		>
 			<section aria-labelledby="settings-language">
 				<h2 id="settings-language" class={sectionHeadingClass}>{t(locale, 'menu.language')}</h2>
@@ -125,7 +127,7 @@
 								lang={target}
 								hreflang={target}
 								aria-current={target === locale ? 'true' : undefined}
-								class="flex h-9 items-center justify-between rounded-lg px-2 text-sm transition-colors {target ===
+								class="flex h-11 items-center justify-between rounded-lg px-2 text-sm transition-colors sm:h-9 {target ===
 								locale
 									? 'bg-zinc-100 font-medium text-zinc-900 dark:bg-white/[0.08] dark:text-zinc-50'
 									: 'text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-white/5'}"

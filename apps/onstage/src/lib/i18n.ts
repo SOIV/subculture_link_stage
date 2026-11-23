@@ -32,6 +32,9 @@ const ko = {
 	'filter.from': '시작일 이후',
 	'filter.to': '종료일 이전',
 	'filter.reset': '초기화',
+	'filter.open': '필터',
+	'filter.close': '필터 닫기',
+	'filter.showResults': '{n}개 행사 보기',
 
 	'subscribe.title': '캘린더 구독',
 	'subscribe.google': 'Google Calendar에 추가',
@@ -144,7 +147,14 @@ const ko = {
 
 	'footer.about': 'SCLS는 한국·일본·글로벌 서브컬처 및 게임 관련 공식 행사 정보를 모아 제공합니다.',
 	'footer.sourceLink': '프로젝트 저장소',
-	'footer.icsAll': '전체 일정 구독'
+	'footer.icsAll': '전체 일정 구독',
+
+	'offline.title': '오프라인 상태예요',
+	'error.title': '페이지를 열 수 없어요',
+	'error.notFound': '찾는 페이지가 없어요',
+	'error.desc': '주소가 바뀌었거나 잠시 문제가 생겼어요. 메인에서 다시 찾아 주세요.',
+	'error.home': '메인으로',
+	'offline.notice': '오프라인 상태예요. 전에 본 내용을 보여 주고 있어서 최신 정보가 아닐 수 있어요.'
 };
 
 const ja: Record<keyof typeof ko, string> = {
@@ -167,6 +177,9 @@ const ja: Record<keyof typeof ko, string> = {
 	'filter.from': '開始日以降',
 	'filter.to': '終了日以前',
 	'filter.reset': 'リセット',
+	'filter.open': '絞り込み',
+	'filter.close': '絞り込みを閉じる',
+	'filter.showResults': '{n}件のイベントを表示',
 
 	'subscribe.title': 'カレンダー購読',
 	'subscribe.google': 'Googleカレンダーに追加',
@@ -281,7 +294,15 @@ const ja: Record<keyof typeof ko, string> = {
 	'footer.about':
 		'SCLSは韓国・日本・グローバルのサブカルチャー及びゲーム関連の公式イベント情報をまとめて提供します。',
 	'footer.sourceLink': 'プロジェクトリポジトリ',
-	'footer.icsAll': '全イベントを購読'
+	'footer.icsAll': '全イベントを購読',
+
+	'offline.title': 'オフラインです',
+	'error.title': 'ページを開けません',
+	'error.notFound': 'ページが見つかりません',
+	'error.desc':
+		'アドレスが変わったか、一時的な問題が発生しました。トップからもう一度お探しください。',
+	'error.home': 'トップへ',
+	'offline.notice': 'オフラインです。以前に表示した内容のため、最新の情報ではない場合があります。'
 };
 
 const en: Record<keyof typeof ko, string> = {
@@ -304,6 +325,9 @@ const en: Record<keyof typeof ko, string> = {
 	'filter.from': 'From',
 	'filter.to': 'To',
 	'filter.reset': 'Reset',
+	'filter.open': 'Filters',
+	'filter.close': 'Close filters',
+	'filter.showResults': 'Show {n} events',
 
 	'subscribe.title': 'Subscribe',
 	'subscribe.google': 'Add to Google Calendar',
@@ -418,7 +442,15 @@ const en: Record<keyof typeof ko, string> = {
 	'footer.about':
 		'SCLS collects official subculture and game event information across Korea, Japan, and worldwide.',
 	'footer.sourceLink': 'Project repository',
-	'footer.icsAll': 'Subscribe to all events'
+	'footer.icsAll': 'Subscribe to all events',
+
+	'offline.title': "You're offline",
+	'error.title': "This page can't be opened",
+	'error.notFound': 'Page not found',
+	'error.desc':
+		'The address may have changed, or something went wrong for a moment. Try finding it again from the home page.',
+	'error.home': 'Go to home',
+	'offline.notice': "You're offline. This is what you viewed earlier, so it may be out of date."
 };
 
 const dictionaries: Record<Locale, Record<string, string>> = { ko, ja, en };
