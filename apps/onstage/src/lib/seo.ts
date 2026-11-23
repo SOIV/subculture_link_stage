@@ -4,6 +4,7 @@
 import type { EventDetail } from './api';
 import { dayKey, inclusiveAllDayEnd } from './dates';
 import { eventPeriod, type TimeRange } from './format';
+import { safeExternalUrl } from './url';
 import type { Locale } from './i18n';
 
 export type PageSeo = {
@@ -57,8 +58,11 @@ export function eventJsonLd(event: EventDetail, url: string): Record<string, unk
 	const dates = jsonLdDates(eventPeriod(event));
 	if (!dates) return null;
 
+	const onlineUrl = safeExternalUrl(event.officialUrl);
 	const location = event.isOnline
-		? { '@type': 'VirtualLocation', url: event.officialUrl }
+		? onlineUrl
+			? { '@type': 'VirtualLocation', url: onlineUrl }
+			: null
 		: event.venue
 			? {
 					'@type': 'Place',

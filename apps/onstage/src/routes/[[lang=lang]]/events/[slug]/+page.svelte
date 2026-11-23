@@ -22,6 +22,7 @@
 	import { venueMapLinks } from '$lib/map';
 	import { eventJsonLd, jsonLdScript } from '$lib/seo';
 	import { accentColor } from '$lib/theme';
+	import { safeExternalUrl } from '$lib/url';
 	import CountryBadge from '$lib/components/CountryBadge.svelte';
 	import type { PageProps } from './$types';
 
@@ -58,6 +59,14 @@
 	);
 	let hasTicketInfo = $derived(event.ticket.types.length > 0 || event.ticket.channels.length > 0);
 	let mapLinks = $derived(venueMapLinks(event.venue, event.countryCode));
+	// API에서 온 외부 주소는 http(s)일 때만 링크로 만든다($lib/url.ts).
+	let links = $derived(
+		event.urls.flatMap((link) => {
+			const href = safeExternalUrl(link.url);
+			return href ? [{ ...link, href }] : [];
+		})
+	);
+	let officialHref = $derived(safeExternalUrl(event.officialUrl));
 
 	const linkButtonClass =
 		'inline-flex h-11 items-center rounded-lg border border-zinc-900/[0.08] bg-white px-3 text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-50 sm:h-9 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:bg-white/[0.08]';
@@ -261,9 +270,10 @@
 				</h3>
 				<ul class="flex flex-wrap gap-x-3 gap-y-2">
 					{#each group.channels as channel (channel.id)}
+						{@const channelHref = safeExternalUrl(channel.url)}
 						<li class="text-sm">
-							{#if channel.url}
-								<a href={channel.url} target="_blank" rel="noreferrer" class={linkButtonClass}>
+							{#if channelHref}
+								<a href={channelHref} target="_blank" rel="noreferrer" class={linkButtonClass}>
 									{channel.name}
 								</a>
 							{:else}
@@ -307,16 +317,18 @@
 			<Link class="size-4" aria-hidden="true" />{t(locale, 'detail.links')}
 		</h2>
 		<div class="flex flex-wrap gap-2">
-			{#if event.urls.length > 0}
-				{#each event.urls as link (link.url)}
-					<a href={link.url} target="_blank" rel="noreferrer" class={linkButtonClass}>
+			{#if links.length > 0}
+				{#each links as link (link.href)}
+					<a href={link.href} target="_blank" rel="noreferrer" class={linkButtonClass}>
 						{link.label ?? urlTypeLabel(locale, link.type)}
 					</a>
 				{/each}
-			{:else}
-				<a href={event.officialUrl} target="_blank" rel="noreferrer" class={linkButtonClass}>
+			{:else if officialHref}
+				<a href={officialHref} target="_blank" rel="noreferrer" class={linkButtonClass}>
 					{urlTypeLabel(locale, 'OFFICIAL_SITE')}
 				</a>
+			{:else}
+				<p class="text-sm text-zinc-500 dark:text-zinc-400">—</p>
 			{/if}
 		</div>
 	</section>

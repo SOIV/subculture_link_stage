@@ -21,5 +21,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (response.headers.get('content-type')?.includes('text/html')) {
 		response.headers.set('x-scls-version', version);
 	}
+
+	// 기본 보안 헤더. 페이지의 콘텐츠 보안 정책(CSP, frame-ancestors 포함)은 vite.config.ts의 kit.csp가
+	// 붙인다. 정적 파일(_app/·static/)은 Cloudflare가 바로 내보내 여기를 거치지 않는다.
+	response.headers.set('X-Content-Type-Options', 'nosniff');
+	response.headers.set('X-Frame-Options', 'DENY');
+	response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 	return response;
 };

@@ -13,7 +13,8 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-title" content="SCLS" />
 		<link rel="apple-touch-icon" href="%sveltekit.assets%/icons/apple-touch-icon.png" />
-		<script>
+		<!-- nonce: 콘텐츠 보안 정책(CSP, vite.config.ts)이 이 인라인 스크립트만 허용하도록 SvelteKit이 채운다. -->
+		<script nonce="%sveltekit.nonce%">
 			// 테마 결정은 body가 그려지기 전, 되도록 이르게 해야 깜빡임(FOUC)이 없다.
 			// localStorage에 명시적 선택(light/dark)이 없으면 "시스템" 취급 — OS 설정을 그대로 따른다.
 			(function () {
