@@ -1,9 +1,14 @@
 <script lang="ts">
 	// 메인 페이지 "티켓·신청 일정": 여러 행사의 티켓 오픈·추첨·신청 일정을 날짜순으로 한 목록에 모은다.
 	// 행사 단위가 아니라 일정 단위로 보여주는 것이 SCLS의 차별점이라 메인에 따로 뺐다.
-	import { formatShortDate, scheduleQualifier, scheduleTypeLabel } from '$lib/format';
+	import {
+		formatShortDate,
+		scheduleQualifier,
+		scheduleStatusLabel,
+		scheduleTypeLabel
+	} from '$lib/format';
 	import { localeHref, t, tv, type Locale } from '$lib/i18n';
-	import type { ScheduleEntry } from '$lib/schedule';
+	import { isPostponed, type ScheduleEntry } from '$lib/schedule';
 	import { accentColor } from '$lib/theme';
 
 	let { entries, locale }: { entries: ScheduleEntry[]; locale: Locale } = $props();
@@ -48,14 +53,23 @@
 								<span class="font-medium text-zinc-900 dark:text-zinc-100">
 									{scheduleTypeLabel(locale, entry.schedule.type)}
 								</span>
-								<span
-									class="shrink-0 rounded-md px-1.5 py-0.5 text-xs font-medium tabular-nums {entry.days ===
-									0
-										? 'bg-violet-600 text-white dark:bg-violet-500'
-										: 'bg-zinc-100 text-zinc-700 dark:bg-white/[0.08] dark:text-zinc-200'}"
-								>
-									{ddayLabel(entry.days)}
-								</span>
+								{#if isPostponed(entry.schedule)}
+									<!-- 연기된 일정은 적힌 날짜가 더는 맞지 않아 D-day 대신 상태를 보여준다. -->
+									<span
+										class="shrink-0 rounded-md bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-500/15 dark:text-amber-300"
+									>
+										{scheduleStatusLabel(locale, entry.schedule.status)}
+									</span>
+								{:else}
+									<span
+										class="shrink-0 rounded-md px-1.5 py-0.5 text-xs font-medium tabular-nums {entry.days ===
+										0
+											? 'bg-violet-600 text-white dark:bg-violet-500'
+											: 'bg-zinc-100 text-zinc-700 dark:bg-white/[0.08] dark:text-zinc-200'}"
+									>
+										{ddayLabel(entry.days)}
+									</span>
+								{/if}
 							</span>
 							<span class="block truncate text-zinc-600 dark:text-zinc-400">
 								{entry.event.title ?? entry.event.slug}

@@ -10,6 +10,7 @@
 	import SubscribeMenu from '$lib/components/SubscribeMenu.svelte';
 	import UpcomingSchedules from '$lib/components/UpcomingSchedules.svelte';
 	import { localeHref, t } from '$lib/i18n';
+	import { now } from '$lib/clock.svelte';
 	import { isUpcomingOrOngoing, upcomingActionSchedules } from '$lib/schedule';
 	import { buildTagIndex, topTagsWithEvents } from '$lib/tags';
 	import type { PageProps } from './$types';
@@ -22,14 +23,11 @@
 	const SCHEDULE_LIMIT = 6;
 
 	// 아직 끝나지 않은(진행 중 포함) 행사. API가 시작일 순으로 주므로 그대로 앞에서 자른다.
+	// now()는 날짜가 바뀌면 다시 계산되게 하는 공통 시계다($lib/clock.svelte.ts).
 	let upcoming = $derived(
-		data.events.items
-			.filter((event) => isUpcomingOrOngoing(event, new Date()))
-			.slice(0, UPCOMING_LIMIT)
+		data.events.items.filter((event) => isUpcomingOrOngoing(event, now())).slice(0, UPCOMING_LIMIT)
 	);
-	let actionSchedules = $derived(
-		upcomingActionSchedules(data.events.items, new Date(), SCHEDULE_LIMIT)
-	);
+	let actionSchedules = $derived(upcomingActionSchedules(data.events.items, now(), SCHEDULE_LIMIT));
 
 	// 바로가기·구독 버튼은 행사 데이터에서 만든다(하드코딩 없음) — 국가는 등록된 행사가 있는 국가만,
 	// 분류는 첫 태그 그룹(행사 형식)의 최상위 태그 중 행사가 있는 것만 보여줘서 빈 결과로 이어지지 않게 한다.

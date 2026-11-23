@@ -2,41 +2,21 @@
 // 날짜 비교는 각 일정의 타임존 기준 "날짜"로 한다 — D-day가 한국/일본 자정 기준으로 세어지고,
 // 시·분 단위로는 서버·브라우저 렌더가 어긋날 일이 없도록 일 단위로만 계산한다.
 import type { EventScheduleItem, EventScheduleType, EventSummary } from './api';
+import { dayNumber } from './dates';
 import { eventPeriod, type TimeRange } from './format';
 
-const DAY_MS = 24 * 60 * 60 * 1000;
+// 이미 끝났거나(COMPLETED — 매진 등으로 일찍 끝난 판매 포함) 취소된 일정은 "다음 일정"·추천에서 뺀다.
+// 연기(POSTPONED)된 일정은 남겨 두되 화면이 D-day 대신 "연기"를 보여준다(적힌 날짜가 더는 맞지 않으므로).
+// 상태의 뜻은 docs/plan/04-database-design.md의 event_schedules "상태와 기간의 뜻".
+const INACTIVE_SCHEDULE_STATUSES = ['COMPLETED', 'CANCELLED'];
 
-const dayFormatters = new Map<string, Intl.DateTimeFormat>();
-
-function dayFormatter(timeZone: string): Intl.DateTimeFormat {
-	let formatter = dayFormatters.get(timeZone);
-	if (!formatter) {
-		try {
-			formatter = new Intl.DateTimeFormat('en-CA', {
-				timeZone,
-				year: 'numeric',
-				month: '2-digit',
-				day: '2-digit'
-			});
-		} catch {
-			// 알 수 없는 타임존 문자열이면 UTC 기준으로 대신한다.
-			formatter = new Intl.DateTimeFormat('en-CA', {
-				timeZone: 'UTC',
-				year: 'numeric',
-				month: '2-digit',
-				day: '2-digit'
-			});
-		}
-		dayFormatters.set(timeZone, formatter);
-	}
-	return formatter;
+/** 아직 챙길 수 있는 일정인지(끝나거나 취소되지 않음). */
+export function isActiveSchedule(schedule: EventScheduleItem): boolean {
+	return !INACTIVE_SCHEDULE_STATUSES.includes(schedule.status);
 }
 
-/** 그 타임존의 "날짜"를 1970-01-01부터 센 일수로 바꾼다(날짜끼리 빼면 일수 차이). */
-function dayNumber(date: Date, timeZone: string): number {
-	const parts = dayFormatter(timeZone).formatToParts(date);
-	const part = (type: string) => Number(parts.find((p) => p.type === type)?.value);
-	return Math.floor(Date.UTC(part('year'), part('month') - 1, part('day')) / DAY_MS);
+export function isPostponed(schedule: EventScheduleItem): boolean {
+	return schedule.status === 'POSTPONED';
 }
 
 /** now 기준으로 iso 시각의 날짜가 며칠 뒤인지(오늘이면 0, 지났으면 음수). */
@@ -53,7 +33,6 @@ function lastDayOf(range: TimeRange): number | null {
 	return Math.max(day - 1, dayNumber(new Date(range.startsAt), range.timezone));
 }
 
-/** 아직 끝나지 않은(진행 중이거나 앞으로 열릴) 행사인지. 날짜가 없는 행사는 false. */
 /** 행사 기간의 마지막 날이 지났는지. 날짜를 모르는 행사는 끝나지 않은 것으로 본다(목록에서 숨기지 않게). */
 export function hasEnded(event: EventSummary, now: Date): boolean {
 	const range = eventPeriod(event);
@@ -61,7 +40,9 @@ export function hasEnded(event: EventSummary, now: Date): boolean {
 	return last !== null && last < dayNumber(now, range.timezone);
 }
 
+/** 아직 끝나지 않은(진행 중이거나 앞으로 열릴) 행사인지. 날짜가 없는 행사와 취소된 행사는 false. */
 export function isUpcomingOrOngoing(event: EventSummary, now: Date): boolean {
+	if (event.status === 'CANCELLED') return false;
 	const range = eventPeriod(event);
 	const last = lastDayOf(range);
 	return last !== null && last >= dayNumber(now, range.timezone);
@@ -73,12 +54,14 @@ export type NextSchedule =
 
 /**
  * 카드에 보여줄 "다음 일정". 행사 기간 안이면 진행 중, 아니면 아직 시작하지 않은(오늘 포함) 일정 중
- * 가장 이른 것. 남은 일정이 없으면 null.
+ * 가장 이른 것. 끝났거나 취소된 일정은 건너뛴다. 남은 일정이 없거나 행사가 취소됐으면 null.
+ * 연기된 행사는 적힌 기간이 맞지 않으므로 "진행 중"이라고 하지 않는다.
  */
 export function nextSchedule(event: EventSummary, now: Date): NextSchedule | null {
+	if (event.status === 'CANCELLED') return null;
 	const range = eventPeriod(event);
 	const last = lastDayOf(range);
-	if (range.startsAt && last !== null) {
+	if (event.status !== 'POSTPONED' && range.startsAt && last !== null) {
 		const today = dayNumber(now, range.timezone);
 		if (dayNumber(new Date(range.startsAt), range.timezone) <= today && today <= last) {
 			return { kind: 'ongoing' };
@@ -88,7 +71,7 @@ export function nextSchedule(event: EventSummary, now: Date): NextSchedule | nul
 	let best: { schedule: EventScheduleItem; startsAt: string; days: number; time: number } | null =
 		null;
 	for (const schedule of event.schedules) {
-		if (!schedule.startsAt) continue;
+		if (!schedule.startsAt || !isActiveSchedule(schedule)) continue;
 		const days = daysUntil(schedule.startsAt, schedule.timezone, now);
 		if (days < 0) continue;
 		const time = new Date(schedule.startsAt).getTime();
@@ -117,7 +100,10 @@ export type ScheduleEntry = {
 	days: number;
 };
 
-/** 여러 행사의 티켓·추첨·신청 일정 중 앞으로 다가오는 것을 날짜순으로 최대 limit개. */
+/**
+ * 여러 행사의 티켓·추첨·신청 일정 중 앞으로 다가오는 것을 날짜순으로 최대 limit개. 취소된 행사,
+ * 끝났거나 취소된 일정은 뺀다(연기된 일정은 남기고 화면이 "연기"로 표시한다).
+ */
 export function upcomingActionSchedules(
 	events: EventSummary[],
 	now: Date,
@@ -125,8 +111,10 @@ export function upcomingActionSchedules(
 ): ScheduleEntry[] {
 	const entries: (ScheduleEntry & { time: number })[] = [];
 	for (const event of events) {
+		if (event.status === 'CANCELLED') continue;
 		for (const schedule of event.schedules) {
 			if (!schedule.startsAt || !ACTION_SCHEDULE_TYPES.includes(schedule.type)) continue;
+			if (!isActiveSchedule(schedule)) continue;
 			const days = daysUntil(schedule.startsAt, schedule.timezone, now);
 			if (days >= 0) {
 				entries.push({

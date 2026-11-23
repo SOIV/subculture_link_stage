@@ -4,6 +4,8 @@
 	import EventCard from '$lib/components/EventCard.svelte';
 	import FilterBar from '$lib/components/FilterBar.svelte';
 	import { t, tv } from '$lib/i18n';
+	import { now } from '$lib/clock.svelte';
+	import { hasEnded } from '$lib/schedule';
 	import { buildTagIndex } from '$lib/tags';
 	import type { PageProps } from './$types';
 
@@ -11,9 +13,21 @@
 	let locale = $derived(data.locale);
 	let tagIndex = $derived(buildTagIndex(data.tagGroups.items));
 
+	// 기본은 끝난 행사를 빼고 보여준다(?ended=1이면 전부). 숨긴 개수는 스위치 옆에 알려준다.
+	// now()는 날짜가 바뀌면 다시 계산되게 하는 공통 시계다($lib/clock.svelte.ts).
+	let ended = $derived.by(() => {
+		const at = now();
+		return data.events.items.filter((event) => hasEnded(event, at));
+	});
+	let items = $derived(
+		data.filters.showEnded
+			? data.events.items
+			: data.events.items.filter((event) => !ended.includes(event))
+	);
+
 	let countText = $derived(
 		(data.filters.q ? `${tv(locale, 'list.searchResults', { q: data.filters.q })} · ` : '') +
-			`${data.events.count}${t(locale, 'list.count')}`
+			`${items.length}${t(locale, 'list.count')}`
 	);
 
 	// "끝난 행사 보기" 스위치: 지금 조건은 그대로 두고 ?ended=1만 켜고 끈다(자바스크립트 없이도 동작하는 링크).
@@ -38,7 +52,7 @@
 		{locale}
 		tagGroups={data.tagGroups.items}
 		filters={data.filters}
-		count={data.events.count}
+		count={items.length}
 	/>
 
 	<div class="flex flex-wrap items-center justify-between gap-3">
@@ -67,13 +81,13 @@
 				></span>
 			</span>
 			{t(locale, 'list.showEnded')}
-			{#if data.endedCount > 0}
-				<span class="text-zinc-400 tabular-nums dark:text-zinc-500">{data.endedCount}</span>
+			{#if ended.length > 0}
+				<span class="text-zinc-400 tabular-nums dark:text-zinc-500">{ended.length}</span>
 			{/if}
 		</a>
 	</div>
 
-	{#if data.events.items.length === 0}
+	{#if items.length === 0}
 		<p
 			class="rounded-2xl border border-dashed border-zinc-300 p-8 text-center text-zinc-500 dark:border-zinc-700"
 		>
@@ -81,7 +95,7 @@
 		</p>
 	{:else}
 		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-			{#each data.events.items as event (event.id)}
+			{#each items as event (event.id)}
 				<EventCard {event} {locale} {tagIndex} />
 			{/each}
 		</div>

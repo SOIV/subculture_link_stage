@@ -2,6 +2,8 @@
 // [[lang=lang]]/+layout.svelte가 한 곳에서 <head>에 그린다(페이지마다 <title>·description을
 // 따로 쓰면 태그가 겹친다).
 import type { EventDetail } from './api';
+import { dayKey, inclusiveAllDayEnd } from './dates';
+import { eventPeriod, type TimeRange } from './format';
 import type { Locale } from './i18n';
 
 export type PageSeo = {
@@ -30,11 +32,30 @@ const EVENT_STATUS_URL: Record<string, string> = {
 };
 
 /**
+ * JSON-LD의 startDate/endDate. 화면과 같은 대표 기간(eventPeriod)을 쓴다. 종일 행사는 시각 없이 그
+ * 행사 시간대의 날짜(YYYY-MM-DD)로, 끝은 배타적 종료가 아니라 실제 마지막 날로 적는다(Google 행사
+ * 구조화 데이터의 날짜만 아는 행사 형식). 시각이 있는 행사는 정확한 시각을 그대로 쓴다.
+ */
+export function jsonLdDates(range: TimeRange): { startDate: string; endDate?: string } | null {
+	if (!range.startsAt) return null;
+	if (!range.isAllDay) {
+		return { startDate: range.startsAt, ...(range.endsAt ? { endDate: range.endsAt } : {}) };
+	}
+	const startDate = dayKey(new Date(range.startsAt), range.timezone);
+	if (!range.endsAt) return { startDate };
+	const endDate = dayKey(inclusiveAllDayEnd(new Date(range.endsAt)), range.timezone);
+	return endDate > startDate ? { startDate, endDate } : { startDate };
+}
+
+/**
  * 행사 상세의 schema.org Event 구조화 데이터. 검색엔진이 행사 정보를 읽을 수 있게 하는 용도라
  * 필수 항목(시작 일시, 오프라인이면 장소)이 없으면 틀린 값을 만들지 않고 null을 돌려준다.
+ * 장소 주소가 없으면 schema.org로는 맞지만 Google 행사 검색 결과의 필수 항목(location.address)은
+ * 채우지 못한다 — 주소는 Backstage에서 장소에 넣는다.
  */
 export function eventJsonLd(event: EventDetail, url: string): Record<string, unknown> | null {
-	if (!event.startsAt) return null;
+	const dates = jsonLdDates(eventPeriod(event));
+	if (!dates) return null;
 
 	const location = event.isOnline
 		? { '@type': 'VirtualLocation', url: event.officialUrl }
@@ -62,8 +83,7 @@ export function eventJsonLd(event: EventDetail, url: string): Record<string, unk
 		name: event.title ?? event.slug,
 		url,
 		...(event.summary ? { description: metaDescription(event.summary) } : {}),
-		startDate: event.startsAt,
-		...(event.endsAt ? { endDate: event.endsAt } : {}),
+		...dates,
 		eventStatus: EVENT_STATUS_URL[event.status] ?? 'https://schema.org/EventScheduled',
 		eventAttendanceMode: event.isOnline
 			? 'https://schema.org/OnlineEventAttendanceMode'

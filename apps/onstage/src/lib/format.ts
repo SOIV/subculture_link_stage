@@ -1,6 +1,7 @@
 // 날짜·시간 표시와 코드값(status/scheduleType/urlType/국가) → 사람이 읽는 문구 변환.
 // API가 주는 코드값 자체는 packages/domain(scls-platform)의 TEXT+CHECK 목록과 같다.
 import type { EventScheduleItem, EventSummary } from './api';
+import { inclusiveAllDayEnd, isSameDay } from './dates';
 import { t, type Locale } from './i18n';
 
 const COUNTRY_TIMEZONE: Record<string, string> = {
@@ -16,26 +17,31 @@ export type TimeRange = {
 };
 
 /**
- * 카드/상세에 보여줄 대표 기간을 고른다. EVENT_START 일정이 있으면 그 timezone·isAllDay를
- * 그대로 쓴다(가장 신뢰할 수 있는 값). 없으면 최상위 startsAt/endsAt과 countryCode로 추정한
- * 타임존으로 대체한다(온라인 전용 등 국가가 없으면 UTC).
+ * 카드/상세(와 검색엔진용 JSON-LD)에 쓰는 대표 기간을 고른다. 시각이 있는 EVENT_START 일정이 있으면
+ * 그 timezone·isAllDay를 쓴다(가장 신뢰할 수 있는 값). 일정의 필드는 비어 있을 수 있어서 빈 칸만
+ * 최상위 startsAt/endsAt으로 채운다 — 시작 일정에 종료가 없다고 정상 행사 기간을 하루짜리로 줄이지
+ * 않게 한다. 최상위 값을 쓸 때 국가가 없으면(온라인 전용 등) UTC로 본다.
  */
 export function eventPeriod(event: EventSummary): TimeRange {
 	const start = event.schedules.find((schedule) => schedule.type === 'EVENT_START');
-	if (start) {
-		return {
-			startsAt: start.startsAt,
-			endsAt: start.endsAt,
-			isAllDay: start.isAllDay,
-			timezone: start.timezone
-		};
-	}
-	return {
+	const topLevel: TimeRange = {
 		startsAt: event.startsAt,
 		endsAt: event.endsAt,
 		isAllDay: event.isAllDay,
-		timezone: (event.countryCode && COUNTRY_TIMEZONE[event.countryCode]) || 'UTC'
+		// 시작 일정에 시각이 없어도 시간대는 그 일정의 것이 더 정확하다.
+		timezone: start?.timezone || (event.countryCode && COUNTRY_TIMEZONE[event.countryCode]) || 'UTC'
 	};
+	if (!start?.startsAt) return topLevel;
+
+	const fromSchedule = { isAllDay: start.isAllDay, timezone: start.timezone };
+	if (start.endsAt) return { startsAt: start.startsAt, endsAt: start.endsAt, ...fromSchedule };
+	// 시작 일정에 종료가 없으면 최상위 종료를 빌린다. 종일/시각 방식이 다르면 종료의 뜻이 달라지므로
+	// (종일은 배타적 종료) 섞지 않고 최상위 기간 전체를 쓴다.
+	if (event.endsAt && event.isAllDay === start.isAllDay) {
+		return { startsAt: start.startsAt, endsAt: event.endsAt, ...fromSchedule };
+	}
+	if (event.startsAt && event.endsAt) return topLevel;
+	return { startsAt: start.startsAt, endsAt: null, ...fromSchedule };
 }
 
 function localeTag(locale: Locale) {
@@ -85,9 +91,10 @@ function timeFormatter(locale: Locale, timeZone: string) {
 
 /**
  * 사람이 읽는 기간 문자열. 종일 일정은 날짜만, 시각이 있으면 시간까지 보여준다. 종일 일정의
- * endsAt은 "마지막 날 다음 날 00:00"(배타적 종료) 관례이므로(apps/api의 seed-events.ts와 동일)
- * 표시 전에 하루를 뺀다. EventScheduleItem도 같은 4개 필드 모양이라 그대로 넘길 수 있다.
- * 시각이 들어가는 일정은 끝에 타임존(KST 등)을 한 번 붙인다.
+ * endsAt은 "마지막 날 다음 날 00:00"(배타적 종료) 관례이므로(docs/plan/04-database-design.md)
+ * 마지막 날로 바꿔 보여준다. EventScheduleItem도 같은 4개 필드 모양이라 그대로 넘길 수 있다.
+ * 시각이 들어가는 일정은 끝에 타임존(KST 등)을 한 번 붙인다. 같은 날인지는 일정의 시간대로 판단한다
+ * (서버·브라우저의 시간대와 상관없이 같은 결과).
  */
 export function formatRange(locale: Locale, range: TimeRange): string {
 	if (!range.startsAt) return t(locale, 'card.dateUnknown');
@@ -98,13 +105,12 @@ export function formatRange(locale: Locale, range: TimeRange): string {
 	if (!range.endsAt) return longFormatter.format(start) + zone;
 
 	const rawEnd = new Date(range.endsAt);
-	const end = range.isAllDay ? new Date(rawEnd.getTime() - 24 * 60 * 60 * 1000) : rawEnd;
+	const end = range.isAllDay ? inclusiveAllDayEnd(rawEnd) : rawEnd;
 	if (end.getTime() <= start.getTime()) return longFormatter.format(start) + zone;
 
-	// 자정 기준 UTC 비교라 타임존 경계의 극히 드문 사례에서는 실제 표시 날짜와 하루 어긋날 수
-	// 있지만, "같은 날이면 시각만 붙인다"는 표시 단순화가 목적이라 문제되지 않는다.
-	const sameDay = start.toDateString() === end.toDateString();
-	if (sameDay && !range.isAllDay) {
+	if (isSameDay(start, end, range.timezone)) {
+		// 하루짜리 종일 일정은 날짜 하나, 시각이 있으면 "날짜 시각 ~ 시각".
+		if (range.isAllDay) return longFormatter.format(start);
 		return `${longFormatter.format(start)} ~ ${timeFormatter(locale, range.timezone).format(end)}${zone}`;
 	}
 	return `${longFormatter.format(start)} ~ ${longFormatter.format(end)}${zone}`;
@@ -137,9 +143,9 @@ export function formatCardPeriod(locale: Locale, range: TimeRange, now: Date): s
 	});
 	if (!range.endsAt) return formatter.format(start);
 
-	// 종일 일정의 endsAt은 "마지막 날 다음 날 0시"(배타적 종료)라 표시 전에 하루를 뺀다(formatRange와 동일).
+	// 종일 일정의 endsAt은 "마지막 날 다음 날 0시"(배타적 종료)라 마지막 날로 바꾼다(formatRange와 동일).
 	const rawEnd = new Date(range.endsAt);
-	const end = range.isAllDay ? new Date(rawEnd.getTime() - 24 * 60 * 60 * 1000) : rawEnd;
+	const end = range.isAllDay ? inclusiveAllDayEnd(rawEnd) : rawEnd;
 	if (end.getTime() <= start.getTime()) return formatter.format(start);
 	// 같은 날로 접히면 Intl이 날짜 하나만 돌려준다(예: 하루짜리 행사의 시작·종료 시각이 다른 경우).
 	return formatter.formatRange(start, end);

@@ -7,11 +7,13 @@
 		formatCardPeriod,
 		formatShortDate,
 		scheduleQualifier,
+		scheduleStatusLabel,
 		scheduleTypeLabel,
 		statusLabel
 	} from '$lib/format';
 	import { localeHref, t, tv, type Locale } from '$lib/i18n';
-	import { nextSchedule } from '$lib/schedule';
+	import { now } from '$lib/clock.svelte';
+	import { isPostponed, nextSchedule } from '$lib/schedule';
 	import { pickCardTags, type TagIndex } from '$lib/tags';
 	import { accentColor } from '$lib/theme';
 	import CountryBadge from './CountryBadge.svelte';
@@ -33,7 +35,7 @@
 	// 시리즈 단위로 같은 색이 나오게 한다 — 단독 행사는 자기 slug로 대신한다.
 	let accent = $derived(accentColor(event.eventSeries?.slug ?? event.slug));
 	let chips = $derived(pickCardTags(event.tags, tagIndex, MAX_TAG_CHIPS));
-	let next = $derived(nextSchedule(event, new Date()));
+	let next = $derived(nextSchedule(event, now()));
 	let moreSchedules = $derived(Math.max(0, event.schedules.length - 1));
 	// 확정이 아닌 예외 상태(연기 등)만 표시한다 — 공개 행사는 대부분 확정이라 "확정" 표시는 잡음이다.
 	let showStatus = $derived(event.status !== 'CONFIRMED');
@@ -65,7 +67,7 @@
 				{/if}
 			</span>
 			<span class="text-right tabular-nums">
-				{formatCardPeriod(locale, period, new Date())}
+				{formatCardPeriod(locale, period, now())}
 			</span>
 		</div>
 
@@ -154,14 +156,23 @@
 									)}
 								</p>
 							</div>
-							<span
-								class="shrink-0 rounded-md px-2 py-1 text-xs font-medium whitespace-nowrap tabular-nums {next.days ===
-								0
-									? 'bg-violet-600 text-white dark:bg-violet-500'
-									: 'bg-zinc-100 text-zinc-700 dark:bg-white/[0.08] dark:text-zinc-200'}"
-							>
-								{ddayLabel(next.days)}
-							</span>
+							{#if isPostponed(next.schedule)}
+								<!-- 연기된 일정은 적힌 날짜가 더는 맞지 않아 D-day 대신 상태를 보여준다. -->
+								<span
+									class="shrink-0 rounded-md bg-amber-100 px-2 py-1 text-xs font-medium whitespace-nowrap text-amber-800 dark:bg-amber-500/15 dark:text-amber-300"
+								>
+									{scheduleStatusLabel(locale, next.schedule.status)}
+								</span>
+							{:else}
+								<span
+									class="shrink-0 rounded-md px-2 py-1 text-xs font-medium whitespace-nowrap tabular-nums {next.days ===
+									0
+										? 'bg-violet-600 text-white dark:bg-violet-500'
+										: 'bg-zinc-100 text-zinc-700 dark:bg-white/[0.08] dark:text-zinc-200'}"
+								>
+									{ddayLabel(next.days)}
+								</span>
+							{/if}
 						</div>
 					{/if}
 				</div>
