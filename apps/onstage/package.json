@@ -14,7 +14,8 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
-		"gen": "wrangler types --env-file .env.example"
+		"gen": "wrangler types --env-file .env.example",
+		"test": "vitest run"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
@@ -38,6 +39,7 @@
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.60.1",
 		"vite": "^8.0.16",
+		"vitest": "5.1.1",
 		"wrangler": "^4.97.0"
 	}
 }

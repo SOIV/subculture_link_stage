@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import tailwindcss from '@tailwindcss/vite';
 import adapter from '@sveltejs/adapter-cloudflare';
 import { sveltekit } from '@sveltejs/kit/vite';
@@ -14,5 +15,11 @@ export default defineConfig({
 			},
 			adapter: adapter()
 		})
-	]
+	],
+	test: {
+		include: ['src/**/*.test.ts'],
+		environment: 'node',
+		// 날짜 계산이 실행 환경 시간대에 기대지 않는지 보려고 서버(Cloudflare Workers)와 같은 UTC로 돌린다.
+		env: { TZ: 'UTC' }
+	}
 });
