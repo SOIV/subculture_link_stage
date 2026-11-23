@@ -10,6 +10,8 @@ const gitignorePath = path.resolve(import.meta.dirname, '.gitignore');
 
 export default defineConfig(
 	includeIgnoreFile(gitignorePath),
+	// wrangler가 생성하는 타입 파일. 손으로 고치면 `wrangler types --check`가 실패하므로 검사하지 않는다.
+	{ ignores: ['worker-configuration.d.ts'] },
 	js.configs.recommended,
 	ts.configs.recommended,
 	svelte.configs.recommended,

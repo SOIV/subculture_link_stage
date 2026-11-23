@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import EventCard from '$lib/components/EventCard.svelte';
 	import FilterBar from '$lib/components/FilterBar.svelte';
 	import { t, tv } from '$lib/i18n';
@@ -18,7 +19,7 @@
 	// "끝난 행사 보기" 스위치: 지금 조건은 그대로 두고 ?ended=1만 켜고 끈다(자바스크립트 없이도 동작하는 링크).
 	// 캘린더 구독은 이 페이지에 따로 두지 않는다 — 페이지 맨 아래(푸터)에서 구독할 수 있다.
 	let endedToggleHref = $derived.by(() => {
-		const params = new URLSearchParams(page.url.search);
+		const params = new SvelteURLSearchParams(page.url.search);
 		if (data.filters.showEnded) params.delete('ended');
 		else params.set('ended', '1');
 		const query = params.toString();
