@@ -115,7 +115,10 @@ export async function networkFirst(
 		cached = undefined;
 	}
 
-	const network = options.fetch(request).then((response) => {
+	// 꺼내서 부른다 — options.fetch(...)로 부르면 this가 options가 되어 브라우저의 fetch가
+	// "Illegal invocation"으로 실패한다.
+	const fetchFn = options.fetch;
+	const network = fetchFn(request).then((response) => {
 		if (shouldStore(response)) {
 			waitUntil(putTrimmed(cache, request, withSavedAt(response.clone(), now()), maxEntries));
 		}
@@ -164,7 +167,10 @@ export async function cacheFirst(options: {
 	const cached = await matchCache(cache, request);
 	if (cached && !options.revalidate) return cached;
 
-	const network = options.fetch(request).then((response) => {
+	// 꺼내서 부른다 — options.fetch(...)로 부르면 this가 options가 되어 브라우저의 fetch가
+	// "Illegal invocation"으로 실패한다.
+	const fetchFn = options.fetch;
+	const network = fetchFn(request).then((response) => {
 		if (shouldStore(response)) {
 			waitUntil(putTrimmed(cache, request, response.clone(), maxEntries));
 		}

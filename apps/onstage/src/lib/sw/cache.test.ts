@@ -279,3 +279,39 @@ describe('저장 시각 표시', () => {
 		expect(savedAtOf(new Response(''))).toBeNull();
 	});
 });
+
+describe('fetch 호출 방식', () => {
+	// 브라우저의 fetch는 다른 this로 부르면 "Illegal invocation"으로 실패한다(service worker에서 실제로 겪음).
+	function strictFetch(this: unknown) {
+		if (this !== undefined && this !== globalThis) throw new TypeError('Illegal invocation');
+		return Promise.resolve(new Response('ok'));
+	}
+
+	it('networkFirst는 fetch를 옵션 객체의 메서드로 부르지 않는다', async () => {
+		const { waitUntil, settle } = collectWaitUntil();
+		const result = await networkFirst({
+			request: new Request(URL_A),
+			cache: undefined,
+			fetch: strictFetch as unknown as typeof fetch,
+			waitUntil,
+			maxEntries: 10,
+			timeoutMs: 4000,
+			maxAgeMs: Infinity
+		});
+		await settle();
+		expect(await result?.response.text()).toBe('ok');
+	});
+
+	it('cacheFirst도 같다', async () => {
+		const { waitUntil, settle } = collectWaitUntil();
+		const response = await cacheFirst({
+			request: new Request(URL_A),
+			cache: undefined,
+			fetch: strictFetch as unknown as typeof fetch,
+			waitUntil,
+			maxEntries: 10
+		});
+		await settle();
+		expect(await response.text()).toBe('ok');
+	});
+});
