@@ -53,6 +53,7 @@
 		tagGroups={data.tagGroups.items}
 		filters={data.filters}
 		count={items.length}
+		invalidFields={data.invalidFields}
 	/>
 
 	<div class="flex flex-wrap items-center justify-between gap-3">
@@ -91,7 +92,7 @@
 		<p
 			class="rounded-2xl border border-dashed border-zinc-300 p-8 text-center text-zinc-500 dark:border-zinc-700"
 		>
-			{t(locale, 'list.empty')}
+			{t(locale, data.invalidQuery ? 'list.invalidQuery' : 'list.empty')}
 		</p>
 	{:else}
 		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

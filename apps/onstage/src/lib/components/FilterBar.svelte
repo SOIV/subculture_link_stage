@@ -13,14 +13,19 @@
 		locale,
 		tagGroups,
 		filters,
-		count
+		count,
+		invalidFields = []
 	}: {
 		locale: Locale;
 		tagGroups: TagGroup[];
 		filters: ListFilters;
 		/** 지금 조건의 행사 수 — 휴대폰 필터 시트의 "N개 행사 보기" 버튼에 쓴다. */
 		count: number;
+		/** 알아볼 수 없어서 빼고 찾은 조건 칸(from/to). 그 칸에 안내를 붙인다. */
+		invalidFields?: string[];
 	} = $props();
+
+	let dateInvalid = $derived(invalidFields.includes('from') || invalidFields.includes('to'));
 
 	let active = $derived(hasActiveFilters(filters));
 	// 검색어를 뺀 조건 수(필터 버튼의 숫자 표시).
@@ -176,6 +181,13 @@
 		{/if}
 	</div>
 
+	{#if dateInvalid}
+		<!-- 시트가 닫혀 있는 휴대폰에서도 보이도록 검색 줄 바로 아래에 둔다. 날짜 칸이 이 문구를 가리킨다. -->
+		<p id="filter-date-error" role="alert" class="mt-2 text-sm text-red-700 dark:text-red-400">
+			{t(locale, 'filter.invalidDate')}
+		</p>
+	{/if}
+
 	{#if sheetOpen}
 		<!-- 시트 뒤 어두운 막. 누르면 닫힌다(키보드는 Esc나 닫기 버튼). -->
 		<div
@@ -255,6 +267,8 @@
 					type="date"
 					name="from"
 					value={filters.from}
+					aria-invalid={invalidFields.includes('from') || undefined}
+					aria-describedby={invalidFields.includes('from') ? 'filter-date-error' : undefined}
 					onchange={submitOnChange}
 					class={dateClass}
 				/>
@@ -265,6 +279,8 @@
 					type="date"
 					name="to"
 					value={filters.to}
+					aria-invalid={invalidFields.includes('to') || undefined}
+					aria-describedby={invalidFields.includes('to') ? 'filter-date-error' : undefined}
 					onchange={submitOnChange}
 					class={dateClass}
 				/>
