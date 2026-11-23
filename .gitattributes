@@ -1,0 +1,14 @@
+# 저장소의 텍스트 파일은 어느 OS에서 받아도 LF로 체크아웃한다.
+# Windows의 core.autocrlf=true 환경에서 CRLF로 풀리면 Prettier 검사(pnpm lint)와
+# wrangler types --check(생성 파일 worker-configuration.d.ts 비교)가 실패하기 때문이다.
+* text=auto eol=lf
+
+# 바이너리 — 줄바꿈 변환·diff 대상이 아니다.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
