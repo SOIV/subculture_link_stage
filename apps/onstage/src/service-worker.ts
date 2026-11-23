@@ -11,26 +11,50 @@
 // - 페이지(HTML)와 공개 API 응답: 네트워크 먼저. 받으면 캐시에 넣고, 못 받거나 늦으면 캐시를 보여준다.
 //   서버에서 그린 HTML에는 API 응답이 함께 실려 오므로, 새로고침한 페이지도 HTML 캐시만으로 다시 그려진다.
 //   화면 안에서 이동할 때는 브라우저가 API를 직접 부르므로 API 응답도 따로 담아 둔다.
-// - 캐시 이름에 빌드 버전이 붙어 새로 배포하면 지난 버전 캐시는 지운다. 지난 HTML은 지난 앱 파일을
-//   가리켜서 새 버전에서는 쓸 수 없기 때문이다(그래서 배포 뒤에는 다시 본 페이지부터 오프라인 보관된다).
+//   저장본을 보여줄 때는 앱에 알려서 "저장본·마지막 확인 시각"을 띄운다(src/lib/pwa.svelte.ts).
+// - 새 버전은 설치 후 바로 넘겨받지 않고 기다린다. 열린 탭은 지난 버전의 앱 파일로 돌고 있어서, 이때
+//   지난 캐시를 지우면 그 탭이 아직 받지 않은 화면 파일을 찾지 못한다. 앱이 "새 버전" 안내를 띄우고
+//   사용자가 누르면(또는 모든 탭이 닫히면) 넘겨받은 뒤 지난 버전 캐시를 지우고, 열린 탭은 한 번 새로 고친다.
+// - 캐시 이름은 scls-onstage-로 시작한다. 정리할 때 이 앱이 만든 캐시만 지운다(같은 주소의 다른 앱 보호).
+// - 캐시 저장이 실패해도(저장 공간 부족 등) 네트워크 응답은 그대로 돌려준다(src/lib/sw/cache.ts).
 import { PUBLIC_API_BASE_URL } from '$env/static/public';
 import { build, files, version } from '$service-worker';
+import {
+	cacheFirst,
+	markHtmlAsSaved,
+	matchCache,
+	networkFirst,
+	openCache,
+	putTrimmed,
+	savedAtOf,
+	withSavedAt,
+	type NetworkFirstResult
+} from '$lib/sw/cache';
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
 
-const ASSET_CACHE = `assets-${version}`;
-const PAGE_CACHE = `pages-${version}`;
-const API_CACHE = `api-${version}`;
-const FONT_CACHE = 'fonts';
+const CACHE_PREFIX = 'scls-onstage-';
+const ASSET_CACHE = `${CACHE_PREFIX}assets-${version}`;
+const PAGE_CACHE = `${CACHE_PREFIX}pages-${version}`;
+const API_CACHE = `${CACHE_PREFIX}api-${version}`;
+// 글꼴은 앱 버전과 상관없어 배포해도 그대로 둔다. 개수만 제한한다.
+const FONT_CACHE = `${CACHE_PREFIX}fonts`;
 const CURRENT = [ASSET_CACHE, PAGE_CACHE, API_CACHE, FONT_CACHE];
+// 접두사를 붙이기 전(2026-11 첫 PWA 배포)에 쓰던 캐시 이름. 이 앱이 만든 것만 정확히 골라 지운다.
+const LEGACY_CACHE = /^(?:(?:assets|pages|api)-\d+|fonts)$/;
 
 // 오래 쌓이지 않게 개수를 제한한다(오래된 것부터 지운다).
 const MAX_PAGES = 60;
 const MAX_API = 150;
+const MAX_FONTS = 30;
 // 화면 안에서 이동한 페이지는 HTML을 따로 받아 담는다(아래 message). 이보다 최근 저장본이 있으면 다시 받지 않는다.
 const PAGE_REFRESH_MS = 10 * 60 * 1000;
 // 캐시가 있을 때 네트워크를 기다리는 최대 시간. 느린 행사장 통신에서는 이만큼 기다린 뒤 저장본을 보여준다.
 const NETWORK_TIMEOUT_MS = 4000;
+// 페이지·API 저장본을 보여주는 최대 기간. 일정·예매 정보는 바뀌므로 이보다 오래된 저장본은 지운다.
+const MAX_SAVED_AGE_MS = 14 * 24 * 60 * 60 * 1000;
+// 서버가 HTML 응답에 붙이는 앱 버전(src/hooks.server.ts). 다른 버전의 HTML은 이 버전 캐시에 담지 않는다.
+const VERSION_HEADER = 'x-scls-version';
 
 const PRECACHE = [...build, ...files];
 const PRECACHE_SET = new Set(PRECACHE);
@@ -38,53 +62,75 @@ const API_BASE = new URL(PUBLIC_API_BASE_URL);
 const API_PATH = API_BASE.pathname.replace(/\/$/, '');
 
 sw.addEventListener('install', (event) => {
-	event.waitUntil(
-		caches
-			.open(ASSET_CACHE)
-			.then((cache) => cache.addAll(PRECACHE))
-			.then(() => sw.skipWaiting())
-	);
+	// skipWaiting()을 부르지 않는다 — 위 설명처럼 열린 탭이 없거나 사용자가 새로 고침을 고를 때 넘겨받는다.
+	event.waitUntil(caches.open(ASSET_CACHE).then((cache) => cache.addAll(PRECACHE)));
 });
 
 sw.addEventListener('activate', (event) => {
 	event.waitUntil(
 		(async () => {
 			for (const key of await caches.keys()) {
-				if (!CURRENT.includes(key)) await caches.delete(key);
+				const ours = key.startsWith(CACHE_PREFIX) || LEGACY_CACHE.test(key);
+				if (ours && !CURRENT.includes(key)) await caches.delete(key);
 			}
+			// 처음 설치될 때 지금 열린 페이지도 바로 맡는다(앱이 이때 그 페이지를 저장해 달라고 알린다).
 			await sw.clients.claim();
 		})()
 	);
 });
 
-// 화면 안 이동(클라이언트 라우팅)은 HTML을 받지 않아서 그대로는 오프라인 보관이 안 된다. 그래서 이동이
-// 끝나면 페이지가 주소를 알려 주고(src/routes/+layout.svelte), 여기서 그 주소의 HTML을 받아 담는다.
-// 서버에서 그린 HTML에는 그 페이지의 API 응답이 함께 실려 있어 오프라인에서도 그대로 다시 그려진다.
+// 앱(src/lib/pwa.svelte.ts)이 보내는 요청:
+// - skip-waiting: 사용자가 "새 버전" 안내에서 새로 고침을 눌렀다. 기다리던 새 버전이 넘겨받는다.
+// - cache-page: 이 주소들의 HTML을 담아 둔다. 화면 안 이동(클라이언트 라우팅)과 처음 방문한 페이지는
+//   HTML 요청이 이 worker를 거치지 않아서 그대로는 오프라인 보관이 안 된다. 서버에서 그린 HTML에는
+//   그 페이지의 API 응답이 함께 실려 있어 오프라인에서도 그대로 다시 그려진다.
 sw.addEventListener('message', (event) => {
 	const data: unknown = event.data;
-	if (
-		typeof data !== 'object' ||
-		data === null ||
-		(data as { type?: unknown }).type !== 'cache-page' ||
-		typeof (data as { url?: unknown }).url !== 'string'
-	) {
+	if (typeof data !== 'object' || data === null) return;
+	const type = (data as { type?: unknown }).type;
+	if (type === 'skip-waiting') {
+		event.waitUntil(sw.skipWaiting());
 		return;
 	}
-	const url = new URL((data as { url: string }).url);
-	if (url.origin !== sw.location.origin) return;
-	event.waitUntil(cachePage(url));
+	if (type !== 'cache-page') return;
+	const urls = (data as { urls?: unknown }).urls;
+	if (!Array.isArray(urls)) return;
+	const targets = urls
+		.filter((value): value is string => typeof value === 'string')
+		.map((value) => new URL(value, sw.location.origin))
+		.filter((url) => url.origin === sw.location.origin);
+	event.waitUntil(Promise.all(targets.map(cachePage)));
 });
 
+/** 이 버전의 앱이 그린 HTML인지. 버전 표시가 없으면(개발 서버 등) 이 버전으로 본다. */
+function isOwnVersion(response: Response): boolean {
+	const responseVersion = response.headers.get(VERSION_HEADER);
+	if (!responseVersion || responseVersion === version) return true;
+	// 서버에는 이미 새 버전이 올라가 있다 — 새 worker를 받아 오게 한다(앱이 "새 버전" 안내를 띄운다).
+	sw.registration.update().catch(() => {});
+	return false;
+}
+
+function isStorablePage(response: Response): boolean {
+	return (
+		response.ok &&
+		response.type !== 'opaque' &&
+		Boolean(response.headers.get('content-type')?.includes('text/html')) &&
+		isOwnVersion(response)
+	);
+}
+
 async function cachePage(url: URL) {
-	const cache = await caches.open(PAGE_CACHE);
+	const cache = await openCache(caches, PAGE_CACHE);
+	if (!cache) return;
 	const request = new Request(url.href, { headers: { accept: 'text/html' } });
-	const cached = await cache.match(request, { ignoreVary: true });
-	const savedAt = Date.parse(cached?.headers.get('date') ?? '');
-	if (cached && Date.now() - savedAt < PAGE_REFRESH_MS) return;
+	const cached = await matchCache(cache, request, { ignoreVary: true });
+	const savedAt = cached ? savedAtOf(cached) : null;
+	if (savedAt !== null && Date.now() - savedAt < PAGE_REFRESH_MS) return;
 	try {
 		const response = await fetch(request);
-		if (response.ok && response.headers.get('content-type')?.includes('text/html')) {
-			await putTrimmed(cache, request, response, MAX_PAGES);
+		if (isStorablePage(response)) {
+			await putTrimmed(cache, request, withSavedAt(response, Date.now()), MAX_PAGES);
 		}
 	} catch {
 		// 오프라인이면 다음 기회에 담는다.
@@ -95,17 +141,27 @@ sw.addEventListener('fetch', (event) => {
 	const { request } = event;
 	if (request.method !== 'GET') return;
 	const url = new URL(request.url);
+	const waitUntil = (promise: Promise<unknown>) => event.waitUntil(promise);
 
 	if (url.origin === sw.location.origin) {
 		if (PRECACHE_SET.has(url.pathname)) {
-			event.respondWith(cacheFirst(request, ASSET_CACHE));
+			event.respondWith(
+				openCache(caches, ASSET_CACHE).then((cache) =>
+					cacheFirst({ request, cache, fetch, waitUntil, maxEntries: Number.MAX_SAFE_INTEGER })
+				)
+			);
 			return;
 		}
 		if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
 			event.respondWith(
-				networkFirst(event, request, PAGE_CACHE, MAX_PAGES).then(
-					(response) => response ?? offlinePage(url)
-				)
+				respondNetworkFirst(event, PAGE_CACHE, MAX_PAGES, isStorablePage).then((result) => {
+					if (!result) return offlinePage(url);
+					if (!result.fromCache) return result.response;
+					// 저장본 HTML이면 <html>에 저장 시각을 적어 앱이 안내를 띄우게 한다.
+					return markHtmlAsSaved(result.response.clone(), result.savedAt).catch(
+						() => result.response
+					);
+				})
 			);
 			return;
 		}
@@ -115,8 +171,8 @@ sw.addEventListener('fetch', (event) => {
 			return;
 		}
 		event.respondWith(
-			networkFirst(event, request, PAGE_CACHE, MAX_PAGES).then(
-				(response) => response ?? Response.error()
+			respondNetworkFirst(event, PAGE_CACHE, MAX_PAGES).then((result) =>
+				result ? notifyIfSaved(event, result) : Response.error()
 			)
 		);
 		return;
@@ -129,91 +185,68 @@ sw.addEventListener('fetch', (event) => {
 		!url.pathname.endsWith('.ics')
 	) {
 		event.respondWith(
-			networkFirst(event, request, API_CACHE, MAX_API).then(
-				(response) => response ?? Response.error()
+			respondNetworkFirst(event, API_CACHE, MAX_API).then((result) =>
+				result ? notifyIfSaved(event, result) : Response.error()
 			)
 		);
 		return;
 	}
 
 	// 제목용 글꼴(Google Fonts). 바뀔 일이 거의 없어 저장본을 먼저 쓰고 뒤에서 새로 받는다.
+	// 글꼴 CSS는 crossorigin 없는 <link>로 받아 opaque 응답이라 그것도 담는다.
 	if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
-		event.respondWith(staleWhileRevalidate(event, request, FONT_CACHE));
+		event.respondWith(
+			openCache(caches, FONT_CACHE).then((cache) =>
+				cacheFirst({
+					request,
+					cache,
+					fetch,
+					waitUntil,
+					maxEntries: MAX_FONTS,
+					revalidate: true,
+					shouldStore: (response) => response.ok || response.type === 'opaque'
+				})
+			)
+		);
 	}
 });
 
-async function cacheFirst(request: Request, cacheName: string): Promise<Response> {
-	const cache = await caches.open(cacheName);
-	const cached = await cache.match(request);
-	if (cached) return cached;
-	const response = await fetch(request);
-	if (response.ok) await cache.put(request, response.clone());
-	return response;
-}
-
-/**
- * 네트워크 먼저. 받은 응답(200)은 캐시에 넣는다. 네트워크가 실패하거나 서버 오류(5xx)면 저장본을,
- * 저장본이 있는데 네트워크가 NETWORK_TIMEOUT_MS 넘게 걸리면 저장본을 먼저 돌려준다(받는 중인 응답은
- * 끝까지 받아 캐시를 새로 고친다). 둘 다 없으면 undefined.
- */
-async function networkFirst(
+async function respondNetworkFirst(
 	event: FetchEvent,
-	request: Request,
 	cacheName: string,
-	maxEntries: number
-): Promise<Response | undefined> {
-	const cache = await caches.open(cacheName);
-	const cached = await cache.match(request, { ignoreVary: true });
-
-	const network = fetch(request).then(async (response) => {
-		if (response.ok && response.type !== 'opaque') {
-			await putTrimmed(cache, request, response.clone(), maxEntries);
-		}
-		return response;
+	maxEntries: number,
+	shouldStore?: (response: Response) => boolean
+): Promise<NetworkFirstResult | undefined> {
+	return networkFirst({
+		request: event.request,
+		cache: await openCache(caches, cacheName),
+		fetch,
+		waitUntil: (promise) => event.waitUntil(promise),
+		maxEntries,
+		timeoutMs: NETWORK_TIMEOUT_MS,
+		maxAgeMs: MAX_SAVED_AGE_MS,
+		shouldStore
 	});
-	event.waitUntil(network.then(noop, noop));
+}
 
-	if (!cached) return network.catch(() => undefined);
-
-	return new Promise<Response>((resolve) => {
-		const timer = setTimeout(() => resolve(cached), NETWORK_TIMEOUT_MS);
-		network.then(
-			(response) => {
-				clearTimeout(timer);
-				resolve(response.status >= 500 ? cached : response);
-			},
-			() => {
-				clearTimeout(timer);
-				resolve(cached);
-			}
+/** 저장본을 돌려줬으면 요청한 탭에 저장 시각을 알린다(앱이 "저장본" 안내를 띄운다). */
+function notifyIfSaved(event: FetchEvent, result: NetworkFirstResult): Response {
+	if (result.fromCache && event.clientId) {
+		event.waitUntil(
+			sw.clients
+				.get(event.clientId)
+				.then((client) =>
+					client?.postMessage({
+						type: 'saved-response',
+						url: event.request.url,
+						savedAt: result.savedAt
+					})
+				)
+				.catch(() => {})
 		);
-	});
+	}
+	return result.response;
 }
-
-async function staleWhileRevalidate(
-	event: FetchEvent,
-	request: Request,
-	cacheName: string
-): Promise<Response> {
-	const cache = await caches.open(cacheName);
-	const cached = await cache.match(request);
-	const network = fetch(request).then(async (response) => {
-		if (response.ok || response.type === 'opaque') await cache.put(request, response.clone());
-		return response;
-	});
-	event.waitUntil(network.then(noop, noop));
-	return cached ?? network;
-}
-
-// 같은 주소를 다시 넣으면 맨 뒤(최신)로 보내고, 개수가 넘치면 가장 오래된 것부터 지운다.
-async function putTrimmed(cache: Cache, request: Request, response: Response, max: number) {
-	await cache.delete(request, { ignoreVary: true });
-	await cache.put(request, response);
-	const keys = await cache.keys();
-	for (const key of keys.slice(0, Math.max(0, keys.length - max))) await cache.delete(key);
-}
-
-function noop() {}
 
 // 한 번도 본 적 없는 페이지를 오프라인에서 열었을 때 보여줄 안내. 앱 파일 없이 혼자 그려지는 HTML이다.
 const OFFLINE_TEXT = {

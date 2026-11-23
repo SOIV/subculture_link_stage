@@ -163,6 +163,20 @@ export function formatShortDate(
 	return withTime ? `${text} (${timeZoneLabel(timeZone, at)})` : text;
 }
 
+/**
+ * "저장본" 안내에 붙이는 저장 시각. 행사 시간대가 아니라 보는 사람의 기기 시간대로 보여주고(언제 확인한
+ * 정보인지가 목적), 오늘이 아니면 날짜도 붙인다.
+ */
+export function formatSavedAt(locale: Locale, savedAt: number, now: Date = new Date()): string {
+	const at = new Date(savedAt);
+	const today = at.toDateString() === now.toDateString();
+	return new Intl.DateTimeFormat(localeTag(locale), {
+		...(today ? {} : { month: 'short', day: 'numeric' }),
+		hour: '2-digit',
+		minute: '2-digit'
+	}).format(at);
+}
+
 export function statusLabel(locale: Locale, status: string): string {
 	return t(locale, `status.${status}`);
 }

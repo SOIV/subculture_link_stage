@@ -154,6 +154,11 @@ const ko = {
 	'error.notFound': '찾는 페이지가 없어요',
 	'error.desc': '주소가 바뀌었거나 잠시 문제가 생겼어요. 메인에서 다시 찾아 주세요.',
 	'error.home': '메인으로',
+	'saved.notice': '저장해 둔 내용을 보여 주고 있어요. 최신 정보가 아닐 수 있어요.',
+	'saved.checkedAt': '마지막 확인 {time}',
+	'saved.retry': '다시 불러오기',
+	'update.available': '새 버전이 있어요. 새로 고치면 바로 적용돼요.',
+	'update.apply': '새로 고침',
 	'offline.notice': '오프라인 상태예요. 전에 본 내용을 보여 주고 있어서 최신 정보가 아닐 수 있어요.'
 };
 
@@ -302,6 +307,11 @@ const ja: Record<keyof typeof ko, string> = {
 	'error.desc':
 		'アドレスが変わったか、一時的な問題が発生しました。トップからもう一度お探しください。',
 	'error.home': 'トップへ',
+	'saved.notice': '保存済みの内容を表示しています。最新の情報ではない場合があります。',
+	'saved.checkedAt': '最終確認 {time}',
+	'saved.retry': '再読み込み',
+	'update.available': '新しいバージョンがあります。再読み込みするとすぐに反映されます。',
+	'update.apply': '再読み込み',
 	'offline.notice': 'オフラインです。以前に表示した内容のため、最新の情報ではない場合があります。'
 };
 
@@ -450,6 +460,11 @@ const en: Record<keyof typeof ko, string> = {
 	'error.desc':
 		'The address may have changed, or something went wrong for a moment. Try finding it again from the home page.',
 	'error.home': 'Go to home',
+	'saved.notice': 'Showing saved content, so it may be out of date.',
+	'saved.checkedAt': 'last checked {time}',
+	'saved.retry': 'Reload',
+	'update.available': 'A new version is available. Reload to update.',
+	'update.apply': 'Reload',
 	'offline.notice': "You're offline. This is what you viewed earlier, so it may be out of date."
 };
 

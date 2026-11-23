@@ -3,6 +3,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import OfflineNotice from '$lib/components/OfflineNotice.svelte';
+	import UpdateNotice from '$lib/components/UpdateNotice.svelte';
 	import { DEFAULT_LOCALE, LOCALES, localeHref, stripLocale, t } from '$lib/i18n';
 	import { OG_LOCALE } from '$lib/seo';
 	import type { LayoutProps } from './$types';
@@ -65,6 +66,7 @@
 	class="flex min-h-dvh flex-col bg-zinc-50 pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)] text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100"
 >
 	<Header {locale} />
+	<UpdateNotice {locale} />
 	<OfflineNotice {locale} />
 	<main class="mx-auto w-full max-w-7xl flex-1 px-4 pt-8 pb-8 sm:px-6 sm:pt-12 lg:px-8">
 		{@render children()}
