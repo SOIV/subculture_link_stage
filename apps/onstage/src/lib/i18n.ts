@@ -161,6 +161,8 @@ const ko = {
 	'update.apply': '새로 고침',
 	'filter.invalidDate': '알아볼 수 없는 날짜가 있어서 그 기간 조건은 빼고 찾았어요.',
 	'list.invalidQuery': '이 검색 조건으로는 찾을 수 없었어요. 조건을 바꾸거나 초기화해 주세요.',
+	'state.on': '켜짐',
+	'state.off': '꺼짐',
 	'offline.notice': '오프라인 상태예요. 전에 본 내용을 보여 주고 있어서 최신 정보가 아닐 수 있어요.'
 };
 
@@ -316,6 +318,8 @@ const ja: Record<keyof typeof ko, string> = {
 	'update.apply': '再読み込み',
 	'filter.invalidDate': '認識できない日付があったため、その期間の条件を除いて検索しました。',
 	'list.invalidQuery': 'この条件では検索できませんでした。条件を変えるかリセットしてください。',
+	'state.on': 'オン',
+	'state.off': 'オフ',
 	'offline.notice': 'オフラインです。以前に表示した内容のため、最新の情報ではない場合があります。'
 };
 
@@ -471,6 +475,8 @@ const en: Record<keyof typeof ko, string> = {
 	'update.apply': 'Reload',
 	'filter.invalidDate': "One of the dates couldn't be read, so that date filter was left out.",
 	'list.invalidQuery': "These filters couldn't be used. Change or reset them and try again.",
+	'state.on': 'on',
+	'state.off': 'off',
 	'offline.notice': "You're offline. This is what you viewed earlier, so it may be out of date."
 };
 

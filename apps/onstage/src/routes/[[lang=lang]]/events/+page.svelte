@@ -31,6 +31,8 @@
 	);
 
 	// "끝난 행사 보기" 스위치: 지금 조건은 그대로 두고 ?ended=1만 켜고 끈다(자바스크립트 없이도 동작하는 링크).
+	// 모양만 스위치이고 의미는 링크다(role="switch"를 주면 Space로 켜져야 하는데 링크는 Enter로만 동작한다).
+	// 켜짐/꺼짐은 화면 읽기 프로그램용 글자로 알린다.
 	// 캘린더 구독은 이 페이지에 따로 두지 않는다 — 페이지 맨 아래(푸터)에서 구독할 수 있다.
 	let endedToggleHref = $derived.by(() => {
 		const params = new SvelteURLSearchParams(page.url.search);
@@ -62,8 +64,6 @@
 		</p>
 		<a
 			href={endedToggleHref}
-			role="switch"
-			aria-checked={data.filters.showEnded}
 			data-sveltekit-noscroll
 			data-sveltekit-keepfocus
 			class="-mr-2 inline-flex h-11 items-center gap-2.5 rounded-lg px-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-900/[0.04] sm:mr-0 sm:h-9 dark:text-zinc-200 dark:hover:bg-white/[0.06]"
@@ -82,6 +82,7 @@
 				></span>
 			</span>
 			{t(locale, 'list.showEnded')}
+			<span class="sr-only">({t(locale, data.filters.showEnded ? 'state.on' : 'state.off')})</span>
 			{#if ended.length > 0}
 				<span class="text-zinc-400 tabular-nums dark:text-zinc-500">{ended.length}</span>
 			{/if}

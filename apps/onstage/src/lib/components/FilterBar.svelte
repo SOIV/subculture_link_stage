@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import { goto } from '$app/navigation';
 	import Search from '@lucide/svelte/icons/search';
 	import SlidersHorizontal from '@lucide/svelte/icons/sliders-horizontal';
@@ -39,20 +40,27 @@
 	let sheetOpen = $state(false);
 	let sheetToggle: HTMLButtonElement | undefined = $state();
 	let sheetClose: HTMLButtonElement | undefined = $state();
+	let sheet: HTMLElement | undefined = $state();
+	let backdrop: HTMLElement | undefined = $state();
 
 	function closeSheet() {
 		if (!sheetOpen) return;
 		sheetOpen = false;
-		sheetToggle?.focus();
+		// 뒤 페이지의 inert가 풀린 다음(아래 $effect 정리)에 포커스를 필터 버튼으로 돌려준다.
+		void tick().then(() => sheetToggle?.focus());
 	}
 
 	// 시트가 열려 있는 동안 뒤 페이지가 스크롤되지 않게 하고, 화면이 넓어지면(가로 회전 등) 시트를 닫는다.
+	// 모달(aria-modal)이라고 알리는 만큼 뒤 페이지는 실제로도 조작할 수 없게(inert) 한다 — 포커스·클릭·
+	// 스크린리더가 모두 시트 안에만 머문다. 닫히면 원래대로 되돌린다. 넓어져서 닫힐 때는 시트 내용이
+	// 그 자리에 그대로 펼쳐지므로 포커스를 옮기지 않는다.
 	$effect(() => {
-		if (!sheetOpen) return;
+		if (!sheetOpen || !sheet) return;
 		sheetClose?.focus();
 		const root = document.documentElement;
 		const previous = root.style.overflow;
 		root.style.overflow = 'hidden';
+		const restoreInert = inertOutside(sheet, backdrop ? [backdrop] : []);
 		const wide = window.matchMedia('(min-width: 40rem)');
 		const onWide = () => {
 			if (wide.matches) sheetOpen = false;
@@ -60,9 +68,47 @@
 		wide.addEventListener('change', onWide);
 		return () => {
 			root.style.overflow = previous;
+			restoreInert();
 			wide.removeEventListener('change', onWide);
 		};
 	});
+
+	/** target(과 keep)을 뺀 페이지의 나머지를 inert로 만든다. 되돌리는 함수를 돌려준다. */
+	function inertOutside(target: HTMLElement, keep: HTMLElement[]) {
+		const changed: HTMLElement[] = [];
+		for (let node: HTMLElement = target; node.parentElement; node = node.parentElement) {
+			for (const sibling of node.parentElement.children) {
+				if (sibling === node || !(sibling instanceof HTMLElement)) continue;
+				if (keep.includes(sibling) || sibling.inert) continue;
+				sibling.inert = true;
+				changed.push(sibling);
+			}
+			if (node.parentElement === document.body) break;
+		}
+		return () => {
+			for (const element of changed) element.inert = false;
+		};
+	}
+
+	// 시트 안에서 Tab·Shift+Tab이 처음과 끝을 돌게 한다(바깥은 inert라 브라우저 주소창으로 빠지지 않게).
+	function onSheetKeydown(event: KeyboardEvent) {
+		if (!sheetOpen || event.key !== 'Tab' || !sheet) return;
+		const focusable = [
+			...sheet.querySelectorAll<HTMLElement>(
+				'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+			)
+		].filter((element) => element.getClientRects().length > 0);
+		if (focusable.length === 0) return;
+		const first = focusable[0];
+		const last = focusable[focusable.length - 1];
+		if (event.shiftKey && document.activeElement === first) {
+			event.preventDefault();
+			last.focus();
+		} else if (!event.shiftKey && document.activeElement === last) {
+			event.preventDefault();
+			first.focus();
+		}
+	}
 
 	function onWindowKeydown(event: KeyboardEvent) {
 		if (sheetOpen && event.key === 'Escape') closeSheet();
@@ -191,6 +237,7 @@
 	{#if sheetOpen}
 		<!-- 시트 뒤 어두운 막. 누르면 닫힌다(키보드는 Esc나 닫기 버튼). -->
 		<div
+			bind:this={backdrop}
 			class="fixed inset-0 z-40 bg-zinc-950/40 sm:hidden"
 			onclick={closeSheet}
 			aria-hidden="true"
@@ -199,7 +246,9 @@
 
 	<!-- 같은 칸을 넓은 화면에서는 제자리에, 휴대폰에서는 아래에서 올라오는 시트로 보여준다. -->
 	<div
+		bind:this={sheet}
 		id="filter-sheet"
+		onkeydown={onSheetKeydown}
 		role={sheetOpen ? 'dialog' : undefined}
 		aria-modal={sheetOpen ? 'true' : undefined}
 		aria-labelledby={sheetOpen ? 'filter-sheet-title' : undefined}
