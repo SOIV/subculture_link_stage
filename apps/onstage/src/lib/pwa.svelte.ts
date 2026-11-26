@@ -100,14 +100,17 @@ export function startPwa() {
 function watchForUpdate(registration: ServiceWorkerRegistration) {
 	// 지난 버전의 탭이 열려 있는 동안에만 기다린다(controller가 있음). 처음 설치는 안내할 필요가 없다.
 	if (registration.waiting && navigator.serviceWorker.controller) pwa.updateReady = true;
-	registration.addEventListener('updatefound', () => {
-		const worker = registration.installing;
+	const follow = (worker: ServiceWorker | null) => {
 		worker?.addEventListener('statechange', () => {
 			if (worker.state === 'installed' && navigator.serviceWorker.controller) {
 				pwa.updateReady = true;
 			}
 		});
-	});
+	};
+	// 이 화면이 뜨기 전에 이미 설치를 시작한 새 버전도 따라간다(서버가 새 버전 HTML을 주면 worker가 곧바로
+	// 새 버전을 받기 시작해서, 아래 updatefound는 이미 지나갔을 수 있다).
+	follow(registration.installing);
+	registration.addEventListener('updatefound', () => follow(registration.installing));
 }
 
 /** "새로 고침"을 눌렀을 때. 기다리던 worker가 넘겨받으면 controllerchange에서 새로 고친다. */
