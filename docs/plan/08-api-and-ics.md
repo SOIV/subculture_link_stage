@@ -51,6 +51,7 @@ EMAIL 채널 제외로 생겼던 "일반 웹 사용자의 개인화 알림 공�
 | 구분 | 현재 상태 |
 |---|---|
 | 구현됨 (Phase 1) | `/v1/events`, `/v1/events/:slug`, `/v1/event-series`, `/v1/schedules`, `/v1/venues`, `/v1/tags`, `/v1/search`, `/v1/health` |
+| 구현됨 (행사 목록·연혁, 2026-11-26 — 배포 전) | `/v1/event-series/:slug`(시리즈 상세, `description` 포함), `/v1/event-series/:slug/events`(시리즈 회차 목록 — 끝난·취소 회차 포함, `order`·`status`·`from`·`to`), `/v1/event-series` 항목의 요약 칸(`countryCodes`·`eventCount`·`nextEvent`·`latestEvent`), `/v1/events/:slug`가 끝난·취소 회차도 연다 |
 | 구현됨 (행사 목록 필터) | `country`, `tags`, `from`, `to`, `q` |
 | 계획/보류 | `/v1/franchises`, `category`/`franchise` 필터 — 대응 데이터 모델 미구현 |
 
@@ -58,6 +59,8 @@ EMAIL 채널 제외로 생겼던 "일반 웹 사용자의 개인화 알림 공�
 
 - `tags`: 쉼표로 구분한 태그 slug. **같은 태그 그룹의 태그끼리는 "또는", 서로 다른 그룹 사이는 "그리고"** 로 처리한다(예: `tags=exhibition,paid`는 행사 형식이 전시이면서 티켓 방식이 유료인 행사). 상위 태그(예: 전시)를 고르면 그 하위 태그(산업 전시 등)가 붙은 행사도 포함한다. 존재하지 않는 태그만 넘기면 결과가 없다.
 - `q`: 행사 이름 검색어. 모든 언어의 제목과 slug에서 부분 일치(대소문자 무시)로 찾으므로 화면 언어와 다른 언어로 검색해도 찾아진다.
+
+공개 범위(2026-11-26 — 배포 전): 행사 목록·검색·일정·구독(ICS)은 앞으로 열릴 행사를 찾는 화면이라 확정(`CONFIRMED`)·연기(`POSTPONED`) 행사만 준다(날짜가 지난 확정 행사는 응답에서 `ENDED`). 시리즈 회차 목록(`/v1/event-series/:slug/events`, 연혁)과 행사 상세(`/v1/events/:slug`)는 끝난(`ENDED`)·취소(`CANCELLED`) 회차도 준다 — 연혁에서 지난 회차를 눌러 상세를 열 수 있어야 하기 때문이다. 준비 중(`DRAFT`)·보관(`ARCHIVED`)은 어디에도 나오지 않는다. 시리즈 회차 목록은 기본이 최근 회차부터(`order=desc`, 날짜 미정 회차가 맨 앞)이고 `status=ENDED,CANCELLED`처럼 응답 상태로 거를 수 있으며, 페이지 나눔은 없다. 없는 시리즈는 `EVENT_SERIES_NOT_FOUND`(404). 시리즈 목록 요약의 `nextEvent`는 아직 끝나지 않은 확정 회차 중 가장 이른 것(없으면 연기 회차), `latestEvent`는 끝난 회차 중 가장 늦게 시작한 것(취소 제외)이다.
 
 언어(`locale`: `ko`·`ja`·`en`, 기본 `ko`)는 행사 제목·요약·설명뿐 아니라 응답 안의 장소 이름(`venue.name`)과 주최 이름(`organizers[].name`)에도 적용한다. 그 언어의 번역(`entity_localizations`)이 없으면 기준 이름(`canonicalName`)으로 대신한다. 장소 주소(`venue.address`)도 요청 언어의 번역 주소가 있으면 그것을 주고, 없으면 `ko`는 기준 주소(`venues.address`, 현지 표기)를, 그 밖의 언어는 영어 주소를 거쳐 기준 주소를 준다(기준 주소가 한국어인 장소를 일본어 화면에서 한국어로 보여주지 않기 위해서다). 구독(ICS)의 장소 이름과 "자동 번역 포함" 안내 문구도 같은 `locale`을 따른다.
 
@@ -69,6 +72,8 @@ EMAIL 채널 제외로 생겼던 "일반 웹 사용자의 개인화 알림 공�
 GET /v1/events
 GET /v1/events/{eventId}
 GET /v1/event-series
+GET /v1/event-series/{slug}
+GET /v1/event-series/{slug}/events
 GET /v1/schedules
 GET /v1/venues
 GET /v1/franchises
