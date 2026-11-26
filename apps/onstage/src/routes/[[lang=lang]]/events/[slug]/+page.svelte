@@ -105,8 +105,13 @@
 		<div class="h-1 w-full bg-[var(--accent)]"></div>
 		<div class="space-y-3 p-5 sm:p-8">
 			<div class="flex flex-wrap items-center gap-2 text-xs text-zinc-600 dark:text-zinc-300">
-				<span class="rounded-md bg-zinc-100 px-2 py-1 dark:bg-white/[0.08]"
-					>{statusLabel(locale, event.status)}</span
+				<!-- 연혁에서 끝난·취소 회차도 열리므로(2026-11-26 API) 취소·연기는 색으로 구분한다. -->
+				<span
+					class="rounded-md px-2 py-1 {event.status === 'CANCELLED'
+						? 'bg-rose-100 font-medium text-rose-800 dark:bg-rose-500/15 dark:text-rose-300'
+						: event.status === 'POSTPONED'
+							? 'bg-amber-100 font-medium text-amber-800 dark:bg-amber-500/15 dark:text-amber-300'
+							: 'bg-zinc-100 dark:bg-white/[0.08]'}">{statusLabel(locale, event.status)}</span
 				>
 				<span class="rounded-md bg-zinc-100 px-2 py-1 dark:bg-white/[0.08]">
 					<CountryBadge {locale} countryCode={event.countryCode} isOnline={event.isOnline} />
@@ -130,6 +135,20 @@
 			</h1>
 			{#if event.summary}
 				<p class="max-w-3xl text-lg text-zinc-600 dark:text-zinc-300">{event.summary}</p>
+			{/if}
+			{#if event.status === 'CANCELLED' || event.status === 'ENDED'}
+				<!-- 취소·종료 회차는 아래 일정·티켓 정보가 더는 쓸모없다는 것을 먼저 알린다. -->
+				<p
+					class="flex items-center gap-1.5 text-sm font-medium {event.status === 'CANCELLED'
+						? 'text-rose-700 dark:text-rose-400'
+						: 'text-zinc-600 dark:text-zinc-400'}"
+				>
+					<TriangleAlert class="size-4 shrink-0" aria-hidden="true" />
+					{t(
+						locale,
+						event.status === 'CANCELLED' ? 'detail.cancelledNotice' : 'detail.endedNotice'
+					)}
+				</p>
 			{/if}
 			{#if needsReview}
 				<p class="flex items-center gap-1.5 text-xs font-medium text-amber-700 dark:text-amber-400">

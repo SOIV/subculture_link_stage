@@ -15,6 +15,7 @@
 		compareByStart,
 		editionPhase,
 		historyByYear,
+		editionTags,
 		isAheadPhase,
 		seriesCategoryTags,
 		seriesOverview
@@ -30,7 +31,7 @@
 	let tagIndex = $derived(buildTagIndex(data.tagGroups.items));
 	let accent = $derived(accentColor(series.slug));
 	let officialHref = $derived(safeExternalUrl(series.officialUrl));
-	let chips = $derived(seriesCategoryTags(data.editions, tagIndex, 6));
+	let chips = $derived(seriesCategoryTags(editionTags(data.editions), tagIndex, 6));
 
 	// 회차 상태(예정·진행 중·종료)는 날짜에 따라 바뀌므로 공통 시계(now)로 화면에서 계산한다.
 	let overview = $derived(seriesOverview(data.editions, now()));
@@ -115,6 +116,13 @@
 			</div>
 		</div>
 	</header>
+
+	{#if series.description}
+		<!-- 시리즈 소개(새 시리즈 상세 API에만 있다). 비어 있으면 자리를 두지 않는다. -->
+		<p class="max-w-3xl leading-relaxed whitespace-pre-line text-zinc-700 dark:text-zinc-300">
+			{series.description}
+		</p>
+	{/if}
 
 	<section aria-labelledby="series-upcoming">
 		<h2 id="series-upcoming" class={sectionHeadingClass}>

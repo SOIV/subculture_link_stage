@@ -9,6 +9,11 @@ const COUNTRY_TIMEZONE: Record<string, string> = {
 	JP: 'Asia/Tokyo'
 };
 
+/** 국가의 대표 시간대. 일정 시간대를 모르는 회차(시리즈 요약의 회차 등)에 쓴다. 모르는 국가는 UTC. */
+export function countryTimezone(countryCode: string | null): string {
+	return (countryCode && COUNTRY_TIMEZONE[countryCode]) || 'UTC';
+}
+
 export type TimeRange = {
 	startsAt: string | null;
 	endsAt: string | null;

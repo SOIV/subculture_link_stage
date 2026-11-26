@@ -108,6 +108,21 @@ export type EventDetail = Omit<EventSummary, 'venue'> & {
 	ticket: { types: TicketType[]; channels: TicketChannel[] };
 };
 
+/** 시리즈 카드에 보여줄 회차 하나(다음 회차·최근 회차). 자세한 내용은 /events/{slug}로 본다. */
+export type EventSeriesEventRef = {
+	id: string;
+	slug: string;
+	status: EventStatus;
+	title: string | null;
+	countryCode: string | null;
+	isOnline: boolean;
+	startsAt: string | null;
+	endsAt: string | null;
+	isAllDay: boolean;
+};
+
+// countryCodes 아래 요약 칸은 2026-11-26 API(scls-platform 30d694e)부터 있다. 그 전 API 응답에는 없어서
+// 선택 칸으로 두고, 없으면 화면이 전체 행사 목록으로 요약을 만든다($lib/series.ts).
 export type EventSeriesSummary = {
 	id: string;
 	slug: string;
@@ -117,7 +132,19 @@ export type EventSeriesSummary = {
 	summary: string | null;
 	foundedYear: number | null;
 	officialUrl: string | null;
+	/** 회차 개최국(최근 회차부터, 중복 없이). 온라인 전용 회차는 국가가 없어 빠진다. */
+	countryCodes?: string[];
+	/** 공개 회차 수(끝난·취소 회차 포함). */
+	eventCount?: number;
+	/** 아직 끝나지 않은 가장 이른 확정 회차, 없으면 연기 회차. */
+	nextEvent?: EventSeriesEventRef | null;
+	/** 가장 늦게 시작한 끝난 회차(취소 제외). */
+	latestEvent?: EventSeriesEventRef | null;
+	/** 공개 회차들의 태그 slug. API에 아직 없다 — 생기면 카드에 분류 칩이 나온다. */
+	tags?: string[];
 };
+
+export type EventSeriesDetail = EventSeriesSummary & { description: string | null };
 
 export type Venue = {
 	id: string;
@@ -287,6 +314,57 @@ export async function getEvent(fetchFn: typeof fetch, slug: string, locale: Loca
 export async function listEventSeries(fetchFn: typeof fetch, locale: Locale) {
 	const url = buildUrl('/event-series', { locale });
 	return sharedRequest(url.href, () => request(url, fetchFn, isList<EventSeriesSummary>));
+}
+
+/**
+ * 이 API에 그 경로가 아직 없는 것으로 볼 수 있는 실패(배포 전 API). 없는 시리즈·행사는 API 형식의 오류
+ * 코드(EVENT_SERIES_NOT_FOUND 등)로 오므로 여기에 들지 않는다.
+ * - HTTP_404: API 형식이 아닌 404(Fastify의 "없는 경로" 응답)
+ * - NETWORK_ERROR: 그 404에는 CORS 헤더가 없어서(2026-11-26 운영 API 확인) 브라우저와 SvelteKit 서버 렌더의
+ *   fetch는 응답을 읽지 못하고 네트워크 오류로 본다. 진짜 통신 장애여도 이어서 부르는 대체 경로가 같은
+ *   이유로 실패하므로 오류는 그대로 드러난다.
+ */
+export function isMissingRoute(error: unknown): boolean {
+	return (
+		error instanceof ScLsApiError && (error.code === 'HTTP_404' || error.code === 'NETWORK_ERROR')
+	);
+}
+
+function isSeriesDetail(data: unknown): data is EventSeriesDetail {
+	return isObject(data) && typeof data.slug === 'string';
+}
+
+/** 시리즈 상세. 없는(또는 공개하지 않는) 시리즈는 null. 이 경로가 없는 API면 HTTP_404로 던진다(isMissingRoute). */
+export async function getEventSeries(fetchFn: typeof fetch, slug: string, locale: Locale) {
+	const url = buildUrl(`/event-series/${encodeURIComponent(slug)}`, { locale });
+	try {
+		return await request(url, fetchFn, isSeriesDetail);
+	} catch (error) {
+		if (error instanceof ScLsApiError && error.code === 'EVENT_SERIES_NOT_FOUND') return null;
+		throw error;
+	}
+}
+
+/**
+ * 시리즈의 회차 목록(연혁용 — 끝난·취소 회차 포함, 기본은 최근 회차부터). 없는 시리즈는 null.
+ * 이 경로가 없는 API면 HTTP_404로 던진다(isMissingRoute).
+ */
+export async function listEventSeriesEvents(
+	fetchFn: typeof fetch,
+	slug: string,
+	locale: Locale,
+	options: { order?: 'asc' | 'desc' } = {}
+) {
+	const url = buildUrl(`/event-series/${encodeURIComponent(slug)}/events`, {
+		locale,
+		order: options.order
+	});
+	try {
+		return await request(url, fetchFn, isList<EventSummary>);
+	} catch (error) {
+		if (error instanceof ScLsApiError && error.code === 'EVENT_SERIES_NOT_FOUND') return null;
+		throw error;
+	}
 }
 
 export async function listVenues(fetchFn: typeof fetch, locale: Locale, country?: string) {

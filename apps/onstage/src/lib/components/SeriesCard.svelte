@@ -1,36 +1,35 @@
 <script lang="ts">
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
-	import { eventPeriod, formatCardPeriod } from '$lib/format';
+	import { formatCardPeriod } from '$lib/format';
 	import { localeHref, t, tv, type Locale } from '$lib/i18n';
 	import { now } from '$lib/clock.svelte';
 	import { daysUntil } from '$lib/schedule';
-	import { seriesCategoryTags, type SeriesEntry } from '$lib/series';
+	import { seriesCategoryTags, type SeriesCardData } from '$lib/series';
 	import type { TagIndex } from '$lib/tags';
 	import { accentColor } from '$lib/theme';
 	import CountryBadge from './CountryBadge.svelte';
 	import EditionPhaseBadge from './EditionPhaseBadge.svelte';
 
-	let { entry, locale, tagIndex }: { entry: SeriesEntry; locale: Locale; tagIndex: TagIndex } =
+	let { card, locale, tagIndex }: { card: SeriesCardData; locale: Locale; tagIndex: TagIndex } =
 		$props();
 
 	const MAX_TAG_CHIPS = 3;
 
-	let series = $derived(entry.series);
-	let overview = $derived(entry.overview);
+	let series = $derived(card.series);
 	// 회차 카드(EventCard)와 같은 색 — 둘 다 시리즈 slug에서 만든다.
 	let accent = $derived(accentColor(series.slug));
-	let chips = $derived(seriesCategoryTags(entry.editions, tagIndex, MAX_TAG_CHIPS));
+	let chips = $derived(seriesCategoryTags(card.tags, tagIndex, MAX_TAG_CHIPS));
 	// 다음 회차를 먼저 보여주고, 없으면 최근(끝난) 회차를 보여준다.
 	let shown = $derived(
-		overview.next
-			? { label: 'series.next', event: overview.next.event, phase: overview.next.phase }
-			: overview.latest
-				? { label: 'series.latest', event: overview.latest, phase: 'ended' as const }
+		card.next
+			? { label: 'series.next', edition: card.next.edition, phase: card.next.phase }
+			: card.latest
+				? { label: 'series.latest', edition: card.latest, phase: 'ended' as const }
 				: null
 	);
 	let days = $derived.by(() => {
 		if (shown?.phase !== 'upcoming') return null;
-		const range = eventPeriod(shown.event);
+		const { range } = shown.edition;
 		return range.startsAt ? daysUntil(range.startsAt, range.timezone, now()) : null;
 	});
 </script>
@@ -46,10 +45,10 @@
 		<div
 			class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400"
 		>
-			{#each overview.countries as country (country)}
+			{#each card.countries as country (country)}
 				<CountryBadge {locale} countryCode={country} />
 			{/each}
-			{#if overview.hasOnline}
+			{#if card.hasOnline}
 				<CountryBadge {locale} countryCode={null} isOnline />
 			{/if}
 			{#if series.foundedYear}
@@ -91,10 +90,10 @@
 						<div class="min-w-0 text-sm">
 							<p class="text-xs text-zinc-500 dark:text-zinc-400">{t(locale, shown.label)}</p>
 							<p class="mt-1 font-medium text-zinc-900 dark:text-zinc-100">
-								{shown.event.title ?? shown.event.slug}
+								{shown.edition.title ?? shown.edition.slug}
 							</p>
 							<p class="mt-0.5 text-zinc-600 tabular-nums dark:text-zinc-400">
-								{formatCardPeriod(locale, eventPeriod(shown.event), now())}
+								{formatCardPeriod(locale, shown.edition.range, now())}
 							</p>
 						</div>
 						{#if days !== null}
@@ -113,13 +112,13 @@
 			</div>
 		</div>
 
-		{#if overview.editionCount > 0}
+		{#if card.editionCount > 0}
 			<p
 				class="mt-auto flex items-center gap-1 pt-3 text-xs text-zinc-500 transition-colors group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100"
 			>
-				{overview.editionCount === 1
+				{card.editionCount === 1
 					? t(locale, 'series.editionCount.one')
-					: tv(locale, 'series.editionCount', { n: overview.editionCount })}
+					: tv(locale, 'series.editionCount', { n: card.editionCount })}
 				<ChevronRight class="size-3.5" aria-hidden="true" />
 			</p>
 		{/if}
