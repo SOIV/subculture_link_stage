@@ -9,7 +9,11 @@ declare global {
 			cf?: IncomingRequestCfProperties;
 		}
 
-		// interface Error {}
+		interface Error {
+			message: string;
+			/** 공개 API 호출이 실패했을 때 그 원인 코드(ScLsApiError.code — src/hooks.client.ts). */
+			code?: string;
+		}
 		// interface Locals {}
 		interface PageData {
 			seo?: import('$lib/seo').PageSeo;

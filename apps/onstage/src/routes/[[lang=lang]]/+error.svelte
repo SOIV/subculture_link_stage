@@ -1,12 +1,13 @@
 <script lang="ts">
-	// 오류 화면. 오프라인에서 저장된 적 없는 페이지로 이동하면(공개 API를 못 불러) 여기로 온다 —
-	// 그때는 오류 대신 오프라인 안내를 보여준다(헤더 아래 안내 줄과 같은 문구).
+	// 오류 화면. 오프라인에서 저장된 적 없는 페이지로 이동하거나 앱 껍데기로 열면(공개 API도 저장본도 없음)
+	// 여기로 온다 — 그때는 오류 대신 "아직 저장되지 않은 페이지" 안내를 보여준다. 기기가 온라인으로 알고 있어도
+	// API 요청이 통신 실패면(code — src/hooks.client.ts) 같은 안내다.
 	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 	import { DEFAULT_LOCALE, localeHref, t, type Locale } from '$lib/i18n';
 
 	let locale = $derived((page.data.locale as Locale | undefined) ?? DEFAULT_LOCALE);
-	let offline = $derived(browser && !navigator.onLine);
+	let offline = $derived(browser && (!navigator.onLine || page.error?.code === 'NETWORK_ERROR'));
 </script>
 
 <div class="mx-auto max-w-xl py-10 text-center">
@@ -21,7 +22,7 @@
 			: t(locale, page.status === 404 ? 'error.notFound' : 'error.title')}
 	</h1>
 	<p class="mt-3 text-zinc-600 dark:text-zinc-300">
-		{offline ? t(locale, 'offline.notice') : t(locale, 'error.desc')}
+		{offline ? t(locale, 'offline.unsaved') : t(locale, 'error.desc')}
 	</p>
 	<a
 		href={localeHref(locale, '/')}

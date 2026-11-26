@@ -180,6 +180,8 @@ const ko = {
 	'footer.icsAll': '전체 일정 구독',
 
 	'offline.title': '오프라인 상태예요',
+	'offline.unsaved':
+		'이 페이지는 아직 저장된 적이 없어서 지금은 볼 수 없어요. 전에 본 페이지는 통신이 끊겨도 열 수 있어요.',
 	'error.title': '페이지를 열 수 없어요',
 	'error.notFound': '찾는 페이지가 없어요',
 	'error.desc': '주소가 바뀌었거나 잠시 문제가 생겼어요. 메인에서 다시 찾아 주세요.',
@@ -368,6 +370,8 @@ const ja: Record<keyof typeof ko, string> = {
 	'footer.icsAll': '全イベントを購読',
 
 	'offline.title': 'オフラインです',
+	'offline.unsaved':
+		'このページはまだ保存されていないため、今は表示できません。以前に表示したページはオフラインでも開けます。',
 	'error.title': 'ページを開けません',
 	'error.notFound': 'ページが見つかりません',
 	'error.desc':
@@ -557,6 +561,8 @@ const en: Record<keyof typeof ko, string> = {
 	'footer.icsAll': 'Subscribe to all events',
 
 	'offline.title': "You're offline",
+	'offline.unsaved':
+		"This page hasn't been saved yet, so it can't be shown right now. Pages you've viewed before still open offline.",
 	'error.title': "This page can't be opened",
 	'error.notFound': 'Page not found',
 	'error.desc':

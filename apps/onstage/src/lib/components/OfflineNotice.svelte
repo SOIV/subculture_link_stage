@@ -4,6 +4,7 @@
 	// - 화면에 저장본이 쓰였다(worker가 알려 준 pwa.savedAt). 통신이 되는 것처럼 보여도 API만 응답하지 않거나
 	//   너무 느리면 저장본을 보여주므로, 네트워크 상태와 따로 본다. 언제 저장한 내용인지 함께 알린다.
 	import { onMount } from 'svelte';
+	import { page } from '$app/state';
 	import WifiOff from '@lucide/svelte/icons/wifi-off';
 	import History from '@lucide/svelte/icons/history';
 	import { formatSavedAt } from '$lib/format';
@@ -14,7 +15,9 @@
 
 	// 서버에서는 항상 온라인으로 그리고, 브라우저에서 마운트한 뒤 실제 상태를 따른다.
 	let offline = $state(false);
-	let savedAt = $derived(pwa.savedAt);
+	// 오류 화면(저장본도 없어 못 연 페이지)에서는 일부 데이터(태그 등)가 저장본이었어도 "저장본을 보여 준다"고
+	// 하지 않는다 — 오류 화면이 따로 안내한다.
+	let savedAt = $derived(page.error ? null : pwa.savedAt);
 
 	onMount(() => {
 		const update = () => (offline = !navigator.onLine);
