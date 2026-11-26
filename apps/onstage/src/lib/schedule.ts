@@ -25,7 +25,7 @@ export function daysUntil(iso: string, timeZone: string, now: Date): number {
 }
 
 /** 기간의 마지막 날. 종일 일정의 endsAt은 "마지막 날 다음 날 0시"라 하루를 뺀다. */
-function lastDayOf(range: TimeRange): number | null {
+export function lastDayOf(range: TimeRange): number | null {
 	const end = range.endsAt ?? range.startsAt;
 	if (!end) return null;
 	const day = dayNumber(new Date(end), range.timezone);

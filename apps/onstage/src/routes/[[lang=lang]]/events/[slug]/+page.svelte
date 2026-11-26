@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 	import CalendarDays from '@lucide/svelte/icons/calendar-days';
+	import ChevronRight from '@lucide/svelte/icons/chevron-right';
 	import Link from '@lucide/svelte/icons/link';
 	import MapPin from '@lucide/svelte/icons/map-pin';
 	import Mic from '@lucide/svelte/icons/mic';
@@ -111,10 +112,15 @@
 					<CountryBadge {locale} countryCode={event.countryCode} isOnline={event.isOnline} />
 				</span>
 				{#if event.eventSeries}
-					<span class="rounded-md bg-zinc-100 px-2 py-1 dark:bg-white/[0.08]">
+					<!-- 시리즈 상세(연혁)로 가는 링크. 칩은 작지만 누르는 영역은 위아래로 넓혀 40px을 맞춘다(after). -->
+					<a
+						href={localeHref(locale, `/series/${event.eventSeries.slug}`)}
+						class="relative inline-flex items-center gap-0.5 rounded-md bg-zinc-100 px-2 py-1 transition-colors after:absolute after:inset-x-0 after:-inset-y-2 hover:bg-zinc-200 hover:text-zinc-900 dark:bg-white/[0.08] dark:hover:bg-white/[0.14] dark:hover:text-zinc-50"
+					>
 						{t(locale, 'detail.series')} · {data.seriesTitles.get(event.eventSeries.slug) ??
 							event.eventSeries.slug}
-					</span>
+						<ChevronRight class="size-3.5" aria-hidden="true" />
+					</a>
 				{/if}
 			</div>
 			<h1

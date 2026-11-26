@@ -1,4 +1,4 @@
-import { listEvents } from '$lib/api';
+import { listEvents, listEventSeries } from '$lib/api';
 import { DEFAULT_LOCALE, LOCALES, localeHref } from '$lib/i18n';
 import type { RequestHandler } from './$types';
 
@@ -29,12 +29,17 @@ function urlEntries(origin: string, path: string) {
 // 접속한 주소(origin)를 그대로 쓰므로 정식 도메인으로 바뀌어도 손댈 곳이 없다. 공개 API에 수정 시각이
 // 없어 lastmod는 넣지 않는다.
 export const GET: RequestHandler = async ({ fetch, url }) => {
-	const { items } = await listEvents(fetch, { locale: DEFAULT_LOCALE });
+	const [events, series] = await Promise.all([
+		listEvents(fetch, { locale: DEFAULT_LOCALE }),
+		listEventSeries(fetch, DEFAULT_LOCALE)
+	]);
 
 	const paths = [
 		'/',
+		'/series',
 		'/events',
-		...items.map((event) => `/events/${encodeURIComponent(event.slug)}`)
+		...series.items.map((item) => `/series/${encodeURIComponent(item.slug)}`),
+		...events.items.map((event) => `/events/${encodeURIComponent(event.slug)}`)
 	];
 	const body =
 		'<?xml version="1.0" encoding="UTF-8"?>' +

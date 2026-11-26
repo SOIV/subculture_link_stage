@@ -170,6 +170,26 @@ export function formatShortDate(
 }
 
 /**
+ * 시리즈 연혁의 한 줄 기간. 연도는 위 제목(연도별 묶음)에 있으므로 월·일·요일만 쓴다. 시각은 빼고
+ * 종일 일정의 배타적 종료는 마지막 날로 바꾼다(formatCardPeriod와 같은 기준).
+ */
+export function formatHistoryPeriod(locale: Locale, range: TimeRange): string {
+	if (!range.startsAt) return t(locale, 'card.dateUnknown');
+	const start = new Date(range.startsAt);
+	const formatter = new Intl.DateTimeFormat(localeTag(locale), {
+		timeZone: range.timezone,
+		month: 'long',
+		day: 'numeric',
+		weekday: 'short'
+	});
+	if (!range.endsAt) return formatter.format(start);
+	const rawEnd = new Date(range.endsAt);
+	const end = range.isAllDay ? inclusiveAllDayEnd(rawEnd) : rawEnd;
+	if (end.getTime() <= start.getTime()) return formatter.format(start);
+	return formatter.formatRange(start, end);
+}
+
+/**
  * "저장본" 안내에 붙이는 저장 시각. 행사 시간대가 아니라 보는 사람의 기기 시간대로 보여주고(언제 확인한
  * 정보인지가 목적), 오늘이 아니면 날짜도 붙인다.
  */

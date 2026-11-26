@@ -5,8 +5,24 @@
 
 	let { locale }: { locale: Locale } = $props();
 
-	// 행사 목록(/events)과 그 하위 상세 페이지에서는 "행사" 메뉴를 강조한다.
-	let inEvents = $derived(stripLocale(page.url.pathname).startsWith('/events'));
+	// 메뉴 두 개: 시리즈 묶음인 "행사 목록"(/series)과 회차를 날짜순으로 보는 "행사 일정 목록"(/events).
+	// 각 목록과 그 하위 상세 페이지에서 해당 메뉴를 강조한다. 휴대폰 폭(360px)에서는 두 이름이 다
+	// 들어가지 않아 짧은 이름을 쓴다 — 보이는 이름만 화면 읽기 프로그램이 읽도록 숨김은 display로 한다.
+	let basePath = $derived(stripLocale(page.url.pathname));
+	let items = $derived([
+		{
+			path: '/series',
+			label: t(locale, 'nav.series'),
+			short: t(locale, 'nav.series.short'),
+			current: basePath === '/series' || basePath.startsWith('/series/')
+		},
+		{
+			path: '/events',
+			label: t(locale, 'nav.events'),
+			short: t(locale, 'nav.events.short'),
+			current: basePath === '/events' || basePath.startsWith('/events/')
+		}
+	]);
 </script>
 
 <!-- 화면 위에 붙이지 않고 본문과 같은 폭의 막대를 살짝 띄워 둔다. 바깥 래퍼는 투명해서
@@ -24,16 +40,19 @@
 				{t(locale, 'site.name')}
 			</a>
 			<div class="flex min-w-0 items-center gap-0.5 sm:gap-1">
-				<nav class="flex items-center">
-					<a
-						href={localeHref(locale, '/events')}
-						aria-current={inEvents ? 'page' : undefined}
-						class="flex h-11 items-center rounded-lg px-3 text-sm font-medium whitespace-nowrap transition-colors sm:h-9 {inEvents
-							? 'bg-zinc-900/[0.06] text-zinc-900 dark:bg-white/[0.08] dark:text-zinc-50'
-							: 'text-zinc-600 hover:bg-zinc-900/[0.04] hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:text-zinc-50'}"
-					>
-						{t(locale, 'nav.events')}
-					</a>
+				<nav class="flex items-center gap-0.5" aria-label={t(locale, 'nav.label')}>
+					{#each items as item (item.path)}
+						<a
+							href={localeHref(locale, item.path)}
+							aria-current={item.current ? 'page' : undefined}
+							class="flex h-11 items-center rounded-lg px-2.5 text-sm font-medium whitespace-nowrap transition-colors sm:h-9 sm:px-3 {item.current
+								? 'bg-zinc-900/[0.06] text-zinc-900 dark:bg-white/[0.08] dark:text-zinc-50'
+								: 'text-zinc-600 hover:bg-zinc-900/[0.04] hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:text-zinc-50'}"
+						>
+							<span class="sm:hidden">{item.short}</span>
+							<span class="hidden sm:inline">{item.label}</span>
+						</a>
+					{/each}
 				</nav>
 				<span
 					class="mx-1 hidden h-5 w-px bg-zinc-900/10 sm:block dark:bg-white/10"

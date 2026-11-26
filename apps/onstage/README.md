@@ -1,6 +1,6 @@
 # SCLS Onstage
 
-SCLS(Subculture Link Stage)의 사용자 공개 웹. [SCLS 공개 API](../../docs/plan/08-api-and-ics.md)만 소비하며, 내부 DB나 Private `scls-platform`에는 직접 접근하지 않는다(전체 아키텍처는 [docs/plan/03-architecture-and-domain.md §3.2.1](../../docs/plan/03-architecture-and-domain.md#321-repository-구조-확정) 참고). Phase 1 범위는 메인 페이지, 행사 목록·필터·검색·상세와 ICS 구독 링크이며, 사용자 제보/수정 요청 같은 이후 기능은 아직 없다([docs/plan/02-users-and-scope.md §2.2.1](../../docs/plan/02-users-and-scope.md#221-core-mvp-기능-phase-1)). 목록의 검색어(`q`)와 태그 그룹별 조건(같은 그룹 "또는", 그룹 사이 "그리고")은 공개 API가 지원해야 동작한다([docs/plan/08-api-and-ics.md §8.2](../../docs/plan/08-api-and-ics.md#82-공개-api-예시)) — API를 먼저 배포한 뒤 Onstage를 배포한다.
+SCLS(Subculture Link Stage)의 사용자 공개 웹. [SCLS 공개 API](../../docs/plan/08-api-and-ics.md)만 소비하며, 내부 DB나 Private `scls-platform`에는 직접 접근하지 않는다(전체 아키텍처는 [docs/plan/03-architecture-and-domain.md §3.2.1](../../docs/plan/03-architecture-and-domain.md#321-repository-구조-확정) 참고). Phase 1 범위는 메인 페이지, 행사 목록(시리즈별 묶음)·시리즈 상세와 연혁, 행사 일정 목록(회차)·필터·검색·상세와 ICS 구독 링크이며, 사용자 제보/수정 요청 같은 이후 기능은 아직 없다([docs/plan/02-users-and-scope.md §2.2.1](../../docs/plan/02-users-and-scope.md#221-core-mvp-기능-phase-1)). 목록의 검색어(`q`)와 태그 그룹별 조건(같은 그룹 "또는", 그룹 사이 "그리고")은 공개 API가 지원해야 동작한다([docs/plan/08-api-and-ics.md §8.2](../../docs/plan/08-api-and-ics.md#82-공개-api-예시)) — API를 먼저 배포한 뒤 Onstage를 배포한다.
 
 ## 개발 서버 실행
 
@@ -17,7 +17,7 @@ pnpm dev
 pnpm check    # 타입 검사 (check:types = wrangler types 확인, check:app = svelte-check)
 pnpm lint     # prettier + eslint
 pnpm format   # prettier 자동 정리
-pnpm test     # 단위 테스트(vitest) — 날짜·일정 상태·API 응답 검사·service worker 캐시
+pnpm test     # 단위 테스트(vitest) — 날짜·일정 상태·시리즈 묶기·API 응답 검사·service worker 캐시
 pnpm build    # 운영 빌드 (Cloudflare 어댑터)
 ```
 
@@ -38,19 +38,22 @@ src/
 │  ├─ format.ts               날짜·상태·태그 코드값 → 문구 변환
 │  ├─ tags.ts                태그 색인, 드롭다운 옵션, 카드 분류 칩 고르기
 │  ├─ schedule.ts            카드의 다음 일정·D-day, 메인의 티켓·신청 임박 일정 계산
+│  ├─ series.ts              행사 목록(시리즈)·연혁: 회차 묶기·상태(예정·진행 중·종료·연기·취소)·정렬
 │  ├─ dates.ts               일정 시간대 기준 날짜 계산(같은 날·종일 마지막 날)
 │  ├─ clock.svelte.ts        화면 공통 "지금" 시각(15분 경계·화면 복귀 때 갱신)
 │  ├─ pwa.svelte.ts          service worker와 앱 연결(새 버전 안내, 첫 방문 저장, 저장본 안내)
 │  ├─ sw/cache.ts            service worker 캐시 도우미(저장 실패해도 네트워크 응답 유지)
 │  ├─ url.ts                 외부 주소를 http(s)만 링크로 만들기
 │  ├─ filters.ts             행사 목록의 검색·필터 조건(URL 쿼리와 1:1)
-│  └─ components/            Header, SettingsMenu(언어·화면 모드), Footer, EventCard,
+│  └─ components/            Header, SettingsMenu(언어·화면 모드), Footer, EventCard, SeriesCard,
+│                            EditionPhaseBadge(회차 상태),
 │                            FilterBar(휴대폰에서는 아래에서 올라오는 시트), CountryBadge(국기),
 │                            PromotedEvents(광고 자리), UpcomingSchedules, OfflineNotice,
 │                            UpdateNotice
 ├─ service-worker.ts          오프라인 보기(본 페이지·API 응답 저장) — SvelteKit이 자동 등록
 └─ routes/
-   └─ [[lang=lang]]/         메인(/), events(목록+검색+필터), events/[slug](상세), +error,
+   └─ [[lang=lang]]/         메인(/), series(행사 목록 — 시리즈), series/[slug](시리즈 상세·연혁),
+                             events(행사 일정 목록+검색+필터), events/[slug](상세), +error,
                              manifest.webmanifest(언어별 설치 정보)
 static/icons/                 앱 아이콘(임시 — 디자인 확정 전)
 ```
