@@ -1,13 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import type { EventSeriesEventRef, EventSeriesSummary, EventSummary } from './api';
+import type { EventSeriesEventRef, EventSeriesSummary, EventStatus, EventSummary } from './api';
 import {
-	buildSeriesCards,
 	cardFromSummary,
 	editionPhase,
 	editionTags,
 	editionYear,
-	groupBySeries,
-	hasSeriesSummary,
 	historyByYear,
 	seriesCategoryTags,
 	seriesOverview,
@@ -54,6 +51,11 @@ function seriesItem(slug: string, overrides: Partial<EventSeriesSummary> = {}): 
 		summary: null,
 		foundedYear: null,
 		officialUrl: null,
+		countryCodes: [],
+		eventCount: 0,
+		nextEvent: null,
+		latestEvent: null,
+		tags: [],
 		...overrides
 	};
 }
@@ -88,19 +90,6 @@ describe('editionPhase — 회차 상태', () => {
 		const event = edition('a', 's', '2026-11-25', '2026-11-26');
 		expect(editionPhase(event, NOW)).toBe('ongoing');
 		expect(editionPhase(event, justAfterMidnight)).toBe('ended');
-	});
-});
-
-describe('groupBySeries — 시리즈별 묶기', () => {
-	it('시리즈 slug로 묶고 단독 행사는 뺀다. 묶음 안은 시작이 이른 순이다', () => {
-		const groups = groupBySeries([
-			edition('cw-338', 'comic-world', '2026-10-24', '2026-10-25'),
-			edition('solo', null, '2026-11-01', '2026-11-01'),
-			edition('agf-2026', 'agf', '2026-12-04', '2026-12-06'),
-			edition('cw-337', 'comic-world', '2026-10-03', '2026-10-04')
-		]);
-		expect([...groups.keys()].sort()).toEqual(['agf', 'comic-world']);
-		expect(groups.get('comic-world')!.map((event) => event.slug)).toEqual(['cw-337', 'cw-338']);
 	});
 });
 
@@ -156,18 +145,27 @@ describe('seriesOverview — 다음·최근 회차', () => {
 
 describe('sortSeriesCards — 행사 목록 순서', () => {
 	it('다음 회차가 빠른 순 → 다음 회차 없이 최근 회차가 늦은 순 → 회차 없는 시리즈(slug 순)', () => {
-		const series = ['agf', 'anime-japan', 'comic-world', 'g-star', 'playx4', 'tokyo-game-show'].map(
-			(slug) => seriesItem(slug)
-		);
-		const events = [
-			edition('animejapan-2027', 'anime-japan', '2027-03-26', '2027-03-28'),
-			edition('agf-2026', 'agf', '2026-12-04', '2026-12-06'),
-			edition('g-star-2026', 'g-star', '2026-11-19', '2026-11-22'),
-			edition('cw-338', 'comic-world', '2026-10-24', '2026-10-25'),
+		const ref = (slug: string, start: string, end: string, status: EventStatus = 'CONFIRMED') =>
+			eventRef({
+				slug,
+				status,
+				startsAt: `${start}T15:00:00.000Z`,
+				endsAt: `${end}T15:00:00.000Z`
+			});
+		const series = [
+			seriesItem('agf', { nextEvent: ref('agf-2026', '2026-12-03', '2026-12-06') }),
+			seriesItem('anime-japan', { nextEvent: ref('animejapan-2027', '2027-03-25', '2027-03-28') }),
+			seriesItem('comic-world', {
+				latestEvent: ref('cw-338', '2026-10-23', '2026-10-25', 'ENDED')
+			}),
+			seriesItem('g-star', {
+				latestEvent: ref('g-star-2026', '2026-11-18', '2026-11-22', 'ENDED')
+			}),
+			seriesItem('playx4'),
 			// 진행 중인 회차가 가장 앞이다.
-			edition('tgs-ongoing', 'tokyo-game-show', '2026-11-25', '2026-11-28')
+			seriesItem('tokyo-game-show', { nextEvent: ref('tgs-ongoing', '2026-11-24', '2026-11-28') })
 		];
-		const sorted = sortSeriesCards(buildSeriesCards(series, events, NOW));
+		const sorted = sortSeriesCards(series.map((item) => cardFromSummary(item, NOW)));
 		expect(sorted.map((card) => card.series.slug)).toEqual([
 			'tokyo-game-show',
 			'agf',
@@ -255,6 +253,18 @@ describe('seriesCategoryTags — 시리즈 분류 칩', () => {
 		expect(chips.shown.map((tag) => tag.slug)).toEqual(['industry-exhibition', 'performance']);
 		expect(chips.hidden).toBe(0);
 	});
+
+	it('행사 목록 카드는 시리즈 목록 API의 tags로 분류 칩을 고른다', () => {
+		// 2026-11-27 운영 API의 agf 항목 tags 그대로.
+		const card = cardFromSummary(
+			seriesItem('agf', {
+				tags: ['exhibition', 'industry-exhibition', 'joint-live', 'performance', 'offline', 'paid']
+			}),
+			NOW
+		);
+		const chips = seriesCategoryTags(card.tags, index, 3);
+		expect(chips.shown.map((tag) => tag.slug)).toEqual(['industry-exhibition', 'performance']);
+	});
 });
 
 // 새 API(scls-platform 30d694e)의 /v1/event-series 항목 모양 그대로(JSON이라 날짜는 문자열).
@@ -273,25 +283,10 @@ function eventRef(overrides: Partial<EventSeriesEventRef> = {}): EventSeriesEven
 	};
 }
 
-function summarized(slug: string, overrides: Partial<EventSeriesSummary> = {}): EventSeriesSummary {
-	return seriesItem(slug, {
-		countryCodes: ['KR'],
-		eventCount: 1,
-		nextEvent: null,
-		latestEvent: null,
-		...overrides
-	});
-}
-
 describe('시리즈 목록 API의 요약 칸', () => {
-	it('요약 칸이 있는지로 새 API인지 가린다', () => {
-		expect(hasSeriesSummary(seriesItem('old'))).toBe(false);
-		expect(hasSeriesSummary(summarized('new'))).toBe(true);
-	});
-
 	it('요약으로 카드를 만든다 — 다음 회차의 날짜 기준 시간대는 개최국 시간대다', () => {
 		const card = cardFromSummary(
-			summarized('agf', {
+			seriesItem('agf', {
 				eventCount: 3,
 				countryCodes: ['KR', 'JP'],
 				nextEvent: eventRef(),
@@ -314,7 +309,7 @@ describe('시리즈 목록 API의 요약 칸', () => {
 
 	it('화면을 열어 둔 사이 다음 회차가 끝났으면 최근 회차로 옮긴다', () => {
 		const card = cardFromSummary(
-			summarized('g-star', {
+			seriesItem('g-star', {
 				nextEvent: eventRef({
 					slug: 'g-star-2026',
 					startsAt: '2026-11-18T15:00:00.000Z',
@@ -329,7 +324,7 @@ describe('시리즈 목록 API의 요약 칸', () => {
 
 	it('연기·진행 중 회차는 다음 회차로 남는다', () => {
 		const postponed = cardFromSummary(
-			summarized('a', {
+			seriesItem('a', {
 				nextEvent: eventRef({
 					status: 'POSTPONED',
 					startsAt: '2026-10-01T00:00:00.000Z',
@@ -340,7 +335,7 @@ describe('시리즈 목록 API의 요약 칸', () => {
 		);
 		expect(postponed.next?.phase).toBe('postponed');
 		const ongoing = cardFromSummary(
-			summarized('b', {
+			seriesItem('b', {
 				nextEvent: eventRef({
 					startsAt: '2026-11-24T15:00:00.000Z',
 					endsAt: '2026-11-27T15:00:00.000Z'
@@ -351,26 +346,10 @@ describe('시리즈 목록 API의 요약 칸', () => {
 		expect(ongoing.next?.phase).toBe('ongoing');
 	});
 
-	it('요약 칸이 있으면 그것으로, 없는 시리즈만 전체 행사 목록으로 묶는다', () => {
-		const cards = buildSeriesCards(
-			[summarized('agf', { nextEvent: eventRef() }), seriesItem('comic-world')],
-			[edition('cw-338', 'comic-world', '2026-10-24', '2026-10-25')],
-			NOW
-		);
-		expect(cards[0].next?.edition.slug).toBe('agf-2026');
-		expect(cards[1].latest?.slug).toBe('cw-338');
-		expect(cards[1].editionCount).toBe(1);
-	});
-
 	it('회차 없는 시리즈는 다음·최근 회차가 없고 맨 뒤로 간다', () => {
 		const sorted = sortSeriesCards(
-			buildSeriesCards(
-				[
-					summarized('playx4', { eventCount: 0, countryCodes: [] }),
-					summarized('agf', { nextEvent: eventRef() })
-				],
-				[],
-				NOW
+			[seriesItem('playx4'), seriesItem('agf', { eventCount: 1, nextEvent: eventRef() })].map(
+				(item) => cardFromSummary(item, NOW)
 			)
 		);
 		expect(sorted.map((card) => card.series.slug)).toEqual(['agf', 'playx4']);

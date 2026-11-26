@@ -2,7 +2,7 @@
 	import SeriesCard from '$lib/components/SeriesCard.svelte';
 	import { t, tv } from '$lib/i18n';
 	import { now } from '$lib/clock.svelte';
-	import { buildSeriesCards, sortSeriesCards } from '$lib/series';
+	import { cardFromSummary, sortSeriesCards } from '$lib/series';
 	import { buildTagIndex } from '$lib/tags';
 	import type { PageProps } from './$types';
 
@@ -10,8 +10,9 @@
 	let locale = $derived(data.locale);
 	let tagIndex = $derived(buildTagIndex(data.tagGroups.items));
 	// 다음·최근 회차와 순서는 날짜에 따라 바뀌므로 공통 시계(now)로 화면에서 계산한다.
-	// 요약 칸이 없는 이전 API일 때만 events(전체 행사 목록)가 있다(+page.ts).
-	let cards = $derived(sortSeriesCards(buildSeriesCards(data.series.items, data.events, now())));
+	let cards = $derived(
+		sortSeriesCards(data.series.items.map((item) => cardFromSummary(item, now())))
+	);
 </script>
 
 <div class="space-y-5 sm:space-y-6">
