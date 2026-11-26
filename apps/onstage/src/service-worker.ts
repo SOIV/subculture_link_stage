@@ -10,7 +10,11 @@
 // - 앱 파일(_app/immutable/…)과 static 파일: 설치할 때 미리 받아 두고 캐시에서 바로 꺼낸다.
 // - 페이지(HTML)와 공개 API 응답: 네트워크 먼저. 받으면 캐시에 넣고, 못 받거나 늦으면 캐시를 보여준다.
 //   서버에서 그린 HTML에는 API 응답이 함께 실려 오므로, 새로고침한 페이지도 HTML 캐시만으로 다시 그려진다.
-//   화면 안에서 이동할 때는 브라우저가 API를 직접 부르므로 API 응답도 따로 담아 둔다.
+//   화면 안에서 이동할 때는 브라우저가 API를 직접 부르므로 API 응답을 받는 길에 담아 둔다. 서버에서 그린
+//   페이지의 API 응답은 앱이 HTML에서 꺼내 넘겨준다(store-api — 네트워크 요청 없음).
+// - 저장된 HTML이 없는 주소를 오프라인에서 열면 앱 껍데기(/app-shell, 설치 때 받아 둠)를 준다. 앱이 그
+//   주소의 화면을 API 저장본으로 그린다. 예전에는 화면 이동마다 같은 페이지 HTML을 다시 받아 저장해서
+//   서버가 API를 한 번 더 불렀다(2026-11-23 리뷰 R10).
 //   저장본을 보여줄 때는 앱에 알려서 "저장본·마지막 확인 시각"을 띄운다(src/lib/pwa.svelte.ts).
 // - 새 버전은 설치 후 바로 넘겨받지 않고 기다린다. 열린 탭은 지난 버전의 앱 파일로 돌고 있어서, 이때
 //   지난 캐시를 지우면 그 탭이 아직 받지 않은 화면 파일을 찾지 못한다. 앱이 "새 버전" 안내를 띄우고
@@ -25,9 +29,7 @@ import {
 	matchCache,
 	networkFirst,
 	openCache,
-	putTrimmed,
-	savedAtOf,
-	withSavedAt,
+	storeApiEntries,
 	type NetworkFirstResult
 } from '$lib/sw/cache';
 
@@ -47,8 +49,10 @@ const LEGACY_CACHE = /^(?:(?:assets|pages|api)-\d+|fonts)$/;
 const MAX_PAGES = 60;
 const MAX_API = 150;
 const MAX_FONTS = 30;
-// 화면 안에서 이동한 페이지는 HTML을 따로 받아 담는다(아래 message). 이보다 최근 저장본이 있으면 다시 받지 않는다.
-const PAGE_REFRESH_MS = 10 * 60 * 1000;
+// 앱이 넘겨주는 API 응답 하나의 최대 길이(글자 수). 이보다 크면 담지 않는다(저장 공간 보호).
+const MAX_STORED_BODY = 2_000_000;
+// 오프라인용 앱 껍데기(src/routes/app-shell). 앱 파일과 같은 캐시에 버전별로 둔다.
+const SHELL_PATH = '/app-shell';
 // 캐시가 있을 때 네트워크를 기다리는 최대 시간. 느린 행사장 통신에서는 이만큼 기다린 뒤 저장본을 보여준다.
 const NETWORK_TIMEOUT_MS = 4000;
 // 페이지·API 저장본을 보여주는 최대 기간. 일정·예매 정보는 바뀌므로 이보다 오래된 저장본은 지운다.
@@ -63,7 +67,10 @@ const API_PATH = API_BASE.pathname.replace(/\/$/, '');
 
 sw.addEventListener('install', (event) => {
 	// skipWaiting()을 부르지 않는다 — 위 설명처럼 열린 탭이 없거나 사용자가 새로 고침을 고를 때 넘겨받는다.
-	event.waitUntil(caches.open(ASSET_CACHE).then((cache) => cache.addAll(PRECACHE)));
+	// 앱 껍데기는 받지 못해도 설치는 마친다(다음 페이지 이동 때 다시 받는다).
+	event.waitUntil(
+		caches.open(ASSET_CACHE).then((cache) => Promise.all([cache.addAll(PRECACHE), storeShell()]))
+	);
 });
 
 sw.addEventListener('activate', (event) => {
@@ -81,9 +88,8 @@ sw.addEventListener('activate', (event) => {
 
 // 앱(src/lib/pwa.svelte.ts)이 보내는 요청:
 // - skip-waiting: 사용자가 "새 버전" 안내에서 새로 고침을 눌렀다. 기다리던 새 버전이 넘겨받는다.
-// - cache-page: 이 주소들의 HTML을 담아 둔다. 화면 안 이동(클라이언트 라우팅)과 처음 방문한 페이지는
-//   HTML 요청이 이 worker를 거치지 않아서 그대로는 오프라인 보관이 안 된다. 서버에서 그린 HTML에는
-//   그 페이지의 API 응답이 함께 실려 있어 오프라인에서도 그대로 다시 그려진다.
+// - store-api: 서버에서 그린 페이지의 HTML에 실려 온 API 응답들. 처음 방문한 페이지처럼 HTML 요청이
+//   이 worker를 거치지 않았어도, 이것만으로 그 페이지를 오프라인에서 다시 그릴 수 있다.
 sw.addEventListener('message', (event) => {
 	const data: unknown = event.data;
 	if (typeof data !== 'object' || data === null) return;
@@ -92,15 +98,30 @@ sw.addEventListener('message', (event) => {
 		event.waitUntil(sw.skipWaiting());
 		return;
 	}
-	if (type !== 'cache-page') return;
-	const urls = (data as { urls?: unknown }).urls;
-	if (!Array.isArray(urls)) return;
-	const targets = urls
-		.filter((value): value is string => typeof value === 'string')
-		.map((value) => new URL(value, sw.location.origin))
-		.filter((url) => url.origin === sw.location.origin);
-	event.waitUntil(Promise.all(targets.map(cachePage)));
+	if (type !== 'store-api') return;
+	const entries = (data as { entries?: unknown }).entries;
+	event.waitUntil(
+		openCache(caches, API_CACHE).then((cache) =>
+			storeApiEntries({
+				cache,
+				entries,
+				isApiUrl,
+				savedAt: Date.now(),
+				maxEntries: MAX_API,
+				maxBodyLength: MAX_STORED_BODY
+			})
+		)
+	);
 });
+
+/** 공개 API(GET) 주소인지. 캘린더 구독 파일(.ics)은 캘린더 앱이 받는 것이라 담지 않는다. */
+function isApiUrl(url: URL): boolean {
+	return (
+		url.origin === API_BASE.origin &&
+		url.pathname.startsWith(API_PATH + '/') &&
+		!url.pathname.endsWith('.ics')
+	);
+}
 
 /** 이 버전의 앱이 그린 HTML인지. 버전 표시가 없으면(개발 서버 등) 이 버전으로 본다. */
 function isOwnVersion(response: Response): boolean {
@@ -120,21 +141,22 @@ function isStorablePage(response: Response): boolean {
 	);
 }
 
-async function cachePage(url: URL) {
-	const cache = await openCache(caches, PAGE_CACHE);
-	if (!cache) return;
-	const request = new Request(url.href, { headers: { accept: 'text/html' } });
-	const cached = await matchCache(cache, request, { ignoreVary: true });
-	const savedAt = cached ? savedAtOf(cached) : null;
-	if (savedAt !== null && Date.now() - savedAt < PAGE_REFRESH_MS) return;
+const shellRequest = () => new Request(SHELL_PATH, { headers: { accept: 'text/html' } });
+
+/** 앱 껍데기를 받아 둔다. 이 버전이 그린 것만 담는다. */
+async function storeShell() {
 	try {
-		const response = await fetch(request);
-		if (isStorablePage(response)) {
-			await putTrimmed(cache, request, withSavedAt(response, Date.now()), MAX_PAGES);
-		}
+		const response = await fetch(shellRequest());
+		if (!isStorablePage(response)) return;
+		const cache = await openCache(caches, ASSET_CACHE);
+		await cache?.put(shellRequest(), response);
 	} catch {
-		// 오프라인이면 다음 기회에 담는다.
+		// 오프라인이거나 저장 공간이 모자라면 다음 기회에 받는다.
 	}
+}
+
+async function cachedShell(): Promise<Response | undefined> {
+	return matchCache(await openCache(caches, ASSET_CACHE), shellRequest(), { ignoreVary: true });
 }
 
 sw.addEventListener('fetch', (event) => {
@@ -154,13 +176,23 @@ sw.addEventListener('fetch', (event) => {
 		}
 		if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
 			event.respondWith(
-				respondNetworkFirst(event, PAGE_CACHE, MAX_PAGES, isStorablePage).then((result) => {
-					if (!result) return offlinePage(url);
-					if (!result.fromCache) return result.response;
-					// 저장본 HTML이면 <html>에 저장 시각을 적어 앱이 안내를 띄우게 한다.
-					return markHtmlAsSaved(result.response.clone(), result.savedAt).catch(
-						() => result.response
-					);
+				respondNetworkFirst(event, PAGE_CACHE, MAX_PAGES, isStorablePage).then(async (result) => {
+					if (result?.fromCache) {
+						// 저장본 HTML이면 <html>에 저장 시각을 적어 앱이 안내를 띄우게 한다.
+						return markHtmlAsSaved(result.response.clone(), result.savedAt).catch(
+							() => result.response
+						);
+					}
+					if (result && result.response.status < 500) {
+						// 설치 때 껍데기를 못 받았으면 지금 받아 둔다.
+						event.waitUntil(cachedShell().then((shell) => shell ?? storeShell()));
+						return result.response;
+					}
+					// 저장된 HTML이 없고 서버도 응답하지 않는다(오프라인·서버 오류). 앱 껍데기가 있으면
+					// 앱이 이 주소를 API 저장본으로 그린다.
+					const shell = await cachedShell();
+					if (shell) return shell;
+					return result ? result.response : offlinePage(url);
 				})
 			);
 			return;
@@ -178,12 +210,8 @@ sw.addEventListener('fetch', (event) => {
 		return;
 	}
 
-	// 공개 API(GET만). 캘린더 구독 파일(.ics)은 캘린더 앱이 받는 것이라 담지 않는다.
-	if (
-		url.origin === API_BASE.origin &&
-		url.pathname.startsWith(API_PATH + '/') &&
-		!url.pathname.endsWith('.ics')
-	) {
+	// 공개 API(GET만).
+	if (isApiUrl(url)) {
 		event.respondWith(
 			respondNetworkFirst(event, API_CACHE, MAX_API).then((result) =>
 				result ? notifyIfSaved(event, result) : Response.error()

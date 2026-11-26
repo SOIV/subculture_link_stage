@@ -21,6 +21,9 @@ export default defineConfig(({ mode }) => {
 						filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 				},
 				adapter: adapter(),
+				// 앱 파일 주소를 절대 경로(/_app/…)로 쓴다. 오프라인용 앱 껍데기(src/routes/app-shell)는 다른
+				// 주소(/events/… 등)의 응답으로 쓰이는데, 상대 경로(./_app/…)면 그 주소 기준으로 풀려 못 찾는다.
+				paths: { relative: false },
 				// 콘텐츠 보안 정책. 스크립트는 이 사이트 것과 SvelteKit이 nonce를 붙인 인라인(테마 결정 스크립트
 				// 포함, src/app.html)만 실행된다. 스타일은 Svelte의 style 속성(시리즈 색)·Tailwind 때문에 인라인을
 				// 허용하고, 글꼴은 Google Fonts만 받는다. 다른 사이트가 이 페이지를 iframe에 넣지 못하게 한다.

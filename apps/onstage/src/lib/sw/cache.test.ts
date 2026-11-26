@@ -6,6 +6,7 @@ import {
 	putTrimmed,
 	SAVED_AT_HEADER,
 	savedAtOf,
+	storeApiEntries,
 	withSavedAt
 } from './cache';
 
@@ -313,5 +314,105 @@ describe('fetch 호출 방식', () => {
 		});
 		await settle();
 		expect(await response.text()).toBe('ok');
+	});
+});
+
+describe('storeApiEntries — 앱이 넘겨준 API 응답 저장(리뷰 R10)', () => {
+	const isApiUrl = (url: URL) =>
+		url.origin === 'https://api.test' && url.pathname.startsWith('/v1/');
+	const entry = (url: string, body = '{"success":true,"data":{"count":0,"items":[]}}') => ({
+		url,
+		body,
+		contentType: 'application/json; charset=utf-8'
+	});
+	const store = (cache: MemoryCache, entries: unknown, savedAt = NOW) =>
+		storeApiEntries({
+			cache: asCache(cache),
+			entries,
+			isApiUrl,
+			savedAt,
+			maxEntries: 10,
+			maxBodyLength: 1000
+		});
+
+	it('저장 시각을 붙여 담고, 공개 API가 아니거나 너무 크거나 모양이 다른 항목은 버린다', async () => {
+		const cache = new ReadableMemoryCache();
+		const stored = await store(cache, [
+			entry(URL_A),
+			entry('https://other.test/v1/events'),
+			entry('https://api.test/v1/huge', 'x'.repeat(1001)),
+			{ url: 'https://api.test/v1/tags', body: 1 },
+			entry('not a url')
+		]);
+		expect(stored).toBe(1);
+		expect([...cache.entries.keys()]).toEqual([URL_A]);
+		const saved = cache.entries.get(URL_A)!;
+		expect(saved.headers.get(SAVED_AT_HEADER)).toBe(String(NOW));
+		expect(saved.headers.get('content-type')).toContain('json');
+		expect(await saved.clone().json()).toEqual({ success: true, data: { count: 0, items: [] } });
+	});
+
+	it('더 최근 저장본은 덮어쓰지 않는다', async () => {
+		const cache = new ReadableMemoryCache();
+		await store(cache, [entry(URL_A, '"new"')], NOW);
+		expect(await store(cache, [entry(URL_A, '"old"')], NOW - 1000)).toBe(0);
+		expect(await cache.entries.get(URL_A)!.clone().text()).toBe('"new"');
+	});
+
+	it('entries가 배열이 아니거나 캐시를 못 열면 아무것도 하지 않는다', async () => {
+		expect(await store(new MemoryCache(), 'nope')).toBe(0);
+		expect(
+			await storeApiEntries({
+				cache: undefined,
+				entries: [entry(URL_A)],
+				isApiUrl,
+				savedAt: NOW,
+				maxEntries: 10,
+				maxBodyLength: 1000
+			})
+		).toBe(0);
+	});
+
+	it('오프라인 흐름: 서버 렌더 페이지에서 넘겨받은 응답을 화면 안 이동이 저장본으로 받는다', async () => {
+		const cache = new ReadableMemoryCache();
+		// 1) 온라인: 서버에서 그린 페이지의 API 응답을 넘겨받는다(storeApiEntries는 fetch를 받지 않는다).
+		await store(cache, [entry(URL_A)], NOW);
+		// 2) 오프라인: 앱(껍데기로 열렸거나 화면 안 이동)이 같은 주소를 부르면 저장본과 저장 시각이 온다.
+		const { waitUntil, settle } = collectWaitUntil();
+		const result = await networkFirst({
+			request: new Request(URL_A),
+			cache: asCache(cache),
+			fetch: async () => {
+				throw new TypeError('Failed to fetch');
+			},
+			waitUntil,
+			maxEntries: 10,
+			timeoutMs: 4000,
+			maxAgeMs: 14 * 24 * 60 * 60 * 1000,
+			now: () => NOW + 60_000
+		});
+		await settle();
+		expect(result).toMatchObject({ fromCache: true, savedAt: NOW });
+		expect(await result!.response.json()).toMatchObject({ success: true });
+	});
+
+	it('넘겨받은 저장본도 14일이 지나면 쓰지 않는다', async () => {
+		const cache = new ReadableMemoryCache();
+		await store(cache, [entry(URL_A)], NOW);
+		const { waitUntil, settle } = collectWaitUntil();
+		const result = await networkFirst({
+			request: new Request(URL_A),
+			cache: asCache(cache),
+			fetch: async () => {
+				throw new TypeError('Failed to fetch');
+			},
+			waitUntil,
+			maxEntries: 10,
+			timeoutMs: 4000,
+			maxAgeMs: 14 * 24 * 60 * 60 * 1000,
+			now: () => NOW + 15 * 24 * 60 * 60 * 1000
+		});
+		await settle();
+		expect(result).toBeUndefined();
 	});
 });

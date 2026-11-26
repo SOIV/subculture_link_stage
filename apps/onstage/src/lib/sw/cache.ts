@@ -200,3 +200,53 @@ export async function markHtmlAsSaved(
 }
 
 function noop() {}
+
+/** 앱이 넘겨준 API 응답 하나(서버 렌더 HTML에 실려 온 것 — $lib/offline-data.ts). */
+export type SavedApiEntry = { url: string; body: string; contentType: string };
+
+/**
+ * 앱이 이미 받은 API 응답을 API 저장본으로 담는다. 네트워크 요청은 하지 않는다. 주소가 공개 API가 아니거나,
+ * JSON이 아니거나, 너무 크면 버린다. 이미 더 최근에 저장한 것이 있으면 덮어쓰지 않는다. 담은 개수를 돌려준다.
+ */
+export async function storeApiEntries(options: {
+	cache: Cache | undefined;
+	entries: unknown;
+	isApiUrl: (url: URL) => boolean;
+	savedAt: number;
+	maxEntries: number;
+	maxBodyLength: number;
+}): Promise<number> {
+	const { cache, isApiUrl, savedAt, maxEntries, maxBodyLength } = options;
+	if (!cache || !Array.isArray(options.entries)) return 0;
+	let stored = 0;
+	for (const entry of options.entries.filter(isSavedApiEntry)) {
+		let url: URL;
+		try {
+			url = new URL(entry.url);
+		} catch {
+			continue;
+		}
+		if (!isApiUrl(url) || !entry.contentType.includes('json')) continue;
+		if (entry.body.length > maxBodyLength) continue;
+		const request = new Request(url.href);
+		const cached = await matchCache(cache, request, { ignoreVary: true });
+		const cachedAt = cached ? savedAtOf(cached) : null;
+		if (cachedAt !== null && cachedAt >= savedAt) continue;
+		const response = new Response(entry.body, {
+			status: 200,
+			headers: { 'content-type': entry.contentType, [SAVED_AT_HEADER]: String(savedAt) }
+		});
+		if (await putTrimmed(cache, request, response, maxEntries)) stored++;
+	}
+	return stored;
+}
+
+function isSavedApiEntry(value: unknown): value is SavedApiEntry {
+	if (typeof value !== 'object' || value === null) return false;
+	const entry = value as Record<string, unknown>;
+	return (
+		typeof entry.url === 'string' &&
+		typeof entry.body === 'string' &&
+		typeof entry.contentType === 'string'
+	);
+}

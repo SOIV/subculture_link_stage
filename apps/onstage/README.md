@@ -41,7 +41,8 @@ src/
 │  ├─ series.ts              행사 목록(시리즈)·연혁: 카드 요약·회차 상태(예정·진행 중·종료·연기·취소)·정렬
 │  ├─ dates.ts               일정 시간대 기준 날짜 계산(같은 날·종일 마지막 날)
 │  ├─ clock.svelte.ts        화면 공통 "지금" 시각(15분 경계·화면 복귀 때 갱신)
-│  ├─ pwa.svelte.ts          service worker와 앱 연결(새 버전 안내, 첫 방문 저장, 저장본 안내)
+│  ├─ pwa.svelte.ts          service worker와 앱 연결(새 버전 안내, 데이터 저장·첫 방문 저장, 저장본 안내)
+│  ├─ offline-data.ts        서버 렌더 HTML에 실려 온 API 응답 꺼내기(오프라인 저장용)
 │  ├─ sw/cache.ts            service worker 캐시 도우미(저장 실패해도 네트워크 응답 유지)
 │  ├─ url.ts                 외부 주소를 http(s)만 링크로 만들기
 │  ├─ filters.ts             행사 목록의 검색·필터 조건(URL 쿼리와 1:1)
@@ -50,8 +51,10 @@ src/
 │                            FilterBar(휴대폰에서는 아래에서 올라오는 시트), CountryBadge(국기),
 │                            PromotedEvents(광고 자리), UpcomingSchedules, OfflineNotice,
 │                            UpdateNotice
-├─ service-worker.ts          오프라인 보기(본 페이지·API 응답 저장) — SvelteKit이 자동 등록
+├─ service-worker.ts          오프라인 보기(본 페이지·API 응답 저장, 앱 껍데기) — SvelteKit이 자동 등록
+├─ hooks.client.ts            브라우저 load 오류에 API 실패 코드를 실어 오류 화면에 넘김
 └─ routes/
+   ├─ app-shell/             오프라인용 앱 껍데기(ssr = false — 직접 열면 메인으로)
    └─ [[lang=lang]]/         메인(/), series(행사 목록 — 시리즈), series/[slug](시리즈 상세·연혁),
                              events(행사 일정 목록+검색+필터), events/[slug](상세), +error,
                              manifest.webmanifest(언어별 설치 정보)
@@ -63,7 +66,8 @@ static/icons/                 앱 아이콘(임시 — 디자인 확정 전)
 - 휴대폰 폭(약 360~430px)에서 가로 스크롤이 없고, 누르는 곳은 40px 이상, 입력칸 글자는 16px 이상(아이폰 확대 방지)으로 둔다. 넓은 화면 크기는 `sm:` 이상에서 따로 준다.
 - 홈 화면에 설치할 수 있다(언어별 매니페스트, 아이콘은 임시). 한 번 본 페이지는 통신이 끊겨도 다시 열린다 — 동작은 `src/service-worker.ts` 위 주석 참고. 저장본을 보여줄 때는(오프라인, API만 실패, 4초 넘게 느림) 헤더 아래에 "저장본·마지막 확인 시각"을 띄운다. 14일 넘은 저장본은 쓰지 않는다.
 - 새로 배포하면 새 service worker는 설치 뒤 **기다린다**. 열린 화면에 "새 버전이 있어요 · 새로 고침" 안내가 뜨고, 누르거나 사이트 탭을 모두 닫으면 새 버전으로 바뀐다. 그때 지난 버전 저장본을 지우고 다시 본 페이지부터 저장된다. 서버는 HTML에 앱 버전(`x-scls-version`)을 붙이고, worker는 다른 버전의 HTML을 저장하지 않는다.
-- 첫 방문한 페이지(와 그 언어의 시작 화면)는 worker가 처음 페이지를 맡을 때 저장한다.
+- 오프라인 저장은 데이터(API 응답) 중심이다. 화면 안 이동은 브라우저가 부른 API 응답을 worker가 저장하고, 서버에서 그린 페이지는 HTML에 실려 온 API 응답을 앱이 worker에 넘긴다(추가 요청 없음). 저장된 HTML이 없는 주소를 오프라인에서 열면 worker가 앱 껍데기(`/app-shell`)를 주고 앱이 API 저장본으로 그린다. 그래서 앱 파일 주소는 절대 경로(`paths.relative = false`)다.
+- 첫 방문한 페이지는 worker가 처음 페이지를 맡을 때 그 데이터를 저장하고, 그 언어의 시작 화면 데이터도 미리 받아 둔다.
 - 개발 서버(`pnpm dev`)에서도 service worker가 등록된다. 이상하면 브라우저 개발자 도구 → Application → Service workers에서 해제한다.
 - 오프라인 시험은 운영 빌드로 한다(`pnpm build` 뒤 `pnpm preview`). Windows에서는 `pnpm preview`를 띄운 채 다시 빌드하면 `.svelte-kit/cloudflare`가 잠겨 지난 빌드가 그대로 나간다 — 미리보기를 멈추고 빌드한다. 페이지를 몇 개 본 뒤 서버를 끄고 다시 연다(개발자 도구로 할 때는 Network의 Offline이 아니라 Application → Service workers의 Offline을 켠다 — Network 쪽은 service worker의 요청까지 막지 못할 수 있다).
 
