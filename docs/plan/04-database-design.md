@@ -153,21 +153,23 @@ CREATE TABLE events (
 
 2026-11-27 오너와 정한 설계다. 목적은 두 가지 — ① 주최측이 로고를 요청·제공하면 바로 넣을 수 있게 미리 준비, ② 각 행사가 SCLS와 어떤 관계로 정보를 받는지 표시. **지금은 이 설계와 DB 칸(비워 둠)까지만** 한다. 화면 표시·Backstage 입력/업로드·이미지 저장소·형식 변환은 실제 요청이 들어올 때 만든다([로드맵 Phase 2](11-roadmap-and-success.md#phase-2--수집-및-검수)).
 
-**칸 목록** — `event_series`와 `events`에 같은 이름으로 둔다. 모두 비워 둘 수 있다(NULL). 회차(`events`) 값이 있으면 회차 값을, 없으면 시리즈 값을 쓴다.
+**칸 목록** — `event_series`와 `events`에 같은 이름으로 둔다. 시리즈의 두 상태 칸은 기본값이 있고, 회차 칸은 모두 비워 둘 수 있다 — 회차 값이 NULL이면 시리즈 값을 따른다. 칸 이름은 비공개 `scls-platform` Prisma(migration `20261127090000_add_partnership_and_logo_fields`)와 같다.
 
-| 칸 (DB / Prisma) | 타입 | 뜻 |
-|---|---|---|
-| `partnership_status` / `partnershipStatus` | TEXT | 협력 상태 4단계(아래 표). 회차·시리즈 모두 비어 있으면 `OFFICIAL_NOTICE`로 본다 |
-| `partnership_started_at` / `partnershipStartedAt` | TIMESTAMPTZ | 공식 협력·공식 연계를 시작한 날 |
-| `partnership_note` / `partnershipNote` | TEXT | 협력·연계 근거 메모(관리자 전용, 공개 API에 내보내지 않음) |
-| `logo_url` / `logoUrl` | TEXT | 로고(라이트 모드). 지금은 참조만 — URL 또는 저장소 key |
-| `logo_dark_url` / `logoDarkUrl` | TEXT | 다크 모드 로고(선택) |
-| `logo_permission` / `logoPermission` | TEXT | 로고 사용 권한 출처: `OFFICIAL_PROVIDED`(공식 제공) · `PERMITTED`(사용 허락) · `NONE` |
-| `logo_permission_granted_at` / `logoPermissionGrantedAt` | TIMESTAMPTZ | 로고 사용을 허락받은 날 |
-| `logo_permission_note` / `logoPermissionNote` | TEXT | 로고 허락 근거 메모(관리자 전용) |
-| `admin_note` / `adminNote` | TEXT | 공개되지 않는 관리자 메모(예: "출처: 나무위키, 공식 확인 필요") |
+| 칸 (DB / Prisma) | 타입 | event_series | events | 뜻 |
+|---|---|---|---|---|
+| `partnership_status` / `partnershipStatus` | TEXT | NOT NULL DEFAULT `'OFFICIAL_NOTICE'` | NULL = 시리즈 값을 따름 | 협력 상태 4단계(아래 표) |
+| `partnership_started_at` / `partnershipStartedAt` | TIMESTAMP(3) | NULL | NULL | 공식 협력·공식 연계를 시작한 날 |
+| `partnership_note` / `partnershipNote` | TEXT | NULL | NULL | 협력·연계 근거 메모(관리자 전용) |
+| `logo_light_ref` / `logoLightRef` | TEXT | NULL | NULL | 로고(라이트 모드) 저장소 참조 — Phase 2 Storage Object와 연결 |
+| `logo_dark_ref` / `logoDarkRef` | TEXT | NULL | NULL | 다크 모드 로고 저장소 참조(선택) |
+| `logo_source` / `logoSource` | TEXT | NOT NULL DEFAULT `'NONE'` | NULL = 시리즈 로고를 따름, `NONE` = 이 회차는 로고 안 씀 | 로고 사용 권한 출처: `OFFICIAL_PROVIDED`(공식 제공) · `PERMITTED`(사용 허락) · `NONE` |
+| `logo_permitted_at` / `logoPermittedAt` | TIMESTAMP(3) | NULL | NULL | 로고 사용을 허락받은 날 |
+| `logo_permission_note` / `logoPermissionNote` | TEXT | NULL | NULL | 로고 허락 근거 메모(관리자 전용) |
+| `admin_note` / `adminNote` | TEXT | NULL | NULL | 관리자 전용 메모, 공개 금지(예: "출처: 나무위키, 공식 확인 필요") |
 
 값 목록은 다른 상태 칸처럼 TEXT + CHECK로 두고(이 문서의 표기 규칙), Prisma는 String + 애플리케이션 검증으로 둔다.
+
+**운영 DB 적용** — 이 migration은 배포할 때 자동으로 적용되지 않는다. `scls-platform`에서 `pnpm --filter @scls/db migrate:deploy`를 손으로 실행해야 한다. 개발과 운영이 같은 Supabase DB를 쓰므로 실행하면 곧바로 운영 DB에 반영된다.
 
 **협력 상태 4단계** — 기존 `last_verified_at`(마지막 확인 날짜)과 함께 쓴다(배지 예: "공식 공지 기반 · 11월 18일 확인").
 
@@ -182,9 +184,9 @@ CREATE TABLE events (
 
 - 시리즈 로고가 기본이고, 회차 로고가 있으면 회차 로고를 쓴다. 다크 모드 로고가 없으면 라이트 로고를 쓴다.
 - 받는 형식: SVG 또는 투명 배경 PNG. SVG는 화면에 쓰기 전에 안전 검사(스크립트·외부 참조 제거)를 거친다 — 검사는 업로드를 만들 때 정한다.
-- 협력 상태가 `OFFICIAL_NOTICE`·`UNVERIFIED`이면 로고 칸에 값이 있어도 쓰지 않는다. `logo_permission`이 `NONE`이거나 비어 있어도 쓰지 않는다.
-- 내림 요청: 주최측이 로고 사용 중단을 요청하면 로고 칸을 비우고 `logo_permission`을 `NONE`으로, 요청 날짜·경위를 `logo_permission_note`에 남긴다. 저장소의 이미지 파일도 함께 지운다.
-- 저장 위치: 지금은 참조 칸(`logo_url`)만 둔다. 이미지를 SCLS가 직접 보관하게 되면 Phase 2 Storage Object(R2, [§5.1](05-storage-and-collection.md#51-오브젝트-스토리지-설계))에 올리고 `storage_links`로 연결한다 — 그때 `link_type`에 로고 종류를 더하고 `storage_links`에 시리즈 연결 칸을 둘지 정한다.
+- 협력 상태가 `OFFICIAL_NOTICE`·`UNVERIFIED`이면 로고 칸에 값이 있어도 쓰지 않는다. `logo_source`가 `NONE`이어도 쓰지 않는다(회차가 `NONE`이면 시리즈 로고도 쓰지 않는다).
+- 내림 요청: 주최측이 로고 사용 중단을 요청하면 로고 칸을 비우고 `logo_source`를 `NONE`으로, 요청 날짜·경위를 `logo_permission_note`에 남긴다. 저장소의 이미지 파일도 함께 지운다.
+- 저장 위치: 지금은 참조 칸(`logo_light_ref`·`logo_dark_ref`)만 둔다. 이미지를 SCLS가 직접 보관하게 되면 Phase 2 Storage Object(R2, [§5.1](05-storage-and-collection.md#51-오브젝트-스토리지-설계))에 올리고 `storage_links`로 연결한다 — 그때 `link_type`에 로고 종류를 더하고 `storage_links`에 시리즈 연결 칸을 둘지 정한다.
 
 **다른 기능과의 연결**
 
