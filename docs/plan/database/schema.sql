@@ -30,6 +30,17 @@ CREATE TABLE event_series (
                     CHECK (status IN ('ACTIVE','INACTIVE','ARCHIVED')),
   founded_year    INTEGER,
   official_url    TEXT,
+  -- 협력 상태·로고·관리자 메모 (04 §4.3, 2026-11-27 설계 — 칸만 두고 비워 둠, 회차 값이 시리즈 값보다 우선)
+  partnership_status          TEXT CHECK (partnership_status IS NULL OR partnership_status IN (
+                                  'OFFICIAL_PARTNER','OFFICIAL_LINKED','OFFICIAL_NOTICE','UNVERIFIED')),
+  partnership_started_at      TIMESTAMPTZ,
+  partnership_note            TEXT,           -- 관리자 전용(공개 API 제외)
+  logo_url                    TEXT,           -- 지금은 참조만(URL 또는 저장소 key)
+  logo_dark_url               TEXT,
+  logo_permission             TEXT CHECK (logo_permission IS NULL OR logo_permission IN ('OFFICIAL_PROVIDED','PERMITTED','NONE')),
+  logo_permission_granted_at  TIMESTAMPTZ,
+  logo_permission_note        TEXT,           -- 관리자 전용(공개 API 제외)
+  admin_note                  TEXT,           -- 관리자 전용(공개 API 제외)
   created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -49,6 +60,17 @@ CREATE TABLE events (
   is_all_day        BOOLEAN DEFAULT FALSE,
   official_url      TEXT NOT NULL,
   last_verified_at  TIMESTAMPTZ,
+  -- 협력 상태·로고·관리자 메모 (04 §4.3, 2026-11-27 설계 — 칸만 두고 비워 둠, 회차 값이 시리즈 값보다 우선)
+  partnership_status          TEXT CHECK (partnership_status IS NULL OR partnership_status IN (
+                                  'OFFICIAL_PARTNER','OFFICIAL_LINKED','OFFICIAL_NOTICE','UNVERIFIED')),
+  partnership_started_at      TIMESTAMPTZ,
+  partnership_note            TEXT,           -- 관리자 전용(공개 API 제외)
+  logo_url                    TEXT,           -- 지금은 참조만(URL 또는 저장소 key)
+  logo_dark_url               TEXT,
+  logo_permission             TEXT CHECK (logo_permission IS NULL OR logo_permission IN ('OFFICIAL_PROVIDED','PERMITTED','NONE')),
+  logo_permission_granted_at  TIMESTAMPTZ,
+  logo_permission_note        TEXT,           -- 관리자 전용(공개 API 제외)
+  admin_note                  TEXT,           -- 관리자 전용(공개 API 제외)
   created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

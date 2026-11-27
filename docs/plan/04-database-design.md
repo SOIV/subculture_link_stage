@@ -149,6 +149,50 @@ CREATE TABLE events (
 );
 ```
 
+#### 협력 상태·로고·관리자 메모 (event_series / events)
+
+2026-11-27 오너와 정한 설계다. 목적은 두 가지 — ① 주최측이 로고를 요청·제공하면 바로 넣을 수 있게 미리 준비, ② 각 행사가 SCLS와 어떤 관계로 정보를 받는지 표시. **지금은 이 설계와 DB 칸(비워 둠)까지만** 한다. 화면 표시·Backstage 입력/업로드·이미지 저장소·형식 변환은 실제 요청이 들어올 때 만든다([로드맵 Phase 2](11-roadmap-and-success.md#phase-2--수집-및-검수)).
+
+**칸 목록** — `event_series`와 `events`에 같은 이름으로 둔다. 모두 비워 둘 수 있다(NULL). 회차(`events`) 값이 있으면 회차 값을, 없으면 시리즈 값을 쓴다.
+
+| 칸 (DB / Prisma) | 타입 | 뜻 |
+|---|---|---|
+| `partnership_status` / `partnershipStatus` | TEXT | 협력 상태 4단계(아래 표). 회차·시리즈 모두 비어 있으면 `OFFICIAL_NOTICE`로 본다 |
+| `partnership_started_at` / `partnershipStartedAt` | TIMESTAMPTZ | 공식 협력·공식 연계를 시작한 날 |
+| `partnership_note` / `partnershipNote` | TEXT | 협력·연계 근거 메모(관리자 전용, 공개 API에 내보내지 않음) |
+| `logo_url` / `logoUrl` | TEXT | 로고(라이트 모드). 지금은 참조만 — URL 또는 저장소 key |
+| `logo_dark_url` / `logoDarkUrl` | TEXT | 다크 모드 로고(선택) |
+| `logo_permission` / `logoPermission` | TEXT | 로고 사용 권한 출처: `OFFICIAL_PROVIDED`(공식 제공) · `PERMITTED`(사용 허락) · `NONE` |
+| `logo_permission_granted_at` / `logoPermissionGrantedAt` | TIMESTAMPTZ | 로고 사용을 허락받은 날 |
+| `logo_permission_note` / `logoPermissionNote` | TEXT | 로고 허락 근거 메모(관리자 전용) |
+| `admin_note` / `adminNote` | TEXT | 공개되지 않는 관리자 메모(예: "출처: 나무위키, 공식 확인 필요") |
+
+값 목록은 다른 상태 칸처럼 TEXT + CHECK로 두고(이 문서의 표기 규칙), Prisma는 String + 애플리케이션 검증으로 둔다.
+
+**협력 상태 4단계** — 기존 `last_verified_at`(마지막 확인 날짜)과 함께 쓴다(배지 예: "공식 공지 기반 · 11월 18일 확인").
+
+| 값 | 표시 | 뜻 | 정보 출처 | 로고 |
+|---|---|---|---|---|
+| `OFFICIAL_PARTNER` | 공식 협력 | 주최측과 협의, 주최측이 직접 제공·관리(Phase 2 행사 관리자 계정) | 주최측 입력 | 공식 제공 로고 사용 |
+| `OFFICIAL_LINKED` | 공식 연계 | 주최측 허락 아래 공식 사이트/API에서 자동 수집 | 허가된 수집 | 허락 범위 안에서 사용 |
+| `OFFICIAL_NOTICE` | 공식 공지 기반 | SCLS가 공개된 공식 공지를 보고 직접 정리(지금 대부분, 기본값) | 공식 공지 | 넣지 않음 |
+| `UNVERIFIED` | 확인 필요 | 공식 공지로 아직 확인하지 못함(2차 자료) | 2차 자료 | 넣지 않음 |
+
+**로고 규칙**
+
+- 시리즈 로고가 기본이고, 회차 로고가 있으면 회차 로고를 쓴다. 다크 모드 로고가 없으면 라이트 로고를 쓴다.
+- 받는 형식: SVG 또는 투명 배경 PNG. SVG는 화면에 쓰기 전에 안전 검사(스크립트·외부 참조 제거)를 거친다 — 검사는 업로드를 만들 때 정한다.
+- 협력 상태가 `OFFICIAL_NOTICE`·`UNVERIFIED`이면 로고 칸에 값이 있어도 쓰지 않는다. `logo_permission`이 `NONE`이거나 비어 있어도 쓰지 않는다.
+- 내림 요청: 주최측이 로고 사용 중단을 요청하면 로고 칸을 비우고 `logo_permission`을 `NONE`으로, 요청 날짜·경위를 `logo_permission_note`에 남긴다. 저장소의 이미지 파일도 함께 지운다.
+- 저장 위치: 지금은 참조 칸(`logo_url`)만 둔다. 이미지를 SCLS가 직접 보관하게 되면 Phase 2 Storage Object(R2, [§5.1](05-storage-and-collection.md#51-오브젝트-스토리지-설계))에 올리고 `storage_links`로 연결한다 — 그때 `link_type`에 로고 종류를 더하고 `storage_links`에 시리즈 연결 칸을 둘지 정한다.
+
+**다른 기능과의 연결**
+
+- `OFFICIAL_PARTNER`는 Phase 2 행사 관리자 계정([§7.6.3](07-admin-dashboard.md#763-권한-부여-절차))이 생겨야 실제로 쓸 수 있다. 주최측이 로고를 직접 올리는 것도 그 계정으로 한다.
+- `OFFICIAL_LINKED`는 허락받은 출처를 Sources([§5.2.1](05-storage-and-collection.md#521-행사별-수집-프로필))에 등록해 수집한다. 허락 근거는 `partnership_note`와 출처의 이용 조건 메모(`terms_note`)에 함께 남긴다.
+
+**화면 표시(나중)** — Onstage 행사·시리즈 상세에 작은 배지를 두고, 누르면 단계 설명을 보여 준다. 목록 카드에는 공식 협력처럼 눈에 띌 가치가 있는 단계만 표시한다. 공개 API에는 `partnership_status`·로고·`last_verified_at`만 내보내고 메모 칸(`partnership_note`·`logo_permission_note`·`admin_note`)은 내보내지 않는다.
+
 #### event_schedules
 
 ```sql
